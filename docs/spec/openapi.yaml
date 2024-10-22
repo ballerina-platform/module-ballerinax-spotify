@@ -58,6 +58,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /albums:
     get:
       operationId: get-multiple-albums
@@ -83,6 +84,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /albums/{id}/tracks:
     get:
       operationId: get-an-albums-tracks
@@ -112,6 +114,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /artists/{id}:
     get:
       tags:
@@ -136,6 +139,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /artists:
     get:
       tags:
@@ -168,6 +172,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /artists/{id}/albums:
     get:
       tags:
@@ -197,6 +202,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /artists/{id}/top-tracks:
     get:
       tags:
@@ -223,6 +229,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /artists/{id}/related-artists:
     get:
       tags:
@@ -247,6 +254,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /shows/{id}:
     get:
       tags:
@@ -274,6 +282,7 @@ paths:
       security:
         - oauth_2_0:
             - user-read-playback-position
+
   /shows:
     get:
       tags:
@@ -299,6 +308,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /shows/{id}/episodes:
     get:
       tags:
@@ -328,6 +338,7 @@ paths:
       security:
         - oauth_2_0:
             - user-read-playback-position
+
   /episodes/{id}:
     get:
       tags:
@@ -364,6 +375,7 @@ paths:
       security:
         - oauth_2_0:
             - user-read-playback-position
+
   /episodes:
     get:
       tags:
@@ -398,6 +410,7 @@ paths:
       security:
         - oauth_2_0:
             - user-read-playback-position
+
   /audiobooks/{id}:
     get:
       operationId: get-an-audiobook
@@ -427,6 +440,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /audiobooks:
     get:
       operationId: get-multiple-audiobooks
@@ -452,6 +466,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /audiobooks/{id}/chapters:
     get:
       operationId: get-audiobook-chapters
@@ -480,6 +495,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /me/audiobooks:
     get:
       tags:
@@ -551,6 +567,7 @@ paths:
       security:
         - oauth_2_0:
             - user-library-modify
+
   /me/audiobooks/contains:
     get:
       tags:
@@ -575,6 +592,7 @@ paths:
       security:
         - oauth_2_0:
             - user-library-read
+
   /chapters/{id}:
     get:
       operationId: get-a-chapter
@@ -600,6 +618,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /chapters:
     get:
       operationId: get-several-chapters
@@ -660,6 +679,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /tracks:
     get:
       tags:
@@ -693,6 +713,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /search:
     get:
       tags:
@@ -793,6 +814,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
   /me:
     get:
       tags:
@@ -859,6 +881,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+
     put:
       tags:
         - Playlists
@@ -912,6 +935,7 @@ paths:
         - oauth_2_0:
             - playlist-modify-public
             - playlist-modify-private
+
   /playlists/{playlist_id}/tracks:
     get:
       tags:
@@ -1136,6 +1160,7 @@ paths:
         - oauth_2_0:
             - playlist-modify-public
             - playlist-modify-private
+
   /me/playlists:
     get:
       tags:
@@ -1173,6 +1198,7 @@ paths:
       security:
         - oauth_2_0:
             - playlist-read-private
+
   /me/albums:
     get:
       tags:
@@ -1271,6 +1297,7 @@ paths:
       security:
         - oauth_2_0:
             - user-library-modify
+
   /me/albums/contains:
     get:
       tags:
@@ -1295,6 +1322,7 @@ paths:
       security:
         - oauth_2_0:
             - user-library-read
+
   /me/tracks:
     get:
       tags:
@@ -1395,6 +1423,7 @@ paths:
       security:
         - oauth_2_0:
             - user-library-modify
+  
   /me/tracks/contains:
     get:
       tags:
@@ -1419,6 +1448,7 @@ paths:
       security:
         - oauth_2_0:
             - user-library-read
+  
   /me/episodes:
     get:
       tags:
@@ -1531,6 +1561,7 @@ paths:
       security:
         - oauth_2_0:
             - user-library-modify
+  
   /me/episodes/contains:
     get:
       tags:
@@ -1564,6 +1595,7 @@ paths:
       security:
         - oauth_2_0:
             - user-library-read
+  
   /me/shows:
     get:
       tags:
@@ -1636,6 +1668,7 @@ paths:
       security:
         - oauth_2_0:
             - user-library-modify
+  
   /me/shows/contains:
     get:
       tags:
@@ -1660,6 +1693,7 @@ paths:
       security:
         - oauth_2_0:
             - user-library-read
+  
   /me/top/{type}:
     get:
       tags:
@@ -1705,6 +1739,7 @@ paths:
       security:
         - oauth_2_0:
             - user-top-read
+  
   /users/{user_id}:
     get:
       tags:
@@ -1727,6 +1762,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+  
   /users/{user_id}/playlists:
     get:
       tags:
@@ -1820,6 +1856,7 @@ paths:
         - oauth_2_0:
             - playlist-modify-public
             - playlist-modify-private
+  
   /playlists/{playlist_id}/followers:
     put:
       tags:
@@ -1882,6 +1919,7 @@ paths:
         - oauth_2_0:
             - playlist-modify-public
             - playlist-modify-private
+  
   /browse/featured-playlists:
     get:
       tags:
@@ -1916,6 +1954,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+  
   /browse/categories:
     get:
       tags:
@@ -1948,6 +1987,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+  
   /browse/categories/{category_id}:
     get:
       tags:
@@ -1987,6 +2027,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+  
   /browse/categories/{category_id}/playlists:
     get:
       tags:
@@ -2020,6 +2061,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+  
   /playlists/{playlist_id}/images:
     get:
       tags:
@@ -2077,6 +2119,7 @@ paths:
             - ugc-image-upload
             - playlist-modify-public
             - playlist-modify-private
+  
   /browse/new-releases:
     get:
       tags:
@@ -2102,6 +2145,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+  
   /me/following:
     get:
       tags:
@@ -2277,6 +2321,7 @@ paths:
       security:
         - oauth_2_0:
             - user-follow-modify
+  
   /me/following/contains:
     get:
       tags:
@@ -2322,6 +2367,7 @@ paths:
       security:
         - oauth_2_0:
             - user-follow-read
+  
   /playlists/{playlist_id}/followers/contains:
     get:
       tags:
@@ -2354,6 +2400,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+  
   /audio-features:
     get:
       tags:
@@ -2387,6 +2434,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+  
   /audio-features/{id}:
     get:
       tags:
@@ -2420,6 +2468,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+  
   /audio-analysis/{id}:
     get:
       tags:
@@ -2451,6 +2500,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+  
   /recommendations:
     get:
       tags:
@@ -2911,6 +2961,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+  
   /recommendations/available-genre-seeds:
     get:
       tags:
@@ -2931,6 +2982,7 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
+  
   /me/player:
     get:
       tags:
@@ -3004,6 +3056,7 @@ paths:
       security:
         - oauth_2_0:
             - user-modify-playback-state
+  
   /me/player/devices:
     get:
       tags:
@@ -3025,6 +3078,7 @@ paths:
       security:
         - oauth_2_0:
             - user-read-playback-state
+  
   /me/player/currently-playing:
     get:
       tags:
@@ -3122,6 +3176,7 @@ paths:
       security:
         - oauth_2_0:
             - user-modify-playback-state
+  
   /me/player/pause:
     put:
       tags:
@@ -3155,6 +3210,7 @@ paths:
       security:
         - oauth_2_0:
             - user-modify-playback-state
+  
   /me/player/next:
     post:
       tags:
@@ -3188,6 +3244,7 @@ paths:
       security:
         - oauth_2_0:
             - user-modify-playback-state
+  
   /me/player/previous:
     post:
       tags:
@@ -3222,6 +3279,7 @@ paths:
       security:
         - oauth_2_0:
             - user-modify-playback-state
+  
   /me/player/seek:
     put:
       tags:
@@ -3267,6 +3325,7 @@ paths:
       security:
         - oauth_2_0:
             - user-modify-playback-state
+  
   /me/player/repeat:
     put:
       tags:
@@ -3311,6 +3370,7 @@ paths:
       security:
         - oauth_2_0:
             - user-modify-playback-state
+  
   /me/player/volume:
     put:
       tags:
@@ -3351,6 +3411,7 @@ paths:
       security:
         - oauth_2_0:
             - user-modify-playback-state
+  
   /me/player/shuffle:
     put:
       tags:
@@ -3393,6 +3454,7 @@ paths:
       security:
         - oauth_2_0:
             - user-modify-playback-state
+  
   /me/player/recently-played:
     get:
       tags:
@@ -3451,6 +3513,7 @@ paths:
       security:
         - oauth_2_0:
             - user-read-recently-played
+  
   /me/player/queue:
     get:
       tags:
@@ -3517,6 +3580,7 @@ paths:
       security:
         - oauth_2_0:
             - user-modify-playback-state
+  
   /markets:
     get:
       tags:
