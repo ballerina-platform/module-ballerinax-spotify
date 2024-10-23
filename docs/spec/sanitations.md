@@ -9,10 +9,11 @@ This document records the sanitation done on top of the official OpenAPI specifi
 The OpenAPI specification is obtained from the [Spotify OpenAPI Documentation](https://developer.spotify.com/reference/web-api/open-api-schema.yaml).
 These changes are done in order to improve the overall usability, and as workarounds for some known language limitations.
 
-[//]: # (TODO: Add sanitation details)
+
 1. Remove resource paths,
     */playlists/{playlist_id}/images'(put) - schema for the image/jpeg content type is incorrectly defined
- 
+2. Move inline response schemas to the components section,
+    - Inline response schemas are moved to the `components` section to ensure proper naming and reusability.
 
 ## OpenAPI cli command
 
