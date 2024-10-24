@@ -50,12 +50,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OneAlbum'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -76,12 +70,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ManyAlbums'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -106,12 +94,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagingSimplifiedTrackObject'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -131,12 +113,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OneArtist'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -164,12 +140,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ManyArtists'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -194,12 +164,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagingArtistDiscographyAlbumObject'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -221,12 +185,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ManyTracks'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -246,12 +204,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ManyArtists'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -273,12 +225,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OneShow'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-read-playback-position
@@ -300,12 +246,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ManySimplifiedShows'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -329,12 +269,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagingSimplifiedEpisodeObject'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-read-playback-position
@@ -366,12 +300,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OneEpisode'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-read-playback-position
@@ -401,12 +329,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ManyEpisodes'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-read-playback-position
@@ -458,12 +380,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ManyAudiobooks'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -487,12 +403,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagingSimplifiedChapterObject'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -512,12 +422,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagingSimplifiedAudiobookObject'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-read
@@ -535,12 +439,6 @@ paths:
       responses:
         '200':
           description: Audiobook(s) are saved to the library
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-modify
@@ -558,12 +456,6 @@ paths:
       responses:
         '200':
           description: Audiobook(s) have been removed from the library
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-modify
@@ -583,12 +475,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ArrayOfBooleans'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-read
@@ -610,12 +496,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OneChapter'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -636,12 +516,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ManyChapters'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
   /tracks/{id}:
@@ -671,12 +545,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OneTrack'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -705,12 +573,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ManyTracks'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -806,12 +668,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/SearchItems'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -828,12 +684,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OnePrivateUser'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-read-private
@@ -873,12 +723,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OnePlaylist'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 
@@ -919,12 +763,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagingPlaylistTrackObject'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - playlist-read-private
@@ -978,12 +816,6 @@ paths:
       responses:
         '201':
           $ref: '#/components/responses/PlaylistSnapshotId'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - playlist-modify-public
@@ -1047,12 +879,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PlaylistSnapshotId'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - playlist-modify-public
@@ -1096,12 +922,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PlaylistSnapshotId'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - playlist-modify-public
@@ -1135,12 +955,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagedPlaylists'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - playlist-read-private
@@ -1162,12 +976,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagingSavedAlbumObject'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-read
@@ -1198,12 +1006,6 @@ paths:
       responses:
         '200':
           description: The album is saved
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-modify
@@ -1234,12 +1036,6 @@ paths:
       responses:
         '200':
           description: Album(s) have been removed from the library
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-modify
@@ -1259,12 +1055,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ArrayOfBooleans'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-read
@@ -1286,12 +1076,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagingSavedTrackObject'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-read
@@ -1324,12 +1108,6 @@ paths:
       responses:
         '200':
           description: Track saved
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-modify
@@ -1360,12 +1138,6 @@ paths:
       responses:
         '200':
           description: Track removed
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-modify
@@ -1385,12 +1157,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ArrayOfBooleans'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-read
@@ -1413,12 +1179,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagingSavedEpisodeObject'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-read
@@ -1461,12 +1221,6 @@ paths:
       responses:
         '200':
           description: Episode saved
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-modify
@@ -1498,12 +1252,6 @@ paths:
       responses:
         '200':
           description: Episode removed
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-modify
@@ -1532,12 +1280,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ArrayOfBooleans'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-read
@@ -1556,12 +1298,6 @@ paths:
         - $ref: '#/components/parameters/QueryLimit'
         - $ref: '#/components/parameters/QueryOffset'
       responses:
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
         '200':
           $ref: '#/components/responses/PagingSavedShowObject'
       security:
@@ -1581,12 +1317,6 @@ paths:
       responses:
         '200':
           description: Show saved
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-modify
@@ -1605,12 +1335,6 @@ paths:
       responses:
         '200':
           description: Show removed
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-modify
@@ -1630,12 +1354,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ArrayOfBooleans'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-library-read
@@ -1676,12 +1394,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagingArtistOrTrackObject'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-top-read
@@ -1700,12 +1412,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OnePublicUser'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
   
@@ -1737,12 +1443,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagedPlaylists'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - playlist-read-private
@@ -1792,12 +1492,6 @@ paths:
       responses:
         '201':
           $ref: '#/components/responses/OnePlaylist'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - playlist-modify-public
@@ -1831,12 +1525,6 @@ paths:
       responses:
         '200':
           description: Playlist followed
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - playlist-modify-public
@@ -1855,12 +1543,6 @@ paths:
       responses:
         '200':
           description: Playlist unfollowed
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - playlist-modify-public
@@ -1892,12 +1574,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagedFeaturedPlaylists'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
   
@@ -1925,12 +1601,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagedCategories'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
   
@@ -1965,12 +1635,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OneCategory'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
   
@@ -1999,12 +1663,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagedFeaturedPlaylists'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
   
@@ -2024,12 +1682,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ArrayOfImages'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
     put:
@@ -2054,12 +1706,6 @@ paths:
       responses:
         '202':
           description: Image uploaded
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - ugc-image-upload
@@ -2083,12 +1729,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/PagedAlbums'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
   
@@ -2139,12 +1779,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/CursorPagedArtists'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-follow-read
@@ -2201,12 +1835,6 @@ paths:
       responses:
         '204':
           description: Artist or user followed
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-follow-modify
@@ -2258,12 +1886,6 @@ paths:
       responses:
         '200':
           description: Artist or user unfollowed
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-follow-modify
@@ -2304,12 +1926,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ArrayOfBooleans'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-follow-read
@@ -2338,12 +1954,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/SingletonArrayOfBoolean'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
   
@@ -2372,12 +1982,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ManyAudioFeatures'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
   
@@ -2406,12 +2010,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OneAudioFeatures'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
   
@@ -2438,12 +2036,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OneAudioAnalysis'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
   
@@ -2899,12 +2491,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OneRecommendations'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
   
@@ -2920,12 +2506,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ManyGenres'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
   
@@ -2948,12 +2528,6 @@ paths:
           $ref: '#/components/responses/OneCurrentlyPlaying'
         '204':
           description: Playback not available or active
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-read-playback-state
@@ -2993,12 +2567,6 @@ paths:
       responses:
         '204':
           description: Playback transferred
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-modify-playback-state
@@ -3015,12 +2583,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/ManyDevices'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-read-playback-state
@@ -3042,12 +2604,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/OneCurrentlyPlayingTrack'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-read-currently-playing
@@ -3113,12 +2669,6 @@ paths:
       responses:
         '204':
           description: Playback started
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-modify-playback-state
@@ -3147,12 +2697,6 @@ paths:
       responses:
         '204':
           description: Playback paused
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-modify-playback-state
@@ -3181,12 +2725,6 @@ paths:
       responses:
         '204':
           description: Command sent
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-modify-playback-state
@@ -3216,12 +2754,6 @@ paths:
       responses:
         '204':
           description: Command sent
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-modify-playback-state
@@ -3262,12 +2794,6 @@ paths:
       responses:
         '204':
           description: Command sent
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-modify-playback-state
@@ -3307,12 +2833,6 @@ paths:
       responses:
         '204':
           description: Command sent
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-modify-playback-state
@@ -3348,12 +2868,6 @@ paths:
       responses:
         '204':
           description: Command sent
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-modify-playback-state
@@ -3391,12 +2905,6 @@ paths:
       responses:
         '204':
           description: Command sent
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-modify-playback-state
@@ -3450,12 +2958,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/CursorPagedPlayHistory'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-read-recently-played
@@ -3474,12 +2976,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/Queue'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-read-currently-playing
@@ -3517,12 +3013,6 @@ paths:
       responses:
         '204':
           description: Command received
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0:
             - user-modify-playback-state
@@ -3549,12 +3039,6 @@ paths:
                     items:
                       type: string
                     example: ['CA', 'BR', 'IT']
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '429':
-          $ref: '#/components/responses/TooManyRequests'
       security:
         - oauth_2_0: []
 

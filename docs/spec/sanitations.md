@@ -14,6 +14,13 @@ These changes are done in order to improve the overall usability, and as workaro
     */playlists/{playlist_id}/images'(put) - schema for the image/jpeg content type is incorrectly defined
 2. Move inline response schemas to the components section,
     - Inline response schemas are moved to the `components` section to ensure proper naming and reusability.
+3. Remove bad responses to increase readability.
+        401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
 
 ## OpenAPI cli command
 
