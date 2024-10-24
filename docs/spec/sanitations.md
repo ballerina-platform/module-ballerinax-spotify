@@ -12,9 +12,26 @@ These changes are done in order to improve the overall usability, and as workaro
 
 1. Remove resource paths,
     */playlists/{playlist_id}/images'(put) - schema for the image/jpeg content type is incorrectly defined
-2.  Remove inline response schemas.
-     - headers - Headers to be sent with the request 
-     - queries - Queries to be sent with the request
+2.Moving the inline schema to the components section
+    1.MarketsResponse
+    2.PlaylistResponse
+    3.ArtistObjects
+    4.ManyTrackObject
+    5.ManyAudioFeaturesObject
+    6.PagedCategoriesObject
+    7.PagedAlbumsObject
+    8.CursorPagedArtistsObject
+    9.ManyDevicesObject
+    10.PagingArtistOrTrackObject
+    11.ManyGenresObject
+    12.SearchItemsObject
+    13.ManySimplifiedShowsObject
+    14.ManyAlbumsObject
+    15.ManyAudiobooksObject
+    16.ManyChaptersObject
+    17.ManyEpisodesObject
+    18.PlaylistSnapshotIdObject
+
 3.  Remove bad responses to increase readability.
         401':
           $ref: '#/components/responses/Unauthorized'
@@ -28,6 +45,6 @@ These changes are done in order to improve the overall usability, and as workaro
 The following command was used to generate the Ballerina client from the OpenAPI specification. The command should be executed from the repository root directory.
 
 ```bash
-bal openapi -i docs/spec/openapi.yaml --mode client --license docs/license.txt -o ballerina
+bal openapi -i docs/spec/openapi.yaml --mode client --license docs/license.txt -o ballerina --use-sanitized-oas
 ```
 Note: The license year is hardcoded to 2024, change if necessary.
