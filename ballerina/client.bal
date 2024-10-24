@@ -63,8 +63,6 @@ public isolated client class Client {
 
     # Remove Users' Saved Albums
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Album(s) have been removed from the library 
     resource isolated function delete me/albums(me_albums_body_1 payload, map<string|string[]> headers = {}, *RemoveAlbumsUserQueries queries) returns error? {
         string resourcePath = string `/me/albums`;
@@ -77,8 +75,6 @@ public isolated client class Client {
 
     # Remove User's Saved Audiobooks
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Audiobook(s) have been removed from the library 
     resource isolated function delete me/audiobooks(map<string|string[]> headers = {}, *RemoveAudiobooksUserQueries queries) returns error? {
         string resourcePath = string `/me/audiobooks`;
@@ -88,8 +84,6 @@ public isolated client class Client {
 
     # Remove User's Saved Episodes
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Episode removed 
     resource isolated function delete me/episodes(me_episodes_body_1 payload, map<string|string[]> headers = {}, *RemoveEpisodesUserQueries queries) returns error? {
         string resourcePath = string `/me/episodes`;
@@ -102,8 +96,6 @@ public isolated client class Client {
 
     # Unfollow Artists or Users
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Artist or user unfollowed 
     resource isolated function delete me/following(me_following_body_1 payload, map<string|string[]> headers = {}, *UnfollowArtistsUsersQueries queries) returns error? {
         string resourcePath = string `/me/following`;
@@ -116,8 +108,6 @@ public isolated client class Client {
 
     # Remove User's Saved Shows
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Show removed 
     resource isolated function delete me/shows(map<string|string[]> headers = {}, *RemoveShowsUserQueries queries) returns error? {
         string resourcePath = string `/me/shows`;
@@ -127,8 +117,6 @@ public isolated client class Client {
 
     # Remove User's Saved Tracks
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Track removed 
     resource isolated function delete me/tracks(me_tracks_body_1 payload, map<string|string[]> headers = {}, *RemoveTracksUserQueries queries) returns error? {
         string resourcePath = string `/me/tracks`;
@@ -162,8 +150,6 @@ public isolated client class Client {
 
     # Get Several Albums
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A set of albums 
     resource isolated function get albums(map<string|string[]> headers = {}, *GetMultipleAlbumsQueries queries) returns inline_response_200|error {
         string resourcePath = string `/albums`;
@@ -173,8 +159,6 @@ public isolated client class Client {
 
     # Get Album
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - An album 
     resource isolated function get albums/[string id](map<string|string[]> headers = {}, *GetAnAlbumQueries queries) returns AlbumObject|error {
         string resourcePath = string `/albums/${getEncodedUri(id)}`;
@@ -184,8 +168,6 @@ public isolated client class Client {
 
     # Get Album Tracks
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Pages of tracks 
     resource isolated function get albums/[string id]/tracks(map<string|string[]> headers = {}, *GetAnAlbumsTracksQueries queries) returns PagingSimplifiedTrackObject|error {
         string resourcePath = string `/albums/${getEncodedUri(id)}/tracks`;
@@ -195,8 +177,6 @@ public isolated client class Client {
 
     # Get Several Artists
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A set of artists 
     resource isolated function get artists(map<string|string[]> headers = {}, *GetMultipleArtistsQueries queries) returns inline_response_200_1|error {
         string resourcePath = string `/artists`;
@@ -215,8 +195,6 @@ public isolated client class Client {
 
     # Get Artist's Albums
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Pages of albums 
     resource isolated function get artists/[string id]/albums(map<string|string[]> headers = {}, *GetAnArtistsAlbumsQueries queries) returns PagingArtistDiscographyAlbumObject|error {
         string resourcePath = string `/artists/${getEncodedUri(id)}/albums`;
@@ -253,8 +231,6 @@ public isolated client class Client {
 
     # Get Several Audiobooks
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A set of audiobooks. If one of the requested audiobooks is unavailable then you'll find a `null` item in the `audiobooks` array where the audiobook object would otherwise be. 
     resource isolated function get audiobooks(map<string|string[]> headers = {}, *GetMultipleAudiobooksQueries queries) returns inline_response_200_5|error {
         string resourcePath = string `/audiobooks`;
@@ -264,8 +240,6 @@ public isolated client class Client {
 
     # Get an Audiobook
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - An Audiobook 
     resource isolated function get audiobooks/[string id](map<string|string[]> headers = {}, *GetAnAudiobookQueries queries) returns AudiobookObject|error {
         string resourcePath = string `/audiobooks/${getEncodedUri(id)}`;
@@ -275,8 +249,6 @@ public isolated client class Client {
 
     # Get Audiobook Chapters
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Pages of chapters 
     resource isolated function get audiobooks/[string id]/chapters(map<string|string[]> headers = {}, *GetAudiobookChaptersQueries queries) returns PagingSimplifiedChapterObject|error {
         string resourcePath = string `/audiobooks/${getEncodedUri(id)}/chapters`;
@@ -286,8 +258,6 @@ public isolated client class Client {
 
     # Get Several Browse Categories
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A paged set of categories 
     resource isolated function get browse/categories(map<string|string[]> headers = {}, *GetCategoriesQueries queries) returns inline_response_200_10|error {
         string resourcePath = string `/browse/categories`;
@@ -297,8 +267,6 @@ public isolated client class Client {
 
     # Get Single Browse Category
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A category 
     resource isolated function get browse/categories/[string category_id](map<string|string[]> headers = {}, *GetACategoryQueries queries) returns CategoryObject|error {
         string resourcePath = string `/browse/categories/${getEncodedUri(category_id)}`;
@@ -308,8 +276,6 @@ public isolated client class Client {
 
     # Get Category's Playlists
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A paged set of playlists 
     resource isolated function get browse/categories/[string category_id]/playlists(map<string|string[]> headers = {}, *GetACategoriesPlaylistsQueries queries) returns PagingFeaturedPlaylistObject|error {
         string resourcePath = string `/browse/categories/${getEncodedUri(category_id)}/playlists`;
@@ -331,8 +297,6 @@ public isolated client class Client {
 
     # Get Several Chapters
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A set of chapters 
     resource isolated function get chapters(map<string|string[]> headers = {}, *GetSeveralChaptersQueries queries) returns inline_response_200_6|error {
         string resourcePath = string `/chapters`;
@@ -342,8 +306,6 @@ public isolated client class Client {
 
     # Get a Chapter
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A Chapter 
     resource isolated function get chapters/[string id](map<string|string[]> headers = {}, *GetAChapterQueries queries) returns ChapterObject|error {
         string resourcePath = string `/chapters/${getEncodedUri(id)}`;
@@ -353,8 +315,6 @@ public isolated client class Client {
 
     # Get Several Episodes
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A set of episodes 
     resource isolated function get episodes(map<string|string[]> headers = {}, *GetMultipleEpisodesQueries queries) returns inline_response_200_4|error {
         string resourcePath = string `/episodes`;
@@ -364,8 +324,6 @@ public isolated client class Client {
 
     # Get Episode
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - An episode 
     resource isolated function get episodes/[string id](map<string|string[]> headers = {}, *GetAnEpisodeQueries queries) returns EpisodeObject|error {
         string resourcePath = string `/episodes/${getEncodedUri(id)}`;
@@ -393,8 +351,6 @@ public isolated client class Client {
 
     # Get User's Saved Albums
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Pages of albums 
     resource isolated function get me/albums(map<string|string[]> headers = {}, *GetUsersSavedAlbumsQueries queries) returns PagingSavedAlbumObject|error {
         string resourcePath = string `/me/albums`;
@@ -404,8 +360,6 @@ public isolated client class Client {
 
     # Check User's Saved Albums
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Array of booleans 
     resource isolated function get me/albums/contains(map<string|string[]> headers = {}, *CheckUsersSavedAlbumsQueries queries) returns boolean[]|error {
         string resourcePath = string `/me/albums/contains`;
@@ -415,8 +369,6 @@ public isolated client class Client {
 
     # Get User's Saved Audiobooks
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Pages of audiobooks 
     resource isolated function get me/audiobooks(map<string|string[]> headers = {}, *GetUsersSavedAudiobooksQueries queries) returns PagingSimplifiedAudiobookObject|error {
         string resourcePath = string `/me/audiobooks`;
@@ -426,8 +378,6 @@ public isolated client class Client {
 
     # Check User's Saved Audiobooks
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Array of booleans 
     resource isolated function get me/audiobooks/contains(map<string|string[]> headers = {}, *CheckUsersSavedAudiobooksQueries queries) returns boolean[]|error {
         string resourcePath = string `/me/audiobooks/contains`;
@@ -437,8 +387,6 @@ public isolated client class Client {
 
     # Get User's Saved Episodes
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Pages of episodes 
     resource isolated function get me/episodes(map<string|string[]> headers = {}, *GetUsersSavedEpisodesQueries queries) returns PagingSavedEpisodeObject|error {
         string resourcePath = string `/me/episodes`;
@@ -448,8 +396,6 @@ public isolated client class Client {
 
     # Check User's Saved Episodes
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Array of booleans 
     resource isolated function get me/episodes/contains(map<string|string[]> headers = {}, *CheckUsersSavedEpisodesQueries queries) returns boolean[]|error {
         string resourcePath = string `/me/episodes/contains`;
@@ -459,8 +405,6 @@ public isolated client class Client {
 
     # Get Followed Artists
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A paged set of artists 
     resource isolated function get me/following(map<string|string[]> headers = {}, *GetFollowedQueries queries) returns inline_response_200_12|error {
         string resourcePath = string `/me/following`;
@@ -470,8 +414,6 @@ public isolated client class Client {
 
     # Check If User Follows Artists or Users
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Array of booleans 
     resource isolated function get me/following/contains(map<string|string[]> headers = {}, *CheckCurrentUserFollowsQueries queries) returns boolean[]|error {
         string resourcePath = string `/me/following/contains`;
@@ -481,8 +423,6 @@ public isolated client class Client {
 
     # Get Playback State
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Information about playback 
     resource isolated function get me/player(map<string|string[]> headers = {}, *GetInformationAboutTheUsersCurrentPlaybackQueries queries) returns CurrentlyPlayingContextObject|error? {
         string resourcePath = string `/me/player`;
@@ -522,8 +462,6 @@ public isolated client class Client {
 
     # Get Current User's Playlists
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A paged set of playlists 
     resource isolated function get me/playlists(map<string|string[]> headers = {}, *GetAListOfCurrentUsersPlaylistsQueries queries) returns PagingPlaylistObject|error {
         string resourcePath = string `/me/playlists`;
@@ -533,8 +471,6 @@ public isolated client class Client {
 
     # Get User's Saved Shows
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Pages of shows 
     resource isolated function get me/shows(map<string|string[]> headers = {}, *GetUsersSavedShowsQueries queries) returns PagingSavedShowObject|error {
         string resourcePath = string `/me/shows`;
@@ -544,8 +480,6 @@ public isolated client class Client {
 
     # Check User's Saved Shows
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Array of booleans 
     resource isolated function get me/shows/contains(map<string|string[]> headers = {}, *CheckUsersSavedShowsQueries queries) returns boolean[]|error {
         string resourcePath = string `/me/shows/contains`;
@@ -555,8 +489,6 @@ public isolated client class Client {
 
     # Get User's Top Items
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Pages of artists or tracks 
     resource isolated function get me/top/["artists"|"tracks" 'type](map<string|string[]> headers = {}, *GetUsersTopArtistsAndTracksQueries queries) returns inline_response_200_9|error {
         string resourcePath = string `/me/top/${getEncodedUri('type)}`;
@@ -566,8 +498,6 @@ public isolated client class Client {
 
     # Get User's Saved Tracks
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Pages of tracks 
     resource isolated function get me/tracks(map<string|string[]> headers = {}, *GetUsersSavedTracksQueries queries) returns PagingSavedTrackObject|error {
         string resourcePath = string `/me/tracks`;
@@ -577,8 +507,6 @@ public isolated client class Client {
 
     # Check User's Saved Tracks
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Array of booleans 
     resource isolated function get me/tracks/contains(map<string|string[]> headers = {}, *CheckUsersSavedTracksQueries queries) returns boolean[]|error {
         string resourcePath = string `/me/tracks/contains`;
@@ -588,8 +516,6 @@ public isolated client class Client {
 
     # Get Playlist
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A playlist 
     resource isolated function get playlists/[string playlist_id](map<string|string[]> headers = {}, *GetPlaylistQueries queries) returns PlaylistObject|error {
         string resourcePath = string `/playlists/${getEncodedUri(playlist_id)}`;
@@ -599,8 +525,6 @@ public isolated client class Client {
 
     # Check if Current User Follows Playlist
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Array of boolean, containing a single boolean 
     resource isolated function get playlists/[string playlist_id]/followers/contains(map<string|string[]> headers = {}, *CheckIfUserFollowsPlaylistQueries queries) returns boolean[]|error {
         string resourcePath = string `/playlists/${getEncodedUri(playlist_id)}/followers/contains`;
@@ -619,8 +543,6 @@ public isolated client class Client {
 
     # Get Playlist Items
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Pages of tracks 
     resource isolated function get playlists/[string playlist_id]/tracks(map<string|string[]> headers = {}, *GetPlaylistsTracksQueries queries) returns PagingPlaylistTrackObject|error {
         string resourcePath = string `/playlists/${getEncodedUri(playlist_id)}/tracks`;
@@ -630,8 +552,6 @@ public isolated client class Client {
 
     # Get Recommendations
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A set of recommendations 
     resource isolated function get recommendations(map<string|string[]> headers = {}, *GetRecommendationsQueries queries) returns RecommendationsObject|error {
         string resourcePath = string `/recommendations`;
@@ -646,8 +566,6 @@ public isolated client class Client {
 
     # Search for Item
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Search response 
     resource isolated function get search(map<string|string[]> headers = {}, *SearchQueries queries) returns inline_response_200_7|error {
         string resourcePath = string `/search`;
@@ -658,8 +576,6 @@ public isolated client class Client {
 
     # Get Several Shows
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A set of shows 
     resource isolated function get shows(map<string|string[]> headers = {}, *GetMultipleShowsQueries queries) returns inline_response_200_3|error {
         string resourcePath = string `/shows`;
@@ -669,8 +585,6 @@ public isolated client class Client {
 
     # Get Show
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A show 
     resource isolated function get shows/[string id](map<string|string[]> headers = {}, *GetAShowQueries queries) returns ShowObject|error {
         string resourcePath = string `/shows/${getEncodedUri(id)}`;
@@ -680,8 +594,6 @@ public isolated client class Client {
 
     # Get Show Episodes
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Pages of episodes 
     resource isolated function get shows/[string id]/episodes(map<string|string[]> headers = {}, *GetAShowsEpisodesQueries queries) returns PagingSimplifiedEpisodeObject|error {
         string resourcePath = string `/shows/${getEncodedUri(id)}/episodes`;
@@ -691,8 +603,6 @@ public isolated client class Client {
 
     # Get Several Tracks
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A set of tracks 
     resource isolated function get tracks(map<string|string[]> headers = {}, *GetSeveralTracksQueries queries) returns inline_response_200_2|error {
         string resourcePath = string `/tracks`;
@@ -702,8 +612,6 @@ public isolated client class Client {
 
     # Get Track
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A track 
     resource isolated function get tracks/[string id](map<string|string[]> headers = {}, *GetTrackQueries queries) returns TrackObject|error {
         string resourcePath = string `/tracks/${getEncodedUri(id)}`;
@@ -722,8 +630,6 @@ public isolated client class Client {
 
     # Get User's Playlists
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A paged set of playlists 
     resource isolated function get users/[string user_id]/playlists(map<string|string[]> headers = {}, *GetListUsersPlaylistsQueries queries) returns PagingPlaylistObject|error {
         string resourcePath = string `/users/${getEncodedUri(user_id)}/playlists`;
@@ -733,8 +639,6 @@ public isolated client class Client {
 
     # Skip To Next
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Command sent 
     resource isolated function post me/player/next(map<string|string[]> headers = {}, *SkipUsersPlaybackToNextTrackQueries queries) returns error? {
         string resourcePath = string `/me/player/next`;
@@ -745,8 +649,6 @@ public isolated client class Client {
 
     # Skip To Previous
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Command sent 
     resource isolated function post me/player/previous(map<string|string[]> headers = {}, *SkipUsersPlaybackToPreviousTrackQueries queries) returns error? {
         string resourcePath = string `/me/player/previous`;
@@ -757,8 +659,6 @@ public isolated client class Client {
 
     # Add Item to Playback Queue
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Command received 
     resource isolated function post me/player/queue(map<string|string[]> headers = {}, *AddToQueueQueries queries) returns error? {
         string resourcePath = string `/me/player/queue`;
@@ -769,8 +669,6 @@ public isolated client class Client {
 
     # Add Items to Playlist
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A snapshot ID for the playlist 
     resource isolated function post playlists/[string playlist_id]/tracks(playlist_id_tracks_body_1 payload, map<string|string[]> headers = {}, *AddTracksToPlaylistQueries queries) returns inline_response_200_8|error {
         string resourcePath = string `/playlists/${getEncodedUri(playlist_id)}/tracks`;
@@ -795,8 +693,6 @@ public isolated client class Client {
 
     # Save Albums for Current User
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - The album is saved 
     resource isolated function put me/albums(me_albums_body payload, map<string|string[]> headers = {}, *SaveAlbumsUserQueries queries) returns error? {
         string resourcePath = string `/me/albums`;
@@ -809,8 +705,6 @@ public isolated client class Client {
 
     # Save Audiobooks for Current User
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Audiobook(s) are saved to the library 
     resource isolated function put me/audiobooks(map<string|string[]> headers = {}, *SaveAudiobooksUserQueries queries) returns error? {
         string resourcePath = string `/me/audiobooks`;
@@ -821,8 +715,6 @@ public isolated client class Client {
 
     # Save Episodes for Current User
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Episode saved 
     resource isolated function put me/episodes(me_episodes_body payload, map<string|string[]> headers = {}, *SaveEpisodesUserQueries queries) returns error? {
         string resourcePath = string `/me/episodes`;
@@ -835,8 +727,6 @@ public isolated client class Client {
 
     # Follow Artists or Users
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Artist or user followed 
     resource isolated function put me/following(me_following_body payload, map<string|string[]> headers = {}, *FollowArtistsUsersQueries queries) returns error? {
         string resourcePath = string `/me/following`;
@@ -861,8 +751,6 @@ public isolated client class Client {
 
     # Pause Playback
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Playback paused 
     resource isolated function put me/player/pause(map<string|string[]> headers = {}, *PauseAUsersPlaybackQueries queries) returns error? {
         string resourcePath = string `/me/player/pause`;
@@ -873,8 +761,6 @@ public isolated client class Client {
 
     # Start/Resume Playback
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Playback started 
     resource isolated function put me/player/play(player_play_body payload, map<string|string[]> headers = {}, *StartAUsersPlaybackQueries queries) returns error? {
         string resourcePath = string `/me/player/play`;
@@ -887,8 +773,6 @@ public isolated client class Client {
 
     # Set Repeat Mode
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Command sent 
     resource isolated function put me/player/repeat(map<string|string[]> headers = {}, *SetRepeatModeOnUsersPlaybackQueries queries) returns error? {
         string resourcePath = string `/me/player/repeat`;
@@ -899,8 +783,6 @@ public isolated client class Client {
 
     # Seek To Position
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Command sent 
     resource isolated function put me/player/seek(map<string|string[]> headers = {}, *SeekToPositionInCurrentlyPlayingTrackQueries queries) returns error? {
         string resourcePath = string `/me/player/seek`;
@@ -911,8 +793,6 @@ public isolated client class Client {
 
     # Toggle Playback Shuffle
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Command sent 
     resource isolated function put me/player/shuffle(map<string|string[]> headers = {}, *ToggleShuffleForUsersPlaybackQueries queries) returns error? {
         string resourcePath = string `/me/player/shuffle`;
@@ -923,8 +803,6 @@ public isolated client class Client {
 
     # Set Playback Volume
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Command sent 
     resource isolated function put me/player/volume(map<string|string[]> headers = {}, *SetVolumeForUsersPlaybackQueries queries) returns error? {
         string resourcePath = string `/me/player/volume`;
@@ -935,8 +813,6 @@ public isolated client class Client {
 
     # Save Shows for Current User
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Show saved 
     resource isolated function put me/shows(map<string|string[]> headers = {}, *SaveShowsUserQueries queries) returns error? {
         string resourcePath = string `/me/shows`;
@@ -947,8 +823,6 @@ public isolated client class Client {
 
     # Save Tracks for Current User
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - Track saved 
     resource isolated function put me/tracks(me_tracks_body payload, map<string|string[]> headers = {}, *SaveTracksUserQueries queries) returns error? {
         string resourcePath = string `/me/tracks`;
@@ -983,8 +857,6 @@ public isolated client class Client {
 
     # Update Playlist Items
     #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
     # + return - A snapshot ID for the playlist 
     resource isolated function put playlists/[string playlist_id]/tracks(playlist_id_tracks_body payload, map<string|string[]> headers = {}, *ReorderOrReplacePlaylistsTracksQueries queries) returns inline_response_200_8|error {
         string resourcePath = string `/playlists/${getEncodedUri(playlist_id)}/tracks`;
