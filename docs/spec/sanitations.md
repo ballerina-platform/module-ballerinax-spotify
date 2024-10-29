@@ -11,7 +11,8 @@ These changes are done in order to improve the overall usability, and as workaro
 
 
 1. Remove resource paths,
-    */playlists/{playlist_id}/images'(put) - schema for the image/jpeg content type is incorrectly defined
+  In '/playlists/{playlist_id}/images'
+    Remove the required Field from the Schema because required attribute within the schema for the image/jpeg content type is incorrectly defined
 2.Moving the inline schema to the components section
     1.MarketsResponse
     2.PlaylistResponse

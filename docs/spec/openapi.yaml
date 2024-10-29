@@ -726,6 +726,54 @@ paths:
       security:
         - oauth_2_0: []
 
+    put:
+      tags:
+        - Playlists
+        - Library
+      operationId: change-playlist-details
+      summary: |
+        Change Playlist Details
+      description: |
+        Change a playlist's name and public/private state. (The user must, of
+        course, own the playlist.)
+      parameters:
+        - $ref: '#/components/parameters/PathPlaylistId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              example:
+                name: Updated Playlist Name
+                description: Updated playlist description
+                public: false
+              type: object
+              additionalProperties: true
+              properties:
+                name:
+                  type: string
+                  description: |
+                    The new name for the playlist, for example `"My New Playlist Title"`
+                public:
+                  type: boolean
+                  description: |
+                    The playlist's public/private status (if it should be added to the user's profile or not): `true` the playlist will be public, `false` the playlist will be private, `null` the playlist status is not relevant. For more about public/private status, see [Working with Playlists](/documentation/web-api/concepts/playlists)
+                collaborative:
+                  type: boolean
+                  description: |
+                    If `true`, the playlist will become collaborative and other users will be able to modify the playlist in their Spotify client. <br/>
+                    _**Note**: You can only set `collaborative` to `true` on non-public playlists._
+                description:
+                  type: string
+                  description: |
+                    Value for playlist description as displayed in Spotify Clients and in the Web API.
+      responses:
+        '200':
+          description: Playlist updated
+      security:
+        - oauth_2_0:
+            - playlist-modify-public
+            - playlist-modify-private
+
   /playlists/{playlist_id}/tracks:
     get:
       tags:
@@ -1695,13 +1743,13 @@ paths:
       parameters:
         - $ref: '#/components/parameters/PathPlaylistId'
       requestBody:
+        required: true 
         content:
           image/jpeg:
             schema:
               example: /9j/2wCEABoZGSccJz4lJT5CLy8vQkc9Ozs9R0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0cBHCcnMyYzPSYmPUc9Mj1HR0dEREdHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR//dAAQAAf/uAA5BZG9iZQBkwAAAAAH/wAARCAABAAEDACIAAREBAhEB/8QASwABAQAAAAAAAAAAAAAAAAAAAAYBAQAAAAAAAAAAAAAAAAAAAAAQAQAAAAAAAAAAAAAAAAAAAAARAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwAAARECEQA/AJgAH//Z
               format: byte
               type: string
-              required: []
               description: Base64 encoded JPEG image data, maximum payload size is 256 KB.
       responses:
         '202':
