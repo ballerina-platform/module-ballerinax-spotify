@@ -10,8 +10,7 @@ The OpenAPI specification is obtained from the [Spotify OpenAPI Documentation](h
 These changes are done in order to improve the overall usability, and as workarounds for some known language limitations.
 
 
-1. Remove resource paths,
-  In '/playlists/{playlist_id}/images'
+1.In '/playlists/{playlist_id}/images'
     Remove the required Field from the Schema because required attribute within the schema for the image/jpeg content type is incorrectly defined
 2.Moving the inline schema to the components section
     1.MarketsResponse
