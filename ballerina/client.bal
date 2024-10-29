@@ -959,6 +959,18 @@ public isolated client class Client {
         return self.clientEp->put(resourcePath, request, headers);
     }
 
+    # Change Playlist Details
+    #
+    # + headers - Headers to be sent with the request 
+    # + return - Playlist updated 
+    resource isolated function put playlists/[string playlistId](PlaylistsPlaylistIdBody payload, map<string|string[]> headers = {}) returns error? {
+        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}`;
+        http:Request request = new;
+        json jsonBody = payload.toJson();
+        request.setPayload(jsonBody, "application/json");
+        return self.clientEp->put(resourcePath, request, headers);
+    }
+
     # Follow Playlist
     #
     # + headers - Headers to be sent with the request 
