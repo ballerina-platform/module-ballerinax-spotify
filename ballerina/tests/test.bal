@@ -1,3 +1,19 @@
+// Copyright (c) 2024, WSO2 LLC. (http://www.wso2.com).
+//
+// WSO2 LLC. licenses this file to you under the Apache License,
+// Version 2.0 (the "License"); you may not use this file except
+// in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
 import ballerina/test;
 import ballerina/log;
 
@@ -44,6 +60,7 @@ function getArtistTest() returns error? {
     }
     log:printInfo("Test passed: Successfully retrieved artist data");
 }
+
 @test:Config {}
 function getAudiobooksTest() returns error? {
     AudiobookObject|error response = check spotify->/audiobooks/ [audiobooksId];
@@ -53,6 +70,7 @@ function getAudiobooksTest() returns error? {
     }
     log:printInfo("Test passed: Successfully retrieved Audiobooks data");
 }
+
 @test:Config {}
 function BrowseCategoriesTest() returns error? {
     
@@ -63,6 +81,7 @@ function BrowseCategoriesTest() returns error? {
     }
     log:printInfo("Test passed: Successfully retrieved Browse Categories");
 }
+
 @test:Config {}
 function GetChaptersTest() returns error? {
     
@@ -73,6 +92,7 @@ function GetChaptersTest() returns error? {
     }
     log:printInfo("Test passed: Successfully retrieved chapters");
 }
+
 @test:Config {}
 function GetEpisodeTest() returns error? {
     
@@ -83,6 +103,7 @@ function GetEpisodeTest() returns error? {
     }
     log:printInfo("Test passed: Successfully retrieved Episode");
 }
+
 @test:Config {}
 function GetMarketsTest() returns error? {
     
@@ -104,6 +125,7 @@ function GetplaylistTest() returns error? {
     }
     log:printInfo("Test passed: Successfully retrieved playlist");
 }
+
 @test:Config {}
 function GetShowsTest() returns error? {
     
@@ -125,6 +147,7 @@ function getTrackTest() returns error? {
     }
     log:printInfo("Test passed: Successfully retrieved Track data");
 }
+
 @test:Config {}
 function getUserTest() returns error? {
     PrivateUserObject|error response = check spotify->/users/[userId];
@@ -167,7 +190,6 @@ function getArtistsAlbumTest() returns error? {
     }
     log:printInfo("Test passed: Successfully retrieved Artist Album");
 }
-
 
 @test:Config {}
 function BrowseCategoryTest() returns error? {
