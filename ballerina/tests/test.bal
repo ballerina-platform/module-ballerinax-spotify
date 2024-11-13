@@ -72,7 +72,7 @@ function getAudiobooksTest() returns error? {
 }
 
 @test:Config {}
-function BrowseCategoriesTest() returns error? {
+function browseCategoriesTest() returns error? {
     
     PagedCategoriesObject|error response = spotify->/browse/categories;
     if response is error {
@@ -83,7 +83,7 @@ function BrowseCategoriesTest() returns error? {
 }
 
 @test:Config {}
-function GetChaptersTest() returns error? {
+function getChaptersTest() returns error? {
     
     AudiobookObject|error response = spotify->/chapters/[chaptersId];
     if response is error {
@@ -94,7 +94,7 @@ function GetChaptersTest() returns error? {
 }
 
 @test:Config {}
-function GetEpisodeTest() returns error? {
+function getEpisodeTest() returns error? {
     
     EpisodeObject|error response = spotify->/episodes/[episodeId];
     if response is error {
@@ -105,7 +105,7 @@ function GetEpisodeTest() returns error? {
 }
 
 @test:Config {}
-function GetMarketsTest() returns error? {
+function getMarketsTest() returns error? {
     
     MarketsResponse|error response = spotify->/markets;
     if response is error {
@@ -116,7 +116,7 @@ function GetMarketsTest() returns error? {
 }
 
 @test:Config {}
-function GetplaylistTest() returns error? {
+function getplaylistTest() returns error? {
     
     CurrentlyPlayingContextObject|error response = spotify->/playlists/[playlistsId];
     if response is error {
@@ -127,7 +127,7 @@ function GetplaylistTest() returns error? {
 }
 
 @test:Config {}
-function GetShowsTest() returns error? {
+function getShowsTest() returns error? {
     
     CurrentlyPlayingContextObject|error response = spotify->/shows/[showsId];
     if response is error {
@@ -192,7 +192,7 @@ function getArtistsAlbumTest() returns error? {
 }
 
 @test:Config {}
-function BrowseCategoryTest() returns error? {
+function browseCategoryTest() returns error? {
     
     CategoryObject|error response = spotify->/browse/categories/[categoryId];
     if response is error {
