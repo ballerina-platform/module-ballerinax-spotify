@@ -1,16 +1,81 @@
-Adding tests for get methods
-1. Albums
-2. Artist
-//3. AudioBooks {"audiobooks":[null,null,null]}
-4. Browse Categories
-//5. Chapters{"error": {"status": 404, "message": "Resource not found" } }
-//6. Episode
-7. Markets
-8. Playlist
-//9. Shows{"error": {"status": 404, "message": "Resource not found" } }
-10. Tracks
-11. User
-12. AlbumTracks
-13. ArtistId
-14. ArtistsAlbum
-15. Category
+# Running Tests
+
+## Prerequisites
+You need a bearer token and a Access token from Spotify developer account.
+
+And You need Find Your User ID For run some of the tests.
+Via This Website you can find it [Spotify ID Finder](https://developer.spotify.com/documentation/web-api/).
+
+# Running Tests
+
+There are two test environments for running the Spotify connector tests. The default test environment is the mock server for Spotify API. The other test environment is the actual Spotify API. 
+
+You can run the tests in either of these environments and each has its own compatible set of tests.
+
+ Test Groups | Environment                                       
+-------------|---------------------------------------------------
+ mock_tests  | Mock server for Spotify API (Defualt Environment) 
+ live_tests  | Spotify API                                       
+
+## Running Tests in the Mock Server
+
+To execute the tests on the mock server, ensure that the `IS_LIVE_SERVER` environment variable is either set to `false` or unset before initiating the tests. 
+
+This environment variable can be configured within the `Config.toml` file located in the tests directory or specified as an environmental variable.
+
+#### Using a Config.toml File
+
+Create a `Config.toml` file in the tests directory and the following content:
+
+```toml
+isLiveServer = false
+```
+
+#### Using Environment Variables
+
+Alternatively, you can set your authentication credentials as environment variables:
+If you are using linux or mac, you can use following method:
+```bash
+   export IS_LIVE_SERVER=false
+```
+If you are using Windows you can use following method:
+```bash
+   setx IS_LIVE_SERVER false
+```
+Then, run the following command to run the tests:
+
+```bash
+   ./gradlew clean test
+```
+
+## Running Tests Against Spotify Live API
+
+#### Using a Config.toml File
+
+Create a `Config.toml` file in the tests directory and add your authentication credentials a
+
+```toml
+   isLiveServer = true
+   token = "<your-spotify-access-token>"
+```
+
+#### Using Environment Variables
+
+Alternatively, you can set your authentication credentials as environment variables:
+If you are using linux or mac, you can use following method:
+```bash
+   export IS_LIVE_SERVER=true
+   export SPOTIFY_TOKEN ="<your-spotify-access-token>"
+```
+
+If you are using Windows you can use following method:
+```bash
+   setx IS_LIVE_SERVER true
+   setx SPOTIFY_TOKEN <your-spotify-access-token>
+   setx SPOTIFY_USER_ID  <your-spotify-user-id>
+```
+Then, run the following command to run the tests:
+
+```bash
+   ./gradlew clean test 
+```
