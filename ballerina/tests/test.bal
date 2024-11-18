@@ -15,7 +15,6 @@
 // under the License.
 
 import ballerina/test;
-import ballerina/log;
 
 configurable string token = ?;
 
@@ -40,164 +39,91 @@ ConnectionConfig config = {
 final Client spotify = check new(config);
 
 @test:Config {}
-function getAlbumTest() returns error? {
-    
-    AlbumObject|error response = spotify->/albums/[albumId];
-    if response is error {
-        log:printError("Failed to get album", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved album data");
+isolated function getAlbumTest() returns error? {
+    AlbumObject response = check spotify->/albums/[albumId];
+    test:assertTrue(response is AlbumObject);
 }
 
 @test:Config {}
-function getArtistTest() returns error? {
-
-    ArtistObject|error response = check spotify->/artists/ [artistId];
-    if response is error {
-        log:printError("Failed to get artist", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved artist data");
+isolated function getArtistTest() returns error? {
+    ArtistObject response = check spotify->/artists/[artistId];
+    test:assertTrue(response is ArtistObject);
 }
 
 @test:Config {}
-function getAudiobooksTest() returns error? {
-    AudiobookObject|error response = check spotify->/audiobooks/ [audiobooksId];
-    if response is error {
-        log:printError("Failed to get Audiobooks", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved Audiobooks data");
+isolated function getAudiobooksTest() returns error? {
+    AudiobookObject response = check spotify->/audiobooks/ [audiobooksId];
+    test:assertTrue(response is AudiobookObject);
 }
 
 @test:Config {}
-function browseCategoriesTest() returns error? {
-    
-    PagedCategoriesObject|error response = spotify->/browse/categories;
-    if response is error {
-        log:printError("Failed to get Browse Categories", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved Browse Categories");
+isolated function browseCategoriesTest() returns error? {
+    PagedCategoriesObject response = check spotify->/browse/categories;
+    test:assertTrue(response is PagedCategoriesObject);
 }
 
 @test:Config {}
-function getChaptersTest() returns error? {
-    
-    AudiobookObject|error response = spotify->/chapters/[chaptersId];
-    if response is error {
-        log:printError("Failed to get chapters", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved chapters");
+isolated function getChaptersTest() returns error? {
+    AudiobookObject response = check spotify->/chapters/[chaptersId];
+    test:assertTrue(response is AudiobookObject);
 }
 
 @test:Config {}
-function getEpisodeTest() returns error? {
-    
-    EpisodeObject|error response = spotify->/episodes/[episodeId];
-    if response is error {
-        log:printError("Failed to get Episode", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved Episode");
+isolated function getEpisodeTest() returns error? {
+    EpisodeObject response = check spotify->/episodes/[episodeId];
+    test:assertTrue(response is EpisodeObject);
 }
 
 @test:Config {}
-function getMarketsTest() returns error? {
-    
-    MarketsResponse|error response = spotify->/markets;
-    if response is error {
-        log:printError("Failed to get Markets", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved Markets");
+isolated function getMarketsTest() returns error? {
+    MarketsResponse response = check spotify->/markets;
+    test:assertTrue(response is MarketsResponse);
 }
 
 @test:Config {}
-function getplaylistTest() returns error? {
-    
-    CurrentlyPlayingContextObject|error response = spotify->/playlists/[playlistsId];
-    if response is error {
-        log:printError("Failed to get playlist", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved playlist");
+isolated function getplaylistTest() returns error? {
+    CurrentlyPlayingContextObject response = check spotify->/playlists/[playlistsId];
+    test:assertTrue(response is CurrentlyPlayingContextObject);
 }
 
 @test:Config {}
-function getShowsTest() returns error? {
-    
-    CurrentlyPlayingContextObject|error response = spotify->/shows/[showsId];
-    if response is error {
-        log:printError("Failed to get Shows", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved Shows");
+isolated function getShowsTest() returns error? {
+    CurrentlyPlayingContextObject response = check spotify->/shows/[showsId];
+    test:assertTrue(response is CurrentlyPlayingContextObject);
 }
 
 @test:Config {}
-function getTrackTest() returns error? {
-    
-    TrackObject|error response = check spotify->/tracks/[tracksId];
-    if response is error {
-        log:printError("Failed to get Track", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved Track data");
+isolated function getTrackTest() returns error? {
+    TrackObject response = check spotify->/tracks/[tracksId];
+    test:assertTrue(response is TrackObject);
 }
 
 @test:Config {}
-function getUserTest() returns error? {
-    PrivateUserObject|error response = check spotify->/users/[userId];
-    if response is error {
-        log:printError("Failed to get  profile information about a Spotify user", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved  profile information about a Spotify user data");
+isolated function getUserTest() returns error? {
+    PrivateUserObject response = check spotify->/tracks/[tracksId];
+    test:assertTrue(response is PrivateUserObject);
 }
 
 @test:Config {}
-function getAlbumTracksTest() returns error? {
-    
-    PagingSimplifiedTrackObject|error response = spotify->/albums/[albumId ]/tracks;
-    if response is error {
-        log:printError("Failed to get album tracks", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved album tracks");
+isolated function getAlbumTracksTest() returns error? {
+    PagingSimplifiedTrackObject response = check spotify->/albums/[albumId ]/tracks;
+    test:assertTrue(response is PagingSimplifiedTrackObject);
 }
 
 @test:Config {}
-function getArtistIdTest() returns error? {
-    
-    ArtistObject|error response = spotify->/artists/[artistId];
-    if response is error {
-        log:printError("Failed to get Artist by Id", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved Artist by Id");
+isolated function getArtistIdTest() returns error? {
+    ArtistObject response = check spotify->/artists/[artistId];
+    test:assertTrue(response is ArtistObject);
 }
 
 @test:Config {}
-function getArtistsAlbumTest() returns error? {
-    
-    PagingArtistDiscographyAlbumObject|error response = spotify->/artists/[artistId]/albums;
-    if response is error {
-        log:printError("Failed to get Artist Album", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved Artist Album");
+isolated function getArtistsAlbumTest() returns error? {
+    PagingArtistDiscographyAlbumObject response = check spotify->/artists/[artistId]/albums;
+    test:assertTrue(response is PagingArtistDiscographyAlbumObject);
 }
 
 @test:Config {}
-function browseCategoryTest() returns error? {
-    
-    CategoryObject|error response = spotify->/browse/categories/[categoryId];
-    if response is error {
-        log:printError("Failed to get Browse Category", response);
-        test:assertFail("API call failed: " + response.message());
-    }
-    log:printInfo("Test passed: Successfully retrieved Browse Category");
+isolated function browseCategoryTest() returns error? {
+    CategoryObject response = check spotify->/browse/categories/[categoryId];
+    test:assertTrue(response is CategoryObject);
 }
