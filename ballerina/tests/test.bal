@@ -47,7 +47,7 @@ isolated function getAlbumTest() returns error? {
 @test:Config {}
 isolated function getArtistTest() returns error? {
     ArtistObject response = check spotify->/artists/[artistId];
-    test:assertTrue(response is ArtistObject);
+    test:assertTrue(response.loudness is ArtistObject);
 }
 
 @test:Config {}
