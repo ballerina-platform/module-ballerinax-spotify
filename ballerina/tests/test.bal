@@ -40,60 +40,60 @@ final Client spotify = check new(config);
 
 @test:Config {}
 isolated function getAlbumTest() returns error? {
-    AlbumObject response = check spotify->/albums/[albumId];
+    AlbumObject|error response =spotify->/albums/[albumId];
     test:assertTrue(response is AlbumObject);
 }
 
 @test:Config {}
 isolated function browseCategoriesTest() returns error? {
-    PagedCategoriesObject response = check spotify->/browse/categories;
+    PagedCategoriesObject|error response = check spotify->/browse/categories;
     test:assertTrue(response is PagedCategoriesObject);
 }
 
 @test:Config {}
 isolated function getMarketsTest() returns error? {
-    MarketsResponse response = check spotify->/markets;
+    MarketsResponse|error response = spotify->/markets;
     test:assertTrue(response is MarketsResponse);
 }
 
 @test:Config {}
 isolated function getplaylistTest() returns error? {
-    CurrentlyPlayingContextObject response = check spotify->/playlists/[playlistsId];
+    CurrentlyPlayingContextObject|error response = spotify->/playlists/[playlistsId];
     test:assertTrue(response is CurrentlyPlayingContextObject);
 }
 
 @test:Config {}
 isolated function getTrackTest() returns error? {
-    TrackObject response = check spotify->/tracks/[tracksId];
+    TrackObject|error response =spotify->/tracks/[tracksId];
     test:assertTrue(response is TrackObject);
 }
 
 @test:Config {}
 isolated function getUserTest() returns error? {
-    PrivateUserObject response = check spotify->/tracks/[tracksId];
+    PrivateUserObject|error response = spotify->/tracks/[tracksId];
     test:assertTrue(response is PrivateUserObject);
 }
 
 @test:Config {}
 isolated function getAlbumTracksTest() returns error? {
-    PagingSimplifiedTrackObject response = check spotify->/albums/[albumId ]/tracks;
+    PagingSimplifiedTrackObject|error response = spotify->/albums/[albumId ]/tracks;
     test:assertTrue(response is PagingSimplifiedTrackObject);
 }
 
 @test:Config {}
 isolated function getArtistIdTest() returns error? {
-    ArtistObject response = check spotify->/artists/[artistId];
+    ArtistObject|error response =spotify->/artists/[artistId];
     test:assertTrue(response is ArtistObject);
 }
 
 @test:Config {}
 isolated function getArtistsAlbumTest() returns error? {
-    PagingArtistDiscographyAlbumObject response = check spotify->/artists/[artistId]/albums;
+    PagingArtistDiscographyAlbumObject|error response = spotify->/artists/[artistId]/albums;
     test:assertTrue(response is PagingArtistDiscographyAlbumObject);
 }
 
 @test:Config {}
 isolated function browseCategoryTest() returns error? {
-    CategoryObject response = check spotify->/browse/categories/[categoryId];
+    CategoryObject|error response = spotify->/browse/categories/[categoryId];
     test:assertTrue(response is CategoryObject);
 }
