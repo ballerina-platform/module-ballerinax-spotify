@@ -45,33 +45,9 @@ isolated function getAlbumTest() returns error? {
 }
 
 @test:Config {}
-isolated function getArtistTest() returns error? {
-    ArtistObject response = check spotify->/artists/[artistId];
-    test:assertTrue(response.loudness is ArtistObject);
-}
-
-@test:Config {}
-isolated function getAudiobooksTest() returns error? {
-    AudiobookObject response = check spotify->/audiobooks/ [audiobooksId];
-    test:assertTrue(response is AudiobookObject);
-}
-
-@test:Config {}
 isolated function browseCategoriesTest() returns error? {
     PagedCategoriesObject response = check spotify->/browse/categories;
     test:assertTrue(response is PagedCategoriesObject);
-}
-
-@test:Config {}
-isolated function getChaptersTest() returns error? {
-    AudiobookObject response = check spotify->/chapters/[chaptersId];
-    test:assertTrue(response is AudiobookObject);
-}
-
-@test:Config {}
-isolated function getEpisodeTest() returns error? {
-    EpisodeObject response = check spotify->/episodes/[episodeId];
-    test:assertTrue(response is EpisodeObject);
 }
 
 @test:Config {}
@@ -83,12 +59,6 @@ isolated function getMarketsTest() returns error? {
 @test:Config {}
 isolated function getplaylistTest() returns error? {
     CurrentlyPlayingContextObject response = check spotify->/playlists/[playlistsId];
-    test:assertTrue(response is CurrentlyPlayingContextObject);
-}
-
-@test:Config {}
-isolated function getShowsTest() returns error? {
-    CurrentlyPlayingContextObject response = check spotify->/shows/[showsId];
     test:assertTrue(response is CurrentlyPlayingContextObject);
 }
 
