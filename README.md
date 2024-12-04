@@ -28,8 +28,6 @@ To use the Spotify connector, you must have access to the Spotify API through a 
 
 Enter an App Name and App Description of your choice (they   will be displayed to the user on the grant screen), put a tick in the Developer Terms of Service checkbox and finally click on CREATE. Your application is now registered, and you'll be redirected to the app overview page.
 
-    <img src=https://developer.spotify.com/images/documentation/web-api/createappdialog.png alt="Set up" style="width: 70%;">
-
 ### Step 3. Obtain Client Id and Client Secret.
 
 With our credentials in hand, we are ready to request an access token.
@@ -44,13 +42,13 @@ With our credentials in hand, we are ready to request an access token.
      -d "grant_type=client_credentials&client_id=your-client-id&client_secret=your-client-secret"
 ```
 The response will return an access token valid for 1 hour
-
+```
 {
   "access_token": "BQDBKJ5eo5jxbtpWjVOj7ryS84khybFpP_lTqzV7uV-T_m0cTfwvdn5BnBSKPxKgEb11",
   "token_type": "Bearer",
   "expires_in": 3600
 }
-
+```
 
 ## Quickstart
 
