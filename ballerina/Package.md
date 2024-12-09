@@ -8,7 +8,7 @@ The `ballerinax/spotify` package provides APIs to connect and interact with Spot
 
 To use the Spotify connector, you must have access to the Spotify API through a [Spotify developer account](https://developer.spotify.com) and a project under it. If you do not have a Spotify Developer account, you can sign up for one [here](https://developer.spotify.com/documentation/web-api/concepts/access-token).
 
-### Step 1: Create a Spotify Developer Project
+### Step 1: Create a Spotify developer project
 
 1. Open the [Spotify Developer Portal](https://developer.spotify.com/dashboard).
 
@@ -19,7 +19,7 @@ To use the Spotify connector, you must have access to the Spotify API through a 
 
 Enter an App Name and App Description of your choice (they will be displayed to the user on the grant screen), put a tick in the Developer Terms of Service checkbox and finally click on CREATE. Your application is now registered, and you'll be redirected to the app overview page.
 
-### Step 3. Obtain Client Id and Client Secret.
+### Step 3. Obtain client Id and client Secret.
 
 With our credentials in hand, we are ready to request an access token.
 
@@ -76,6 +76,14 @@ final spotify:Client spotify = check new({
 ### Step 3: Invoke the connector operation
 
 Now, utilize the available connector operations.
+
+#### Get markets
+
+```ballerina
+public function main() returns error? {
+    MarketsResponse|error response = spotify->/markets;
+}
+```
 
 ### Step 4: Run the Ballerina application
 
