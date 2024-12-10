@@ -2,17 +2,21 @@
 
 The `ballerinax/spotify` connector provides practical examples illustrating usage in various scenarios.
 
-[//]: # (TODO: Add examples)
-1. 
-2. 
+1. [Create folder in Spotify](https://github.com/ballerina-platform/module-ballerinax-spotify/tree/main/examples/get-markets) - get spotify markets
 
 ## Prerequisites
 
-[//]: # (TODO: Add prerequisites)
+1. Generate Spotify access token to authenticate the connector as described in the [Setup guide](https://central.ballerina.io/ballerinax/spotify/latest#setup-guide).
+2. For each example, create a `Config.toml` file to add the configuration parameters. Here's an example of how your `Config.toml` file should look like:
+
+```toml
+token = "<Access Token>"
+```
 
 ## Running an example
 
 Execute the following commands to build an example from the source:
+Explore these [examples](https://github.com/module-ballerinax-spotify/tree/main/examples/), covering the following use cases:
 
 * To build an example:
 
