@@ -1,6 +1,6 @@
-## Create a Folder
+## Get Markets
 
-This use case demonstrates how the Spotify API can be utilized to create a new folder in your Spotify account.
+This use case demonstrates how the Spotify API can be utilized get markets in your Spotify account.
 
 ## Prerequisites
 
