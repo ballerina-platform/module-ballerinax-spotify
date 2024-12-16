@@ -26,6 +26,6 @@ final spotify:Client spotify = check new({
 });
 
 public function main() returns error? {
-    MarketsResponseresponse = check spotify->/markets;
+    MarketsResponse|error response = spotify->/markets;
 }
 
