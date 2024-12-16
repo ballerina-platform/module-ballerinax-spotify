@@ -2,7 +2,7 @@
 
 The `ballerinax/spotify` connector provides practical examples illustrating usage in various scenarios.
 
-1. [Create folder in Spotify](https://github.com/ballerina-platform/module-ballerinax-spotify/tree/main/examples/get-markets) - get spotify markets
+1. [Get Markets in Spotify](https://github.com/ballerina-platform/module-ballerinax-spotify/tree/main/examples/get-markets) - get spotify markets
 
 ## Prerequisites
 

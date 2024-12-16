@@ -108,7 +108,7 @@ bal run
 
 The `Spotify` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/module-ballerinax-spotify/tree/main/examples/), covering the following use cases:
 
-1. [Create folder in Spotify](https://github.com/ballerina-platform/module-ballerinax-spotify/tree/main/examples/get-markets) - get spotify markets
+1. [Get Markets in Spotify](https://github.com/ballerina-platform/module-ballerinax-spotify/tree/main/examples/get-markets) - get spotify markets
 
 ## Build from the source
 
