@@ -2,8 +2,8 @@
 
 The `ballerinax/spotify` connector provides practical examples illustrating usage in various scenarios.
 
-1. [Get albums of artist in Spotify](https://github.com/ballerina-platform/module-ballerinax-spotify/tree/main/examples/get-artist-albums) - get albums of artist in Spotify
-
+ 1.[Get artist and album details from Spotify](https://github.com/ballerina-platform/module-ballerinax-spotify/tree/main/examples/details) - Get information about an artist including their details, genres, followers, and discography from Spotify.
+ 
 ## Prerequisites
 
 1. Generate Spotify access token to authenticate the connector as described in the [Setup guide](https://central.ballerina.io/ballerinax/spotify/latest#setup-guide).

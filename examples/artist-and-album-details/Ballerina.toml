@@ -1,6 +1,6 @@
 [package]
 org = "wso2"
-name = "artist_details"
+name = "artist_and_album_details"
 version = "0.1.0"
 distribution = "2201.10.3"
 

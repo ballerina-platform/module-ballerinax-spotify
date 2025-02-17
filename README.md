@@ -108,7 +108,7 @@ bal run
 
 The `Spotify` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/module-ballerinax-spotify/tree/main/examples/), covering the following use cases:
 
-1.[Get albums of artist in Spotify](https://github.com/ballerina-platform/module-ballerinax-spotify/tree/main/examples/get-artist-albums) - get albums of artist in Spotify
+ 1.[Get artist and album details from Spotify](https://github.com/ballerina-platform/module-ballerinax-spotify/tree/main/examples/details) - Get information about an artist including their details, genres, followers, and discography from Spotify.
 
 ## Build from the source
 
