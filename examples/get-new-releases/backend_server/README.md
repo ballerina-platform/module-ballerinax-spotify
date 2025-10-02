@@ -85,7 +85,7 @@ The service will start on `http://localhost:8080`
 
 ### Health Check
 ```
-GET /api/v1/health
+GET /health
 ```
 Returns the service health status.
 
@@ -101,7 +101,7 @@ Returns the service health status.
 
 ### Get New Releases
 ```
-GET /api/v1/releases
+GET /new-releases
 ```
 
 **Query Parameters:**
@@ -223,10 +223,10 @@ Test the endpoints using curl or any HTTP client:
 
 ```bash
 # Health check
-curl http://localhost:8080/api/v1/health
+curl http://localhost:8080/health
 
 # Get new releases
-curl http://localhost:8080/api/v1/releases
+curl http://localhost:8080/new-releases
 
 ```
 
