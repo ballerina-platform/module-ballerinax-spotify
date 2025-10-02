@@ -85,21 +85,8 @@ service / on new http:Listener(port) {
         log:printInfo("Fetching new releases from Spotify API");
         
         do {
-            // Validate parameters
-            int validLimit = 'limit ?: 20;
-            int validOffset = offset ?: 0;
-            
-            // Ensure limit is within Spotify's constraints (1-50)
-            if (validLimit < 1) {
-                validLimit = 1;
-            } else if (validLimit > 50) {
-                validLimit = 50;
-            }
-            
-            // Ensure offset is not negative
-            if (validOffset < 0) {
-                validOffset = 0;
-            }
+            // Validate parameters using helper function
+            [int, int] [validLimit, validOffset] = validateSpotifyParams('limit, offset);
             
             log:printInfo(string `Requesting new releases with country: ${country ?: "all"}, limit: ${validLimit}, offset: ${validOffset}`);
             
@@ -155,21 +142,8 @@ service / on new http:Listener(port) {
         log:printInfo("Fetching new releases for country: " + country);
         
         do {
-            // Validate parameters
-            int validLimit = 'limit ?: 20;
-            int validOffset = offset ?: 0;
-            
-            // Ensure limit is within Spotify's constraints (1-50)
-            if (validLimit < 1) {
-                validLimit = 1;
-            } else if (validLimit > 50) {
-                validLimit = 50;
-            }
-            
-            // Ensure offset is not negative
-            if (validOffset < 0) {
-                validOffset = 0;
-            }
+            // Validate parameters using helper function
+            [int, int] [validLimit, validOffset] = validateSpotifyParams('limit, offset);
             
             log:printInfo(string `Requesting new releases with country: ${country}, limit: ${validLimit}, offset: ${validOffset}`);
             
@@ -227,18 +201,8 @@ service / on new http:Listener(port) {
         log:printInfo("Fetching featured playlists from Spotify API");
         
         do {
-            int validLimit = 'limit ?: 20;
-            int validOffset = offset ?: 0;
-            
-            if (validLimit < 1) {
-                validLimit = 1;
-            } else if (validLimit > 50) {
-                validLimit = 50;
-            }
-            
-            if (validOffset < 0) {
-                validOffset = 0;
-            }
+            // Validate parameters using helper function
+            [int, int] [validLimit, validOffset] = validateSpotifyParams('limit, offset);
             
             spotify:FeaturedPlaylistObject featuredPlaylists = check spotifyClient->getFeaturedPlaylists(
                 country, (), (), validLimit, validOffset
@@ -284,6 +248,26 @@ service / on new http:Listener(port) {
             };
         }
     }
+}
+
+// Helper function to validate Spotify API parameters
+function validateSpotifyParams(int? 'limit, int? offset) returns [int, int] {
+    int validLimit = 'limit ?: 20;
+    int validOffset = offset ?: 0;
+    
+    // Ensure limit is within Spotify's constraints (1-50)
+    if (validLimit < 1) {
+        validLimit = 1;
+    } else if (validLimit > 50) {
+        validLimit = 50;
+    }
+    
+    // Ensure offset is not negative
+    if (validOffset < 0) {
+        validOffset = 0;
+    }
+    
+    return [validLimit, validOffset];
 }
 
 // Helper function to get current timestamp
