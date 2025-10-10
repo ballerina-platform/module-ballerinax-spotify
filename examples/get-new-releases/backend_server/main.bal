@@ -15,6 +15,7 @@
 // under the License.
 
 import ballerina/http;
+import ballerina/io;
 import ballerina/log;
 import ballerina/time;
 import ballerinax/spotify;
@@ -126,7 +127,7 @@ service / on new http:Listener(port) {
                     "timestamp": timestamp()
                 };
                 
-                log:printInfo("Successfully fetched new releases");
+                io:println("Successfully fetched new releases");
                 return response;
             } else {
                 log:printError("Error converting response to JSON", 'error = responseJson);
@@ -143,7 +144,7 @@ service / on new http:Listener(port) {
             }
             
         } on fail error e {
-            log:printError("Error fetching new releases", 'error = e);
+            io:println("Error fetching new releases");
             return <http:InternalServerError>{
                 body: {
                     "success": false,
