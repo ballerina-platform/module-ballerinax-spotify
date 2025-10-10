@@ -25,6 +25,24 @@ configurable string clientSecret = ?;
 configurable string host = "localhost";
 configurable int port = 8080;
 
+// API response types for the examples
+public type ErrorDetails record {
+    string message;
+    string details?;
+    string timestamp;
+};
+
+public type ErrorResponse record {
+    boolean success = false;
+    ErrorDetails errorInfo;
+};
+
+public type NewReleasesResponse record {
+    boolean success = true;
+    spotify:PagedAlbumsObject data;
+    string timestamp;
+};
+
 // Function to get access token using client credentials
 isolated function getAccessToken() returns string|error {
     http:Client tokenClient = check new ("https://accounts.spotify.com");
@@ -90,7 +108,7 @@ service / on new http:Listener(port) {
         string? country = (),
         int? 'limit = 20,
         int? offset = 0
-    ) returns json|http:InternalServerError {
+    ) returns NewReleasesResponse|ErrorResponse|http:InternalServerError {
         
         log:printInfo("Fetching new releases from Spotify API");
         
@@ -113,47 +131,41 @@ service / on new http:Listener(port) {
             
             log:printInfo(string `Requesting new releases with country: ${country ?: "all"}, limit: ${validLimit}, offset: ${validOffset}`);
             
-            // Call Spotify API
-            spotify:NewReleasesObject newReleases = check spotifyClient->getNewReleses(country, validLimit, validOffset);
-            
-            // Convert the entire response to JSON for easy consumption
-            json|error responseJson = newReleases.cloneWithType(json);
-            
-            if responseJson is json {
-                json response = {
-                    "success": true,
-                    "data": responseJson,
-                    "timestamp": timestamp()
-                };
-                
-                log:printInfo("Successfully fetched new releases");
-                return response;
-            } else {
+            // Call Spotify API using direct HTTP request to avoid depending on connector method versions
+            spotify:PagedAlbumsObject newReleases = check NewReleases(country, validLimit, validOffset);
+
+            NewReleasesResponse response = {
+                success: true,
+                data: newReleases,
+                timestamp: timestamp()
+            };
+
+            log:printInfo("Successfully fetched new releases");
+            return response;
+        } else {
                 log:printError("Error converting response to JSON", 'error = responseJson);
-                return <http:InternalServerError>{
-                    body: {
-                        "success": false,
-                        "error": {
-                            "message": "Failed to process response",
-                            "details": "JSON conversion error",
-                            "timestamp": timestamp()
-                        }
+                ErrorResponse errResp = {
+                    success: false,
+                    errorInfo: {
+                        message: "Failed to process response",
+                        details: "JSON conversion error",
+                        timestamp: timestamp()
                     }
                 };
+                return <http:InternalServerError>{ body: errResp };
             }
             
         } on fail error e {
             log:printError("Error fetching new releases", 'error = e);
-            return <http:InternalServerError>{
-                body: {
-                    "success": false,
-                    "error": {
-                        "message": "Failed to fetch new releases",
-                        "details": e.message(),
-                        "timestamp": timestamp()
-                    }
+            ErrorResponse errResp = {
+                success: false,
+                errorInfo: {
+                    message: "Failed to fetch new releases",
+                    details: e.message(),
+                    timestamp: timestamp()
                 }
             };
+            return <http:InternalServerError>{ body: errResp };
         }
     }
 
@@ -161,7 +173,7 @@ service / on new http:Listener(port) {
     resource function get new\-releases/[string country](
         int? 'limit = 20,
         int? offset = 0
-    ) returns json|http:InternalServerError {
+    ) returns NewReleasesResponse|ErrorResponse|http:InternalServerError {
         log:printInfo("Fetching new releases for country: " + country);
         
         do {
@@ -183,47 +195,41 @@ service / on new http:Listener(port) {
             
             log:printInfo(string `Requesting new releases with country: ${country}, limit: ${validLimit}, offset: ${validOffset}`);
             
-            // Call Spotify API
-            spotify:NewReleasesObject newReleases = check spotifyClient->getNewReleses(country, validLimit, validOffset);
-            
-            // Convert the entire response to JSON for easy consumption
-            json|error responseJson = newReleases.cloneWithType(json);
-            
-            if (responseJson is json) {
-                json response = {
-                    "success": true,
-                    "data": responseJson,
-                    "timestamp": timestamp()
-                };
-                
-                log:printInfo("Successfully fetched new releases");
-                return response;
-            } else {
+            // Call Spotify API using direct HTTP request to avoid depending on connector method versions
+            spotify:PagedAlbumsObject newReleases = check NewReleases(country, validLimit, validOffset);
+
+            NewReleasesResponse response = {
+                success: true,
+                data: newReleases,
+                timestamp: timestamp()
+            };
+
+            log:printInfo("Successfully fetched new releases");
+            return response;
+        } else {
                 log:printError("Error converting response to JSON", 'error = responseJson);
-                return <http:InternalServerError>{
-                    body: {
-                        "success": false,
-                        "error": {
-                            "message": "Failed to process response",
-                            "details": "JSON conversion error",
-                            "timestamp": timestamp()
-                        }
+                ErrorResponse errResp = {
+                    success: false,
+                    errorInfo: {
+                        message: "Failed to process response",
+                        details: "JSON conversion error",
+                        timestamp: timestamp()
                     }
                 };
+                return <http:InternalServerError>{ body: errResp };
             }
             
         } on fail error e {
             log:printError("Error fetching new releases", 'error = e);
-            return <http:InternalServerError>{
-                body: {
-                    "success": false,
-                    "error": {
-                        "message": "Failed to fetch new releases",
-                        "details": e.message(),
-                        "timestamp": timestamp()
-                    }
+            ErrorResponse errResp = {
+                success: false,
+                errorInfo: {
+                    message: "Failed to fetch new releases",
+                    details: e.message(),
+                    timestamp: timestamp()
                 }
             };
+            return <http:InternalServerError>{ body: errResp };
         }
     }
 
@@ -301,4 +307,33 @@ function timestamp() returns string {
     // Get current UTC time and convert to ISO 8601 string
     time:Utc currentTime = time:utcNow();
     return time:utcToString(currentTime);
+}
+
+// Helper to fetch new releases from Spotify Web API using client credentials token
+isolated function NewReleases(string? country, int lim, int off) returns spotify:PagedAlbumsObject|error {
+    // Build query string
+    string query = "?limit=" + lim.toString() + "&offset=" + off.toString();
+    if country is string {
+        query = query + "&country=" + country;
+    }
+
+    // Get a fresh token using the same client credentials helper
+    string token = check getAccessToken();
+
+    http:Client apiClient = check new ("https://api.spotify.com/v1");
+
+    map<string|string[]> headers = {"Authorization": ["Bearer " + token]};
+    http:Response resp = check apiClient->get("/browse/new-releases" + query, headers);
+    if resp.statusCode == 200 {
+        json payload = check resp.getJsonPayload();
+        json|error converted = payload.cloneWithType(spotify:PagedAlbumsObject);
+        if converted is spotify:PagedAlbumsObject {
+            return converted;
+        } else {
+            return error("Failed to convert payload to spotify:PagedAlbumsObject");
+        }
+    } else {
+        string body = check resp.getTextPayload();
+        return error("Spotify API returned " + resp.statusCode.toString() + ": " + body);
+    }
 }
