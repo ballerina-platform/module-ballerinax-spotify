@@ -1,3 +1,19 @@
+// Copyright (c) 2025, WSO2 LLC. (http://www.wso2.com).
+//
+// WSO2 LLC. licenses this file to you under the Apache License,
+// Version 2.0 (the "License"); you may not use this file except
+// in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
 import ballerina/http;
 import ballerina/log;
 import ballerina/time;
@@ -41,18 +57,12 @@ isolated function getAccessToken() returns string|error {
     }
 }
 
-// Get access token
-string accessToken = check getAccessToken();
-
-// Spotify client configuration using Bearer Token
-spotify:ConnectionConfig spotifyConfig = {
-    auth: {
-        token: accessToken
-    }
-};
-
 // Initialize Spotify client
-spotify:Client spotifyClient = check new (spotifyConfig);
+spotify:Client spotifyClient = check new ({
+    auth: {
+        token: check getAccessToken()
+    }
+});
 
 // CORS configuration
 @http:ServiceConfig {
@@ -85,8 +95,21 @@ service / on new http:Listener(port) {
         log:printInfo("Fetching new releases from Spotify API");
         
         do {
-            // Validate parameters using helper function
-            [int, int] [validLimit, validOffset] = validateSpotifyParams('limit, offset);
+            // Validate parameters
+            int validLimit = 'limit ?: 20;
+            int validOffset = offset ?: 0;
+            
+            // Ensure limit is within Spotify's constraints (1-50)
+            if (validLimit < 1) {
+                validLimit = 1;
+            } else if (validLimit > 50) {
+                validLimit = 50;
+            }
+            
+            // Ensure offset is not negative
+            if (validOffset < 0) {
+                validOffset = 0;
+            }
             
             log:printInfo(string `Requesting new releases with country: ${country ?: "all"}, limit: ${validLimit}, offset: ${validOffset}`);
             
@@ -96,7 +119,7 @@ service / on new http:Listener(port) {
             // Convert the entire response to JSON for easy consumption
             json|error responseJson = newReleases.cloneWithType(json);
             
-            if (responseJson is json) {
+            if responseJson is json {
                 json response = {
                     "success": true,
                     "data": responseJson,
@@ -142,8 +165,21 @@ service / on new http:Listener(port) {
         log:printInfo("Fetching new releases for country: " + country);
         
         do {
-            // Validate parameters using helper function
-            [int, int] [validLimit, validOffset] = validateSpotifyParams('limit, offset);
+            // Validate parameters
+            int validLimit = 'limit ?: 20;
+            int validOffset = offset ?: 0;
+            
+            // Ensure limit is within Spotify's constraints (1-50)
+            if (validLimit < 1) {
+                validLimit = 1;
+            } else if (validLimit > 50) {
+                validLimit = 50;
+            }
+            
+            // Ensure offset is not negative
+            if (validOffset < 0) {
+                validOffset = 0;
+            }
             
             log:printInfo(string `Requesting new releases with country: ${country}, limit: ${validLimit}, offset: ${validOffset}`);
             
@@ -201,8 +237,18 @@ service / on new http:Listener(port) {
         log:printInfo("Fetching featured playlists from Spotify API");
         
         do {
-            // Validate parameters using helper function
-            [int, int] [validLimit, validOffset] = validateSpotifyParams('limit, offset);
+            int validLimit = 'limit ?: 20;
+            int validOffset = offset ?: 0;
+            
+            if (validLimit < 1) {
+                validLimit = 1;
+            } else if (validLimit > 50) {
+                validLimit = 50;
+            }
+            
+            if (validOffset < 0) {
+                validOffset = 0;
+            }
             
             spotify:FeaturedPlaylistObject featuredPlaylists = check spotifyClient->getFeaturedPlaylists(
                 country, (), (), validLimit, validOffset
@@ -248,26 +294,6 @@ service / on new http:Listener(port) {
             };
         }
     }
-}
-
-// Helper function to validate Spotify API parameters
-function validateSpotifyParams(int? 'limit, int? offset) returns [int, int] {
-    int validLimit = 'limit ?: 20;
-    int validOffset = offset ?: 0;
-    
-    // Ensure limit is within Spotify's constraints (1-50)
-    if (validLimit < 1) {
-        validLimit = 1;
-    } else if (validLimit > 50) {
-        validLimit = 50;
-    }
-    
-    // Ensure offset is not negative
-    if (validOffset < 0) {
-        validOffset = 0;
-    }
-    
-    return [validLimit, validOffset];
 }
 
 // Helper function to get current timestamp

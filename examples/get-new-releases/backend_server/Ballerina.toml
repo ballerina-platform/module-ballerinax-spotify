@@ -1,13 +1,8 @@
 [package]
-org = "spotify_backend"
+org = "wso2"
 name = "get_new_releases"
 version = "0.1.0"
 distribution = "2201.4.1"
 
 [build-options]
 observabilityIncluded = true
-
-[[dependency]]
-org = "ballerinax"
-name = "spotify"
-version = "1.5.1"
