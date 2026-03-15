@@ -5,7 +5,7 @@ name = "spotify"
 version = "@toml.version@"
 license = ["Apache-2.0"]
 authors = ["Ballerina"]
-keywords = ["Vendor/Spotify", "Area/Media", "Type/Connector"]
+keywords = ["Type/Connector", "Vendor/Spotify", "Area/Productivity & Collaboration"]
 icon = "icon.png"
 repository = "https://github.com/ballerina-platform/module-ballerinax-spotify"
 
