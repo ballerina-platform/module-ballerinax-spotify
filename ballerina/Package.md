@@ -1,8 +1,15 @@
 ## Overview
 
-[Spotify](https://www.spotify.com/) is a popular music streaming service that allows users to listen to millions of songs, podcasts, and other audio content from artists and creators worldwide. It offers personalized playlists, radio stations, and social features, enabling users to discover new music and share content with friends.
+[Spotify](https://www.spotify.com/) is a music streaming service that allows users to listen to millions of songs, podcasts, and other audio content from artists and creators worldwide. It offers personalized playlists, radio stations, and social features, enabling users to discover and share content.
 
-The `ballerinax/spotify` package provides APIs to connect and interact with Spotify Web API endpoints, which allow access to Spotify's catalog, user data, and playback features. This package enables developers to integrate Spotify functionalities, such as searching for tracks, managing playlists, and controlling playback, into their applications.
+The Spotify connector offers APIs to connect and interact with Spotify Web API endpoints, providing access to Spotify's catalog, user data, and playback features.
+
+### Key Features
+
+- Access to extensive Spotify catalog (tracks, albums, artists)
+- Manage user data, playlists, and libraries
+- Control playback and interact with Spotify devices
+- Integration with Spotify Web API endpoints
 
 ## Setup guide
 

@@ -4,6 +4,14 @@
 
 The `ballerinax/spotify` package provides APIs to connect and interact with Spotify Web API endpoints, which allow access to Spotify's catalog, user data, and playback features. This package enables developers to integrate Spotify functionalities, such as searching for tracks, managing playlists, and controlling playback, into their applications.
 
+
+### Key Features
+
+- Access Spotify music catalog and user library
+- Manage playlists, tracks, and albums
+- Search for music content across the platform
+- Control playback and access user listening data
+
 ## Setup guide
 
 To use the Spotify connector, you must have access to the Spotify API through a [Spotify developer account](https://developer.spotify.com) and a project under it. If you do not have a Spotify Developer account, you can sign up for one [here](https://developer.spotify.com/documentation/web-api/concepts/access-token).
