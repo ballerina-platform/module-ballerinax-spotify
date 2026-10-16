@@ -1,5 +1,5 @@
 [package]
-distribution = "2201.10.0"
+distribution = "2201.12.0"
 org = "ballerinax"
 name = "spotify"
 version = "@toml.version@"
@@ -12,5 +12,3 @@ repository = "https://github.com/ballerina-platform/module-ballerinax-spotify"
 [build-options]
 observabilityIncluded = true
 
-[platform.java17]
-graalvmCompatible = true

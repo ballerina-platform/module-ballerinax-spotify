@@ -17,15 +17,10 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/data.jsondata;
 import ballerina/http;
 
-# You can use Spotify's Web API to discover music and podcasts, manage your Spotify library, control audio playback, and much more. Browse our available Web API endpoints using the sidebar at left, or via the navigation bar on top of this page on smaller screens.
-# 
-# In order to make successful Web API requests your app will need a valid access token. One can be obtained through <a href="https://developer.spotify.com/documentation/general/guides/authorization-guide/">OAuth 2.0</a>.
-# 
-# The base URI for all Web API requests is `https://api.spotify.com/v1`.
-# 
-# Need help? See our <a href="https://developer.spotify.com/documentation/web-api/guides/">Web API guides</a> for more information, or visit the <a href="https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer">Spotify for Developers community forum</a> to ask questions and connect with other developers.
+# Client for the Spotify Web API. Search the Spotify catalog, manage a user's library and playlists, follow artists and users, and control playback on a user's devices. Requests need an OAuth 2.0 access token.
 public isolated client class Client {
     final http:Client clientEp;
     # Gets invoked to initialize the `connector`.
@@ -34,141 +29,8 @@ public isolated client class Client {
     # + serviceUrl - URL of the target service 
     # + return - An error if connector initialization failed 
     public isolated function init(ConnectionConfig config, string serviceUrl = "https://api.spotify.com/v1") returns error? {
-        http:ClientConfiguration httpClientConfig = {auth: config.auth, httpVersion: config.httpVersion, timeout: config.timeout, forwarded: config.forwarded, poolConfig: config.poolConfig, compression: config.compression, circuitBreaker: config.circuitBreaker, retryConfig: config.retryConfig, validation: config.validation};
-        do {
-            if config.http1Settings is ClientHttp1Settings {
-                ClientHttp1Settings settings = check config.http1Settings.ensureType(ClientHttp1Settings);
-                httpClientConfig.http1Settings = {...settings};
-            }
-            if config.http2Settings is http:ClientHttp2Settings {
-                httpClientConfig.http2Settings = check config.http2Settings.ensureType(http:ClientHttp2Settings);
-            }
-            if config.cache is http:CacheConfig {
-                httpClientConfig.cache = check config.cache.ensureType(http:CacheConfig);
-            }
-            if config.responseLimits is http:ResponseLimitConfigs {
-                httpClientConfig.responseLimits = check config.responseLimits.ensureType(http:ResponseLimitConfigs);
-            }
-            if config.secureSocket is http:ClientSecureSocket {
-                httpClientConfig.secureSocket = check config.secureSocket.ensureType(http:ClientSecureSocket);
-            }
-            if config.proxy is http:ProxyConfig {
-                httpClientConfig.proxy = check config.proxy.ensureType(http:ProxyConfig);
-            }
-        }
-        http:Client httpEp = check new (serviceUrl, httpClientConfig);
-        self.clientEp = httpEp;
-        return;
-    }
-
-    # Remove Users' Saved Albums
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Album(s) have been removed from the library 
-    resource isolated function delete me/albums(MeAlbumsBody1 payload, map<string|string[]> headers = {}, *RemoveAlbumsUserQueries queries) returns error? {
-        string resourcePath = string `/me/albums`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->delete(resourcePath, request, headers);
-    }
-
-    # Remove User's Saved Audiobooks
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Audiobook(s) have been removed from the library 
-    resource isolated function delete me/audiobooks(map<string|string[]> headers = {}, *RemoveAudiobooksUserQueries queries) returns error? {
-        string resourcePath = string `/me/audiobooks`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->delete(resourcePath, headers = headers);
-    }
-
-    # Remove User's Saved Episodes
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Episode removed 
-    resource isolated function delete me/episodes(MeEpisodesBody1 payload, map<string|string[]> headers = {}, *RemoveEpisodesUserQueries queries) returns error? {
-        string resourcePath = string `/me/episodes`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->delete(resourcePath, request, headers);
-    }
-
-    # Unfollow Artists or Users
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Artist or user unfollowed 
-    resource isolated function delete me/following(MeFollowingBody1 payload, map<string|string[]> headers = {}, *UnfollowArtistsUsersQueries queries) returns error? {
-        string resourcePath = string `/me/following`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->delete(resourcePath, request, headers);
-    }
-
-    # Remove User's Saved Shows
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Show removed 
-    resource isolated function delete me/shows(map<string|string[]> headers = {}, *RemoveShowsUserQueries queries) returns error? {
-        string resourcePath = string `/me/shows`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->delete(resourcePath, headers = headers);
-    }
-
-    # Remove User's Saved Tracks
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Track removed 
-    resource isolated function delete me/tracks(MeTracksBody1 payload, map<string|string[]> headers = {}, *RemoveTracksUserQueries queries) returns error? {
-        string resourcePath = string `/me/tracks`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->delete(resourcePath, request, headers);
-    }
-
-    # Unfollow Playlist
-    #
-    # + headers - Headers to be sent with the request 
-    # + return - Playlist unfollowed 
-    resource isolated function delete playlists/[string playlistId]/followers(map<string|string[]> headers = {}) returns error? {
-        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/followers`;
-        return self.clientEp->delete(resourcePath, headers = headers);
-    }
-
-    # Remove Playlist Items
-    #
-    # + headers - Headers to be sent with the request 
-    # + return - A snapshot ID for the playlist 
-    resource isolated function delete playlists/[string playlistId]/tracks(PlaylistIdTracksBody2 payload, map<string|string[]> headers = {}) returns PlaylistSnapshotIdObject|error {
-        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/tracks`;
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->delete(resourcePath, request, headers);
-    }
-
-    # Get Several Albums
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A set of albums 
-    resource isolated function get albums(map<string|string[]> headers = {}, *GetMultipleAlbumsQueries queries) returns ManyAlbumsObject|error {
-        string resourcePath = string `/albums`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
+        http:ClientConfiguration httpClientConfig = {auth: config.auth, httpVersion: config.httpVersion, http1Settings: config.http1Settings, http2Settings: config.http2Settings, timeout: config.timeout, forwarded: config.forwarded, followRedirects: config.followRedirects, poolConfig: config.poolConfig, cache: config.cache, compression: config.compression, circuitBreaker: config.circuitBreaker, retryConfig: config.retryConfig, cookieConfig: config.cookieConfig, responseLimits: config.responseLimits, secureSocket: config.secureSocket, proxy: config.proxy, socketConfig: config.socketConfig, validation: config.validation, laxDataBinding: config.laxDataBinding};
+        self.clientEp = check new (serviceUrl, httpClientConfig);
     }
 
     # Get Album
@@ -176,7 +38,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - An album 
-    resource isolated function get albums/[string id](map<string|string[]> headers = {}, *GetAnAlbumQueries queries) returns AlbumObject|error {
+    remote isolated function getAlbum(string id, map<string|string[]> headers = {}, *GetAlbumQueries queries) returns AlbumObject|error {
         string resourcePath = string `/albums/${getEncodedUri(id)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
@@ -187,19 +49,8 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Pages of tracks 
-    resource isolated function get albums/[string id]/tracks(map<string|string[]> headers = {}, *GetAnAlbumsTracksQueries queries) returns PagingSimplifiedTrackObject|error {
+    remote isolated function listAlbumTracks(string id, map<string|string[]> headers = {}, *ListAlbumTracksQueries queries) returns PagingSimplifiedTrackObject|error {
         string resourcePath = string `/albums/${getEncodedUri(id)}/tracks`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Several Artists
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A set of artists 
-    resource isolated function get artists(map<string|string[]> headers = {}, *GetMultipleArtistsQueries queries) returns ArtistObjects|error {
-        string resourcePath = string `/artists`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
     }
@@ -208,7 +59,7 @@ public isolated client class Client {
     #
     # + headers - Headers to be sent with the request 
     # + return - An artist 
-    resource isolated function get artists/[string id](map<string|string[]> headers = {}) returns ArtistObject|error {
+    remote isolated function getArtist(string id, map<string|string[]> headers = {}) returns ArtistObject|error {
         string resourcePath = string `/artists/${getEncodedUri(id)}`;
         return self.clientEp->get(resourcePath, headers);
     }
@@ -218,451 +69,8 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Pages of albums 
-    resource isolated function get artists/[string id]/albums(map<string|string[]> headers = {}, *GetAnArtistsAlbumsQueries queries) returns PagingArtistDiscographyAlbumObject|error {
+    remote isolated function listArtistAlbums(string id, map<string|string[]> headers = {}, *ListArtistAlbumsQueries queries) returns PagingArtistDiscographyAlbumObject|error {
         string resourcePath = string `/artists/${getEncodedUri(id)}/albums`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    resource isolated function get artists/[string id]/related\-artists(map<string|string[]> headers = {}) returns ArtistObjects|error {
-        string resourcePath = string `/artists/${getEncodedUri(id)}/related-artists`;
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    resource isolated function get artists/[string id]/top\-tracks(map<string|string[]> headers = {}, *GetAnArtistsTopTracksQueries queries) returns ManyTrackObject|error {
-        string resourcePath = string `/artists/${getEncodedUri(id)}/top-tracks`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    resource isolated function get audio\-analysis/[string id](map<string|string[]> headers = {}) returns AudioAnalysisObject|error {
-        string resourcePath = string `/audio-analysis/${getEncodedUri(id)}`;
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    resource isolated function get audio\-features(map<string|string[]> headers = {}, *GetSeveralAudioFeaturesQueries queries) returns ManyAudioFeaturesObject|error {
-        string resourcePath = string `/audio-features`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    resource isolated function get audio\-features/[string id](map<string|string[]> headers = {}) returns AudioFeaturesObject|error {
-        string resourcePath = string `/audio-features/${getEncodedUri(id)}`;
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Several Audiobooks
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A set of audiobooks. If one of the requested audiobooks is unavailable then you'll find a `null` item in the `audiobooks` array where the audiobook object would otherwise be. 
-    resource isolated function get audiobooks(map<string|string[]> headers = {}, *GetMultipleAudiobooksQueries queries) returns ManyAudiobooksObject|error {
-        string resourcePath = string `/audiobooks`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get an Audiobook
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - An Audiobook 
-    resource isolated function get audiobooks/[string id](map<string|string[]> headers = {}, *GetAnAudiobookQueries queries) returns AudiobookObject|error {
-        string resourcePath = string `/audiobooks/${getEncodedUri(id)}`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Audiobook Chapters
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Pages of chapters 
-    resource isolated function get audiobooks/[string id]/chapters(map<string|string[]> headers = {}, *GetAudiobookChaptersQueries queries) returns PagingSimplifiedChapterObject|error {
-        string resourcePath = string `/audiobooks/${getEncodedUri(id)}/chapters`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Several Browse Categories
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A paged set of categories 
-    resource isolated function get browse/categories(map<string|string[]> headers = {}, *GetCategoriesQueries queries) returns PagedCategoriesObject|error {
-        string resourcePath = string `/browse/categories`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Single Browse Category
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A category 
-    resource isolated function get browse/categories/[string categoryId](map<string|string[]> headers = {}, *GetACategoryQueries queries) returns CategoryObject|error {
-        string resourcePath = string `/browse/categories/${getEncodedUri(categoryId)}`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Category's Playlists
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A paged set of playlists 
-    resource isolated function get browse/categories/[string categoryId]/playlists(map<string|string[]> headers = {}, *GetACategoriesPlaylistsQueries queries) returns PagingFeaturedPlaylistObject|error {
-        string resourcePath = string `/browse/categories/${getEncodedUri(categoryId)}/playlists`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    resource isolated function get browse/featured\-playlists(map<string|string[]> headers = {}, *GetFeaturedPlaylistsQueries queries) returns PagingFeaturedPlaylistObject|error {
-        string resourcePath = string `/browse/featured-playlists`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    resource isolated function get browse/new\-releases(map<string|string[]> headers = {}, *GetNewReleasesQueries queries) returns PagedAlbumsObject|error {
-        string resourcePath = string `/browse/new-releases`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Several Chapters
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A set of chapters 
-    resource isolated function get chapters(map<string|string[]> headers = {}, *GetSeveralChaptersQueries queries) returns ManyChaptersObject|error {
-        string resourcePath = string `/chapters`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get a Chapter
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A Chapter 
-    resource isolated function get chapters/[string id](map<string|string[]> headers = {}, *GetAChapterQueries queries) returns ChapterObject|error {
-        string resourcePath = string `/chapters/${getEncodedUri(id)}`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Several Episodes
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A set of episodes 
-    resource isolated function get episodes(map<string|string[]> headers = {}, *GetMultipleEpisodesQueries queries) returns ManyEpisodesObject|error {
-        string resourcePath = string `/episodes`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Episode
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - An episode 
-    resource isolated function get episodes/[string id](map<string|string[]> headers = {}, *GetAnEpisodeQueries queries) returns EpisodeObject|error {
-        string resourcePath = string `/episodes/${getEncodedUri(id)}`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Available Markets
-    #
-    # + headers - Headers to be sent with the request 
-    # + return - A markets object with an array of country codes 
-    resource isolated function get markets(map<string|string[]> headers = {}) returns MarketsResponse|error {
-        string resourcePath = string `/markets`;
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Current User's Profile
-    #
-    # + headers - Headers to be sent with the request 
-    # + return - A user 
-    resource isolated function get me(map<string|string[]> headers = {}) returns PrivateUserObject|error {
-        string resourcePath = string `/me`;
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get User's Saved Albums
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Pages of albums 
-    resource isolated function get me/albums(map<string|string[]> headers = {}, *GetUsersSavedAlbumsQueries queries) returns PagingSavedAlbumObject|error {
-        string resourcePath = string `/me/albums`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Check User's Saved Albums
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Array of booleans 
-    resource isolated function get me/albums/contains(map<string|string[]> headers = {}, *CheckUsersSavedAlbumsQueries queries) returns boolean[]|error {
-        string resourcePath = string `/me/albums/contains`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get User's Saved Audiobooks
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Pages of audiobooks 
-    resource isolated function get me/audiobooks(map<string|string[]> headers = {}, *GetUsersSavedAudiobooksQueries queries) returns PagingSimplifiedAudiobookObject|error {
-        string resourcePath = string `/me/audiobooks`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Check User's Saved Audiobooks
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Array of booleans 
-    resource isolated function get me/audiobooks/contains(map<string|string[]> headers = {}, *CheckUsersSavedAudiobooksQueries queries) returns boolean[]|error {
-        string resourcePath = string `/me/audiobooks/contains`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get User's Saved Episodes
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Pages of episodes 
-    resource isolated function get me/episodes(map<string|string[]> headers = {}, *GetUsersSavedEpisodesQueries queries) returns PagingSavedEpisodeObject|error {
-        string resourcePath = string `/me/episodes`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Check User's Saved Episodes
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Array of booleans 
-    resource isolated function get me/episodes/contains(map<string|string[]> headers = {}, *CheckUsersSavedEpisodesQueries queries) returns boolean[]|error {
-        string resourcePath = string `/me/episodes/contains`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Followed Artists
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A paged set of artists 
-    resource isolated function get me/following(map<string|string[]> headers = {}, *GetFollowedQueries queries) returns CursorPagedArtistsObject|error {
-        string resourcePath = string `/me/following`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Check If User Follows Artists or Users
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Array of booleans 
-    resource isolated function get me/following/contains(map<string|string[]> headers = {}, *CheckCurrentUserFollowsQueries queries) returns boolean[]|error {
-        string resourcePath = string `/me/following/contains`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Playback State
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Information about playback 
-    resource isolated function get me/player(map<string|string[]> headers = {}, *GetInformationAboutTheUsersCurrentPlaybackQueries queries) returns CurrentlyPlayingContextObject|error? {
-        string resourcePath = string `/me/player`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    resource isolated function get me/player/currently\-playing(map<string|string[]> headers = {}, *GetTheUsersCurrentlyPlayingTrackQueries queries) returns CurrentlyPlayingContextObject|error {
-        string resourcePath = string `/me/player/currently-playing`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Available Devices
-    #
-    # + headers - Headers to be sent with the request 
-    # + return - A set of devices 
-    resource isolated function get me/player/devices(map<string|string[]> headers = {}) returns ManyDevicesObject|error {
-        string resourcePath = string `/me/player/devices`;
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get the User's Queue
-    #
-    # + headers - Headers to be sent with the request 
-    # + return - Information about the queue 
-    resource isolated function get me/player/queue(map<string|string[]> headers = {}) returns QueueObject|error {
-        string resourcePath = string `/me/player/queue`;
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    resource isolated function get me/player/recently\-played(map<string|string[]> headers = {}, *GetRecentlyPlayedQueries queries) returns CursorPagingPlayHistoryObject|error {
-        string resourcePath = string `/me/player/recently-played`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Current User's Playlists
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A paged set of playlists 
-    resource isolated function get me/playlists(map<string|string[]> headers = {}, *GetAListOfCurrentUsersPlaylistsQueries queries) returns PagingPlaylistObject|error {
-        string resourcePath = string `/me/playlists`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get User's Saved Shows
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Pages of shows 
-    resource isolated function get me/shows(map<string|string[]> headers = {}, *GetUsersSavedShowsQueries queries) returns PagingSavedShowObject|error {
-        string resourcePath = string `/me/shows`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Check User's Saved Shows
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Array of booleans 
-    resource isolated function get me/shows/contains(map<string|string[]> headers = {}, *CheckUsersSavedShowsQueries queries) returns boolean[]|error {
-        string resourcePath = string `/me/shows/contains`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get User's Top Items
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Pages of artists or tracks 
-    resource isolated function get me/top/["artists"|"tracks" 'type](map<string|string[]> headers = {}, *GetUsersTopArtistsAndTracksQueries queries) returns PagingArtistOrTrackObject|error {
-        string resourcePath = string `/me/top/${getEncodedUri('type)}`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get User's Saved Tracks
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Pages of tracks 
-    resource isolated function get me/tracks(map<string|string[]> headers = {}, *GetUsersSavedTracksQueries queries) returns PagingSavedTrackObject|error {
-        string resourcePath = string `/me/tracks`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Check User's Saved Tracks
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Array of booleans 
-    resource isolated function get me/tracks/contains(map<string|string[]> headers = {}, *CheckUsersSavedTracksQueries queries) returns boolean[]|error {
-        string resourcePath = string `/me/tracks/contains`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Playlist
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A playlist 
-    resource isolated function get playlists/[string playlistId](map<string|string[]> headers = {}, *GetPlaylistQueries queries) returns PlaylistObject|error {
-        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Check if Current User Follows Playlist
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Array of boolean, containing a single boolean 
-    resource isolated function get playlists/[string playlistId]/followers/contains(map<string|string[]> headers = {}, *CheckIfUserFollowsPlaylistQueries queries) returns boolean[]|error {
-        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/followers/contains`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Playlist Cover Image
-    #
-    # + headers - Headers to be sent with the request 
-    # + return - A set of images 
-    resource isolated function get playlists/[string playlistId]/images(map<string|string[]> headers = {}) returns ImageObject[]|error {
-        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/images`;
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Playlist Items
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Pages of tracks 
-    resource isolated function get playlists/[string playlistId]/tracks(map<string|string[]> headers = {}, *GetPlaylistsTracksQueries queries) returns PagingPlaylistTrackObject|error {
-        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/tracks`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Recommendations
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A set of recommendations 
-    resource isolated function get recommendations(map<string|string[]> headers = {}, *GetRecommendationsQueries queries) returns RecommendationsObject|error {
-        string resourcePath = string `/recommendations`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    resource isolated function get recommendations/available\-genre\-seeds(map<string|string[]> headers = {}) returns ManyGenresObject|error {
-        string resourcePath = string `/recommendations/available-genre-seeds`;
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Search for Item
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Search response 
-    resource isolated function get search(map<string|string[]> headers = {}, *SearchQueries queries) returns SearchItemsObject|error {
-        string resourcePath = string `/search`;
-        map<Encoding> queryParamEncoding = {"type": {style: FORM, explode: false}};
-        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
-        return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Get Several Shows
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A set of shows 
-    resource isolated function get shows(map<string|string[]> headers = {}, *GetMultipleShowsQueries queries) returns ManySimplifiedShowsObject|error {
-        string resourcePath = string `/shows`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
     }
@@ -672,7 +80,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - A show 
-    resource isolated function get shows/[string id](map<string|string[]> headers = {}, *GetAShowQueries queries) returns ShowObject|error {
+    remote isolated function getShow(string id, map<string|string[]> headers = {}, *GetShowQueries queries) returns ShowObject|error {
         string resourcePath = string `/shows/${getEncodedUri(id)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
@@ -683,19 +91,63 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Pages of episodes 
-    resource isolated function get shows/[string id]/episodes(map<string|string[]> headers = {}, *GetAShowsEpisodesQueries queries) returns PagingSimplifiedEpisodeObject|error {
+    remote isolated function listShowEpisodes(string id, map<string|string[]> headers = {}, *ListShowEpisodesQueries queries) returns PagingSimplifiedEpisodeObject|error {
         string resourcePath = string `/shows/${getEncodedUri(id)}/episodes`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Get Several Tracks
+    # Get Episode
     #
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - A set of tracks 
-    resource isolated function get tracks(map<string|string[]> headers = {}, *GetSeveralTracksQueries queries) returns ManyTrackObject|error {
-        string resourcePath = string `/tracks`;
+    # + return - An episode 
+    remote isolated function getEpisode(string id, map<string|string[]> headers = {}, *GetEpisodeQueries queries) returns EpisodeObject|error {
+        string resourcePath = string `/episodes/${getEncodedUri(id)}`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Get an Audiobook
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - An Audiobook 
+    remote isolated function getAudiobook(string id, map<string|string[]> headers = {}, *GetAudiobookQueries queries) returns AudiobookObject|error {
+        string resourcePath = string `/audiobooks/${getEncodedUri(id)}`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Get Audiobook Chapters
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Pages of chapters 
+    remote isolated function listAudiobookChapters(string id, map<string|string[]> headers = {}, *ListAudiobookChaptersQueries queries) returns PagingSimplifiedChapterObject|error {
+        string resourcePath = string `/audiobooks/${getEncodedUri(id)}/chapters`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Get User's Saved Audiobooks
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Pages of audiobooks 
+    remote isolated function listSavedAudiobooks(map<string|string[]> headers = {}, *ListSavedAudiobooksQueries queries) returns PagingSimplifiedAudiobookObject|error {
+        string resourcePath = string `/me/audiobooks`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Get a Chapter
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - A Chapter 
+    remote isolated function getChapter(string id, map<string|string[]> headers = {}, *GetChapterQueries queries) returns ChapterObject|error {
+        string resourcePath = string `/chapters/${getEncodedUri(id)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
     }
@@ -705,30 +157,324 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - A track 
-    resource isolated function get tracks/[string id](map<string|string[]> headers = {}, *GetTrackQueries queries) returns TrackObject|error {
+    remote isolated function getTrack(string id, map<string|string[]> headers = {}, *GetTrackQueries queries) returns TrackObject|error {
         string resourcePath = string `/tracks/${getEncodedUri(id)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Get User's Profile
+    # Search for Item
     #
     # + headers - Headers to be sent with the request 
-    # + return - A user 
-    resource isolated function get users/[string userId](map<string|string[]> headers = {}) returns PublicUserObject|error {
-        string resourcePath = string `/users/${getEncodedUri(userId)}`;
+    # + queries - Queries to be sent with the request 
+    # + return - Search response 
+    remote isolated function searchItems(map<string|string[]> headers = {}, *SearchItemsQueries queries) returns SearchResultsResponse|error {
+        string resourcePath = string `/search`;
+        map<Encoding> queryParamEncoding = {"type": {style: FORM, explode: false}};
+        resourcePath = resourcePath + check getPathForQueryParam(queries, queryParamEncoding);
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Get User's Playlists
+    # Get Current User's Profile
+    #
+    # + headers - Headers to be sent with the request 
+    # + return - A user 
+    remote isolated function getCurrentUserProfile(map<string|string[]> headers = {}) returns PrivateUserObject|error {
+        string resourcePath = string `/me`;
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Get Playlist
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - A playlist 
+    remote isolated function getPlaylist(string playlistId, map<string|string[]> headers = {}, *GetPlaylistQueries queries) returns PlaylistObject|error {
+        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Change Playlist Details
+    #
+    # + headers - Headers to be sent with the request 
+    # + payload - Playlist name, description, and visibility details to change 
+    # + return - Playlist updated 
+    remote isolated function updatePlaylistDetails(string playlistId, UpdatePlaylistDetailsRequest payload, map<string|string[]> headers = {}) returns error? {
+        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}`;
+        http:Request request = new;
+        json jsonBody = jsondata:toJson(payload);
+        request.setPayload(jsonBody, "application/json");
+        return self.clientEp->put(resourcePath, request, headers);
+    }
+
+    # Get Playlist Items
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Pages of tracks 
+    remote isolated function listPlaylistItems(string playlistId, map<string|string[]> headers = {}, *ListPlaylistItemsQueries queries) returns PagingPlaylistTrackObject|error {
+        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/items`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Update Playlist Items
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - URIs to replace the playlist items, or range to reorder 
+    # + return - A snapshot ID for the playlist 
+    remote isolated function updatePlaylistItems(string playlistId, UpdatePlaylistItemsRequest payload, map<string|string[]> headers = {}, *UpdatePlaylistItemsQueries queries) returns PlaylistSnapshotResponse|error {
+        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/items`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        http:Request request = new;
+        json jsonBody = jsondata:toJson(payload);
+        request.setPayload(jsonBody, "application/json");
+        return self.clientEp->put(resourcePath, request, headers);
+    }
+
+    # Add Items to Playlist
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Item URIs and optional position to add to the playlist 
+    # + return - A snapshot ID for the playlist 
+    remote isolated function addItemsToPlaylist(string playlistId, AddItemsToPlaylistRequest payload, map<string|string[]> headers = {}, *AddItemsToPlaylistQueries queries) returns PlaylistSnapshotResponse|error {
+        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/items`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        http:Request request = new;
+        json jsonBody = jsondata:toJson(payload);
+        request.setPayload(jsonBody, "application/json");
+        return self.clientEp->post(resourcePath, request, headers);
+    }
+
+    # Remove Playlist Items
+    #
+    # + headers - Headers to be sent with the request 
+    # + payload - Item URIs to remove from the playlist 
+    # + return - A snapshot ID for the playlist 
+    remote isolated function removePlaylistItems(string playlistId, RemovePlaylistItemsRequest payload, map<string|string[]> headers = {}) returns PlaylistSnapshotResponse|error {
+        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/items`;
+        http:Request request = new;
+        json jsonBody = jsondata:toJson(payload);
+        request.setPayload(jsonBody, "application/json");
+        return self.clientEp->delete(resourcePath, request, headers);
+    }
+
+    # Get Current User's Playlists
     #
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - A paged set of playlists 
-    resource isolated function get users/[string userId]/playlists(map<string|string[]> headers = {}, *GetListUsersPlaylistsQueries queries) returns PagingPlaylistObject|error {
-        string resourcePath = string `/users/${getEncodedUri(userId)}/playlists`;
+    remote isolated function listCurrentUserPlaylists(map<string|string[]> headers = {}, *ListCurrentUserPlaylistsQueries queries) returns PagingPlaylistObject|error {
+        string resourcePath = string `/me/playlists`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Create Playlist
+    #
+    # + headers - Headers to be sent with the request 
+    # + payload - Name, description, and visibility of the playlist to create 
+    # + return - A playlist 
+    remote isolated function createPlaylist(CreatePlaylistRequest payload, map<string|string[]> headers = {}) returns PlaylistObject|error {
+        string resourcePath = string `/me/playlists`;
+        http:Request request = new;
+        json jsonBody = jsondata:toJson(payload);
+        request.setPayload(jsonBody, "application/json");
+        return self.clientEp->post(resourcePath, request, headers);
+    }
+
+    # Save Items to Library
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Items saved to library 
+    remote isolated function saveLibraryItems(map<string|string[]> headers = {}, *SaveLibraryItemsQueries queries) returns error? {
+        string resourcePath = string `/me/library`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        http:Request request = new;
+        return self.clientEp->put(resourcePath, request, headers);
+    }
+
+    # Remove Items from Library
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Items removed from library 
+    remote isolated function removeLibraryItems(map<string|string[]> headers = {}, *RemoveLibraryItemsQueries queries) returns error? {
+        string resourcePath = string `/me/library`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->delete(resourcePath, headers = headers);
+    }
+
+    # Check User's Saved Items
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Array of booleans 
+    remote isolated function checkSavedLibraryItems(map<string|string[]> headers = {}, *CheckSavedLibraryItemsQueries queries) returns boolean[]|error {
+        string resourcePath = string `/me/library/contains`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Get User's Saved Albums
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Pages of albums 
+    remote isolated function listSavedAlbums(map<string|string[]> headers = {}, *ListSavedAlbumsQueries queries) returns PagingSavedAlbumObject|error {
+        string resourcePath = string `/me/albums`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Get User's Saved Tracks
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Pages of tracks 
+    remote isolated function listSavedTracks(map<string|string[]> headers = {}, *ListSavedTracksQueries queries) returns PagingSavedTrackObject|error {
+        string resourcePath = string `/me/tracks`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Get User's Saved Episodes
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Pages of episodes 
+    remote isolated function listSavedEpisodes(map<string|string[]> headers = {}, *ListSavedEpisodesQueries queries) returns PagingSavedEpisodeObject|error {
+        string resourcePath = string `/me/episodes`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Get User's Saved Shows
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Bad or expired token. This can happen if the user revoked a token or the access token has expired. You should re-authenticate the user 
+    remote isolated function listSavedShows(map<string|string[]> headers = {}, *ListSavedShowsQueries queries) returns PagingSavedShowObject|error {
+        string resourcePath = string `/me/shows`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Get User's Top Items
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Pages of artists or tracks 
+    remote isolated function listTopItems("artists"|"tracks" 'type, map<string|string[]> headers = {}, *ListTopItemsQueries queries) returns PagingArtistOrTrackResponse|error {
+        string resourcePath = string `/me/top/${getEncodedUri('type)}`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Get Playlist Cover Image
+    #
+    # + headers - Headers to be sent with the request 
+    # + return - A set of images 
+    remote isolated function getPlaylistCoverImage(string playlistId, map<string|string[]> headers = {}) returns ImageObject[]|error {
+        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/images`;
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Add Custom Playlist Cover Image
+    #
+    # + headers - Headers to be sent with the request 
+    # + request - Base64 encoded JPEG image to use as the playlist cover 
+    # + return - Image uploaded 
+    remote isolated function uploadPlaylistCoverImage(string playlistId, http:Request request, map<string|string[]> headers = {}) returns error? {
+        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/images`;
+        // TODO: Update the request as needed;
+        return self.clientEp->put(resourcePath, request, headers);
+    }
+
+    # Get Followed Artists
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - A paged set of artists 
+    remote isolated function listFollowedArtists(map<string|string[]> headers = {}, *ListFollowedArtistsQueries queries) returns FollowedArtistsResponse|error {
+        string resourcePath = string `/me/following`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Get Playback State
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Information about playback 
+    remote isolated function getPlaybackState(map<string|string[]> headers = {}, *GetPlaybackStateQueries queries) returns CurrentlyPlayingContextObject|error? {
+        string resourcePath = string `/me/player`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Transfer Playback
+    #
+    # + headers - Headers to be sent with the request 
+    # + payload - Device IDs to transfer playback to and whether to start playing 
+    # + return - Playback transferred 
+    remote isolated function transferPlayback(TransferPlaybackRequest payload, map<string|string[]> headers = {}) returns error? {
+        string resourcePath = string `/me/player`;
+        http:Request request = new;
+        json jsonBody = jsondata:toJson(payload);
+        request.setPayload(jsonBody, "application/json");
+        return self.clientEp->put(resourcePath, request, headers);
+    }
+
+    # Get Available Devices
+    #
+    # + headers - Headers to be sent with the request 
+    # + return - A set of devices 
+    remote isolated function listDevices(map<string|string[]> headers = {}) returns DevicesResponse|error {
+        string resourcePath = string `/me/player/devices`;
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Get Currently Playing Track
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Information about the currently playing track 
+    remote isolated function getCurrentlyPlaying(map<string|string[]> headers = {}, *GetCurrentlyPlayingQueries queries) returns CurrentlyPlayingContextObject|error {
+        string resourcePath = string `/me/player/currently-playing`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Start/Resume Playback
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Context, items, offset, and position to start playback from 
+    # + return - Playback started 
+    remote isolated function startPlayback(StartPlaybackRequest payload, map<string|string[]> headers = {}, *StartPlaybackQueries queries) returns error? {
+        string resourcePath = string `/me/player/play`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        http:Request request = new;
+        json jsonBody = jsondata:toJson(payload);
+        request.setPayload(jsonBody, "application/json");
+        return self.clientEp->put(resourcePath, request, headers);
+    }
+
+    # Pause Playback
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Playback paused 
+    remote isolated function pausePlayback(map<string|string[]> headers = {}, *PausePlaybackQueries queries) returns error? {
+        string resourcePath = string `/me/player/pause`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        http:Request request = new;
+        return self.clientEp->put(resourcePath, request, headers);
     }
 
     # Skip To Next
@@ -736,7 +482,7 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Command sent 
-    resource isolated function post me/player/next(map<string|string[]> headers = {}, *SkipUsersPlaybackToNextTrackQueries queries) returns error? {
+    remote isolated function skipToNext(map<string|string[]> headers = {}, *SkipToNextQueries queries) returns error? {
         string resourcePath = string `/me/player/next`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
@@ -748,140 +494,22 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Command sent 
-    resource isolated function post me/player/previous(map<string|string[]> headers = {}, *SkipUsersPlaybackToPreviousTrackQueries queries) returns error? {
+    remote isolated function skipToPrevious(map<string|string[]> headers = {}, *SkipToPreviousQueries queries) returns error? {
         string resourcePath = string `/me/player/previous`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         return self.clientEp->post(resourcePath, request, headers);
     }
 
-    # Add Item to Playback Queue
+    # Seek To Position
     #
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Command received 
-    resource isolated function post me/player/queue(map<string|string[]> headers = {}, *AddToQueueQueries queries) returns error? {
-        string resourcePath = string `/me/player/queue`;
+    # + return - Command sent 
+    remote isolated function seekToPosition(map<string|string[]> headers = {}, *SeekToPositionQueries queries) returns error? {
+        string resourcePath = string `/me/player/seek`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
-        return self.clientEp->post(resourcePath, request, headers);
-    }
-
-    # Add Items to Playlist
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - A snapshot ID for the playlist 
-    resource isolated function post playlists/[string playlistId]/tracks(PlaylistIdTracksBody1 payload, map<string|string[]> headers = {}, *AddTracksToPlaylistQueries queries) returns PlaylistSnapshotIdObject|error {
-        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/tracks`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->post(resourcePath, request, headers);
-    }
-
-    # Create Playlist
-    #
-    # + headers - Headers to be sent with the request 
-    # + return - A playlist 
-    resource isolated function post users/[string userId]/playlists(UserIdPlaylistsBody payload, map<string|string[]> headers = {}) returns PlaylistObject|error {
-        string resourcePath = string `/users/${getEncodedUri(userId)}/playlists`;
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->post(resourcePath, request, headers);
-    }
-
-    # Save Albums for Current User
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - The album is saved 
-    resource isolated function put me/albums(MeAlbumsBody payload, map<string|string[]> headers = {}, *SaveAlbumsUserQueries queries) returns error? {
-        string resourcePath = string `/me/albums`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->put(resourcePath, request, headers);
-    }
-
-    # Save Audiobooks for Current User
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Audiobook(s) are saved to the library 
-    resource isolated function put me/audiobooks(map<string|string[]> headers = {}, *SaveAudiobooksUserQueries queries) returns error? {
-        string resourcePath = string `/me/audiobooks`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        http:Request request = new;
-        return self.clientEp->put(resourcePath, request, headers);
-    }
-
-    # Save Episodes for Current User
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Episode saved 
-    resource isolated function put me/episodes(MeEpisodesBody payload, map<string|string[]> headers = {}, *SaveEpisodesUserQueries queries) returns error? {
-        string resourcePath = string `/me/episodes`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->put(resourcePath, request, headers);
-    }
-
-    # Follow Artists or Users
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Artist or user followed 
-    resource isolated function put me/following(MeFollowingBody payload, map<string|string[]> headers = {}, *FollowArtistsUsersQueries queries) returns error? {
-        string resourcePath = string `/me/following`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->put(resourcePath, request, headers);
-    }
-
-    # Transfer Playback
-    #
-    # + headers - Headers to be sent with the request 
-    # + return - Playback transferred 
-    resource isolated function put me/player(MePlayerBody payload, map<string|string[]> headers = {}) returns error? {
-        string resourcePath = string `/me/player`;
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->put(resourcePath, request, headers);
-    }
-
-    # Pause Playback
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Playback paused 
-    resource isolated function put me/player/pause(map<string|string[]> headers = {}, *PauseAUsersPlaybackQueries queries) returns error? {
-        string resourcePath = string `/me/player/pause`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        http:Request request = new;
-        return self.clientEp->put(resourcePath, request, headers);
-    }
-
-    # Start/Resume Playback
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Playback started 
-    resource isolated function put me/player/play(PlayerPlayBody payload, map<string|string[]> headers = {}, *StartAUsersPlaybackQueries queries) returns error? {
-        string resourcePath = string `/me/player/play`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
         return self.clientEp->put(resourcePath, request, headers);
     }
 
@@ -890,32 +518,8 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Command sent 
-    resource isolated function put me/player/repeat(map<string|string[]> headers = {}, *SetRepeatModeOnUsersPlaybackQueries queries) returns error? {
+    remote isolated function setRepeatMode(map<string|string[]> headers = {}, *SetRepeatModeQueries queries) returns error? {
         string resourcePath = string `/me/player/repeat`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        http:Request request = new;
-        return self.clientEp->put(resourcePath, request, headers);
-    }
-
-    # Seek To Position
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Command sent 
-    resource isolated function put me/player/seek(map<string|string[]> headers = {}, *SeekToPositionInCurrentlyPlayingTrackQueries queries) returns error? {
-        string resourcePath = string `/me/player/seek`;
-        resourcePath = resourcePath + check getPathForQueryParam(queries);
-        http:Request request = new;
-        return self.clientEp->put(resourcePath, request, headers);
-    }
-
-    # Toggle Playback Shuffle
-    #
-    # + headers - Headers to be sent with the request 
-    # + queries - Queries to be sent with the request 
-    # + return - Command sent 
-    resource isolated function put me/player/shuffle(map<string|string[]> headers = {}, *ToggleShuffleForUsersPlaybackQueries queries) returns error? {
-        string resourcePath = string `/me/player/shuffle`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         return self.clientEp->put(resourcePath, request, headers);
@@ -926,84 +530,54 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Command sent 
-    resource isolated function put me/player/volume(map<string|string[]> headers = {}, *SetVolumeForUsersPlaybackQueries queries) returns error? {
+    remote isolated function setPlaybackVolume(map<string|string[]> headers = {}, *SetPlaybackVolumeQueries queries) returns error? {
         string resourcePath = string `/me/player/volume`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         return self.clientEp->put(resourcePath, request, headers);
     }
 
-    # Save Shows for Current User
+    # Toggle Playback Shuffle
     #
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Show saved 
-    resource isolated function put me/shows(map<string|string[]> headers = {}, *SaveShowsUserQueries queries) returns error? {
-        string resourcePath = string `/me/shows`;
+    # + return - Command sent 
+    remote isolated function setShuffle(map<string|string[]> headers = {}, *SetShuffleQueries queries) returns error? {
+        string resourcePath = string `/me/player/shuffle`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         return self.clientEp->put(resourcePath, request, headers);
     }
 
-    # Save Tracks for Current User
+    # Get Recently Played Tracks
     #
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - Track saved 
-    resource isolated function put me/tracks(MeTracksBody payload, map<string|string[]> headers = {}, *SaveTracksUserQueries queries) returns error? {
-        string resourcePath = string `/me/tracks`;
+    # + return - A paged set of tracks 
+    remote isolated function listRecentlyPlayed(map<string|string[]> headers = {}, *ListRecentlyPlayedQueries queries) returns CursorPagingPlayHistoryObject|error {
+        string resourcePath = string `/me/player/recently-played`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->put(resourcePath, request, headers);
+        return self.clientEp->get(resourcePath, headers);
     }
 
-    # Change Playlist Details
+    # Get the User's Queue
     #
     # + headers - Headers to be sent with the request 
-    # + return - Playlist updated 
-    resource isolated function put playlists/[string playlistId](PlaylistsPlaylistIdBody payload, map<string|string[]> headers = {}) returns error? {
-        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}`;
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->put(resourcePath, request, headers);
+    # + return - Information about the queue 
+    remote isolated function getQueue(map<string|string[]> headers = {}) returns QueueObject|error {
+        string resourcePath = string `/me/player/queue`;
+        return self.clientEp->get(resourcePath, headers);
     }
 
-    # Follow Playlist
-    #
-    # + headers - Headers to be sent with the request 
-    # + return - Playlist followed 
-    resource isolated function put playlists/[string playlistId]/followers(PlaylistIdFollowersBody payload, map<string|string[]> headers = {}) returns error? {
-        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/followers`;
-        http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->put(resourcePath, request, headers);
-    }
-
-    # Add Custom Playlist Cover Image
-    #
-    # + headers - Headers to be sent with the request 
-    # + return - Image uploaded 
-    resource isolated function put playlists/[string playlistId]/images(http:Request request, map<string|string[]> headers = {}) returns error? {
-        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/images`;
-        // TODO: Update the request as needed;
-        return self.clientEp->put(resourcePath, request, headers);
-    }
-
-    # Update Playlist Items
+    # Add Item to Playback Queue
     #
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
-    # + return - A snapshot ID for the playlist 
-    resource isolated function put playlists/[string playlistId]/tracks(PlaylistIdTracksBody payload, map<string|string[]> headers = {}, *ReorderOrReplacePlaylistsTracksQueries queries) returns PlaylistSnapshotIdObject|error {
-        string resourcePath = string `/playlists/${getEncodedUri(playlistId)}/tracks`;
+    # + return - Command received 
+    remote isolated function addToQueue(map<string|string[]> headers = {}, *AddToQueueQueries queries) returns error? {
+        string resourcePath = string `/me/player/queue`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
-        json jsonBody = payload.toJson();
-        request.setPayload(jsonBody, "application/json");
-        return self.clientEp->put(resourcePath, request, headers);
+        return self.clientEp->post(resourcePath, request, headers);
     }
 }

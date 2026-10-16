@@ -1,104 +1,90 @@
 # Ballerina Spotify connector
 
 [![Build](https://github.com/ballerina-platform/module-ballerinax-spotify/actions/workflows/ci.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-spotify/actions/workflows/ci.yml)
-[![Trivy](https://github.com/ballerina-platform/module-ballerinax-spotify/actions/workflows/trivy-scan.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-spotify/actions/workflows/trivy-scan.yml)
-[![GraalVM Check](https://github.com/ballerina-platform/module-ballerinax-spotify/actions/workflows/build-with-bal-test-graalvm.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-spotify/actions/workflows/build-with-bal-test-graalvm.yml)
-[![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-spotify.svg)](https://github.com/ballerina-platform/module-ballerinax-spotify/commits/master)
-[![GitHub Issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-library/module/spotify.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-library/labels/module%spotify)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-spotify.svg)](https://github.com/ballerina-platform/module-ballerinax-spotify/commits/main)
+[![GitHub Issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-library/module/spotify.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-library/labels/module%2Fspotify)
 
 ## Overview
 
-[Spotify](https://www.spotify.com/) is a popular music streaming service that allows users to listen to millions of songs, podcasts, and other audio content from artists and creators worldwide. It offers personalized playlists, radio stations, and social features, enabling users to discover new music and share content with friends.
+[Spotify](https://www.spotify.com/) is a music and podcast streaming service that gives listeners access to millions of tracks, albums, podcasts, and audiobooks, along with personalised playlists and recommendations.
 
-The `ballerinax/spotify` package provides APIs to connect and interact with Spotify Web API endpoints, which allow access to Spotify's catalog, user data, and playback features. This package enables developers to integrate Spotify functionalities, such as searching for tracks, managing playlists, and controlling playback, into their applications.
+The Spotify connector provides a Ballerina client for the [Spotify Web API](https://developer.spotify.com/documentation/web-api). It lets you search the Spotify catalogue, read and manage a user's library and playlists, follow artists and users, and inspect and control playback on a user's devices from your integrations.
 
 ## Setup guide
 
-To use the Spotify connector, you must have access to the Spotify API through a [Spotify developer account](https://developer.spotify.com) and a project under it. If you do not have a Spotify Developer account, you can sign up for one [here](https://developer.spotify.com/documentation/web-api/concepts/access-token).
+To use the Spotify connector, you need a Spotify account and an app registered in the Spotify Developer Dashboard.
 
-### Step 1: Create a Spotify developer project
+### Step 1: Create a Spotify app
 
-1. Open the [Spotify Developer Portal](https://developer.spotify.com/dashboard).
-<img src=https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-spotify/main/docs/setup/resources/dashboad.png alt="Dashboad" style="width: 70%;">
+1. Sign in to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard) and select **Create app**.
+2. Enter an app name and description, add a redirect URI such as `http://127.0.0.1:8080/callback`, select the **Web API** option, accept the terms of service, and save the app.
+3. Open the app's **Settings** page and note the **Client ID** and **Client secret**.
 
+### Step 2: Obtain a refresh token
 
-2. Click on the "Create an app" tab and select an existing project or create a new one for which you want API Keys and Authentication Tokens.
-<img src=https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-spotify/main/docs/setup/resources/app_overview.png alt="Spotify Developer Portal" style="width: 70%;">
+1. Open the authorization URL in a browser, replacing the placeholders. Request the scopes your integration needs, for example `user-read-private playlist-modify-private user-top-read user-library-read`.
 
+   ```
+   https://accounts.spotify.com/authorize?client_id=<client-id>&response_type=code&redirect_uri=<redirect-uri>&scope=<space-separated-scopes>
+   ```
 
-### Step 2: Set up user authentication settings
+2. Approve the request. Spotify redirects to your redirect URI with a `code` query parameter.
+3. Exchange the code for tokens.
 
-Enter an App Name and App Description of your choice (they will be displayed to the user on the grant screen), put a tick in the Developer Terms of Service checkbox and finally click on CREATE. Your application is now registered, and you'll be redirected to the app overview page.
-
-<img src=https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-spotify/main/docs/setup/resources/createappdialog.png alt="Create app" style="width: 70%;">
-
-### Step 3. Obtain client Id and client secret.
-
-With our credentials in hand, we are ready to request an access token.
-
-1. Send a POST request to the token endpoint URI.
-2. Add the Content-Type header set to the application/x-www-form-urlencoded value.
-3. Add a HTTP body containing the client ID and client Secret, along with the grant_type parameter set to client_credentials.
-
-```bash
-    curl -X POST "https://accounts.spotify.com/api/token" \
+   ```bash
+   curl -X POST "https://accounts.spotify.com/api/token" \
+     -H "Authorization: Basic <base64 of client-id:client-secret>" \
      -H "Content-Type: application/x-www-form-urlencoded" \
-     -d "grant_type=client_credentials&client_id=your-client-id&client_secret=your-client-secret"
-```
-The response will return an access token valid for 1 hour
-```
-{
-  "access_token": <Access Token>,
-  "token_type": "Bearer",
-  "expires_in": 3600
-}
-```
+     -d "grant_type=authorization_code&code=<code>&redirect_uri=<redirect-uri>"
+   ```
+
+4. Copy the `refresh_token` from the response. The connector uses it to obtain new access tokens automatically.
+
+> **Note**: Endpoints that read or change user data need a token granted by that user through this flow. Alternatively, a short-lived access token can be passed with the `token` field of the connector's bearer-token configuration.
 
 ## Quickstart
 
-To use the `spotify` connector in your Ballerina application, update the `.bal` file as follows:
+To use the Spotify connector in your Ballerina application, modify the `.bal` file as follows.
 
-### Step 1: Import the module
-
-Import the `spotify` module.
+#### Step 1: Import the connector
 
 ```ballerina
 import ballerinax/spotify;
 ```
 
-### Step 2: Instantiate a new connector
+#### Step 2: Create a new connector instance
 
-1. Create a `Config.toml` file and, configure the obtained credentials in the above steps as follows:
+Create a `Config.toml` file with your credentials.
 
-```bash
-token = "<Access Token>"
+```toml
+clientId = "<client-id>"
+clientSecret = "<client-secret>"
+refreshToken = "<refresh-token>"
 ```
 
-2. Create a `spotify:ConnectionConfig` with the obtained access token and initialize the connector with it.
+Then create a client from them.
 
 ```ballerina
-configurable string token = ?;
+configurable string clientId = ?;
+configurable string clientSecret = ?;
+configurable string refreshToken = ?;
 
-final spotify:Client spotify = check new({
-    auth: {
-        token
-    }
+spotify:Client spotify = check new ({
+    auth: {clientId, clientSecret, refreshToken}
 });
 ```
 
-### Step 3: Invoke the connector operation
+#### Step 3: Invoke the connector operation
 
-Now, utilize the available connector operations.
-
-#### Get markets
+Fetch a track from the Spotify catalogue.
 
 ```ballerina
 public function main() returns error? {
-    MarketsResponse|error response = spotify->/markets;
+    spotify:TrackObject _ = check spotify->getTrack("2Foc5Q5nqNiosCNqttzHof");
 }
 ```
 
-### Step 4: Run the Ballerina application
+#### Step 4: Run the Ballerina application
 
 ```bash
 bal run
@@ -106,20 +92,21 @@ bal run
 
 ## Examples
 
-The `Spotify` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/module-ballerinax-spotify/tree/main/examples/), covering the following use cases:
+The `Spotify` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-spotify/tree/main/examples/), covering the following use cases:
 
- 1.[Get artist and album details from Spotify](https://github.com/ballerina-platform/module-ballerinax-spotify/tree/main/examples/details) - Get information about an artist including their details, genres, followers, and discography from Spotify.
+- [Listening taste profile](examples/listening_taste_profile/listening_taste_profile.md) - Summarise the signed-in user's top artists, top tracks, and favourite genres.
+- [Top tracks playlist builder](examples/top_tracks_playlist_builder/top_tracks_playlist_builder.md) - Turn the user's top tracks into a new playlist.
 
-## Build from the source
+## Build from source
 
-### Setting up the prerequisites
+### Setting up prerequisites
 
-1. Download and install Java SE Development Kit (JDK) version 17. You can download it from either of the following sources:
+1. Download and install Java SE Development Kit (JDK) version 21 from either of the following sources:
 
     * [Oracle JDK](https://www.oracle.com/java/technologies/downloads/)
     * [OpenJDK](https://adoptium.net/)
 
-   > **Note:** After installation, remember to set the `JAVA_HOME` environment variable to the directory where JDK was installed.
+   > **Note:** After installation, remember to set the `JAVA_HOME` environment variable to the directory where the JDK is installed.
 
 2. Download and install [Ballerina Swan Lake](https://ballerina.io/).
 
@@ -127,16 +114,16 @@ The `Spotify` connector provides practical examples illustrating usage in variou
 
    > **Note**: Ensure that the Docker daemon is running before executing any tests.
 
-4. Export Github Personal access token with read package permissions as follows,
+4. Export a GitHub Personal Access Token with read package permissions as follows:
 
     ```bash
     export packageUser=<Username>
-    export packagePAT=<Personal access token>
+    export packagePAT=<Personal Access Token>
     ```
 
 ### Build options
 
-Execute the commands below to build from the source.
+Run the following commands to build from source.
 
 1. To build the package:
 
@@ -150,7 +137,7 @@ Execute the commands below to build from the source.
    ./gradlew clean test
    ```
 
-3. To build the without the tests:
+3. To build without the tests:
 
    ```bash
    ./gradlew clean build -x test

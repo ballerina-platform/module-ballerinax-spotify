@@ -18,308 +18,196 @@
 // under the License.
 
 import ballerina/constraint;
+import ballerina/data.jsondata;
 import ballerina/http;
 
-public type ManyEpisodesObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+# Represents the Queries record for the operation: updatePlaylistItems
+public type UpdatePlaylistItemsQueries record {
+    # A comma-separated list of [Spotify URIs](/documentation/web-api/concepts/spotify-uris-ids) to set, can be track or episode URIs. For example: `uris=spotify:track:4iV5W9uYEdYUVa79Axb7Rh,spotify:track:1301WleyT98MSxVHPZCA6M,spotify:episode:512ojhOuo1ktJprKbVcKyQ`<br/>A maximum of 100 items can be set in one request.
+    string uris?;
 };
 
-public type AudioFeaturesObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+# Represents the Queries record for the operation: removeLibraryItems
+public type RemoveLibraryItemsQueries record {
+    # A comma-separated list of [Spotify URIs](/documentation/web-api/concepts/spotify-uris-ids). Maximum: 40 URIs.
+    # 
+    # Supported URI types:
+    # - `spotify:track:{id}`
+    # - `spotify:album:{id}`
+    # - `spotify:episode:{id}`
+    # - `spotify:show:{id}`
+    # - `spotify:audiobook:{id}`
+    # - `spotify:user:{id}`
+    # - `spotify:playlist:{id}`
+    string uris;
 };
 
-# Represents the Queries record for the operation: skip-users-playback-to-previous-track
-public type SkipUsersPlaybackToPreviousTrackQueries record {
-    string device_id?;
+# Represents the Queries record for the operation: skipToNext
+public type SkipToNextQueries record {
+    # The id of the device this command is targeting. If not supplied, the user's currently active device is the target.
+    @http:Query {name: "device_id"}
+    string deviceId?;
 };
 
-# Represents the Queries record for the operation: get-multiple-audiobooks
-public type GetMultipleAudiobooksQueries record {
+public type PagingSimplifiedAlbumObject record {
+    *PagingObject;
+    SimplifiedAlbumObject[] items?;
+};
+
+public type QueueObjectQueue TrackObject|EpisodeObject;
+
+public type ExternalUrlObject record {
+    # The [Spotify URL](/documentation/web-api/concepts/spotify-uris-ids) for the object
+    string spotify?;
+};
+
+# Represents the Queries record for the operation: getAudiobook
+public type GetAudiobookQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
     string market?;
-    string ids;
 };
 
-# Represents the Queries record for the operation: check-if-user-follows-playlist
-public type CheckIfUserFollowsPlaylistQueries record {
-    string ids?;
+# A cursor-paged set of artists
+public type FollowedArtistsResponse record {
+    CursorPagingSimplifiedArtistObject artists;
+};
+
+public type RemovePlaylistItemsRequest record {
+    # The playlist's snapshot ID against which you want to make the changes.
+    # The API will validate that the specified items exist and in the specified positions and make the changes,
+    # even if more recent changes have been made to the playlist
+    @jsondata:Name {value: "snapshot_id"}
+    string snapshotId?;
+    # An array of objects containing [Spotify URIs](/documentation/web-api/concepts/spotify-uris-ids) of the tracks or episodes to remove.
+    # For example: `{ "items": [{ "uri": "spotify:track:4iV5W9uYEdYUVa79Axb7Rh" },{ "uri": "spotify:track:1301WleyT98MSxVHPZCA6M" }] }`. A maximum of 100 objects can be sent at once
+    PlaylistTrackReference[] items;
+};
+
+public type ShowBase record {
+    # The cover art for the show in various sizes, widest first
+    ImageObject[] images;
+    # A list of the languages used in the show, identified by their [ISO 639](https://en.wikipedia.org/wiki/ISO_639) code
+    string[] languages;
+    # The copyright statements of the show
+    CopyrightObject[] copyrights;
+    # A list of the countries in which the show can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "available_markets"}
+    @deprecated
+    string[] availableMarkets;
+    # A description of the show. HTML tags are stripped away from this field, use `html_description` field in case HTML tags are needed
+    string description;
+    # The object type
+    "show" 'type;
+    # A description of the show. This field may contain HTML tags
+    @jsondata:Name {value: "html_description"}
+    string htmlDescription;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the show
+    string uri;
+    # True if all of the shows episodes are hosted outside of Spotify's CDN. This field might be `null` in some cases
+    @jsondata:Name {value: "is_externally_hosted"}
+    boolean isExternallyHosted;
+    # The total number of episodes in the show
+    @jsondata:Name {value: "total_episodes"}
+    int totalEpisodes;
+    # Whether or not the show has explicit content (true = yes it does; false = no it does not OR unknown)
+    boolean explicit;
+    # The media type of the show
+    @jsondata:Name {value: "media_type"}
+    string mediaType;
+    # The name of the episode
+    string name;
+    # The publisher of the show
+    # 
+    # # Deprecated
+    @deprecated
+    string publisher;
+    # A link to the Web API endpoint providing full details of the show
+    string href;
+    # The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the show
+    string id;
+    # External URLs for this show
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls;
+};
+
+public type SimplifiedAlbumObject record {
+    *AlbumBase;
+    # The artists of the album. Each artist object includes a link in `href` to more detailed information about the artist
+    SimplifiedArtistObject[] artists;
 };
 
 public type ShowObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    *ShowBase;
+    # The episodes of the show
+    PagingSimplifiedEpisodeObject episodes;
 };
 
-# Represents the Queries record for the operation: remove-shows-user
-public type RemoveShowsUserQueries record {
-    string market?;
-    string ids;
+public type SimplifiedChapterObject record {
+    *ChapterBase;
 };
 
-public type PagedCategoriesObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: check-users-saved-episodes
-public type CheckUsersSavedEpisodesQueries record {
-    string ids;
-};
-
-# Represents the Queries record for the operation: check-users-saved-audiobooks
-public type CheckUsersSavedAudiobooksQueries record {
-    string ids;
+public type AudiobookBase record {
+    # The cover art for the audiobook in various sizes, widest first
+    ImageObject[] images;
+    # A list of the languages used in the audiobook, identified by their [ISO 639](https://en.wikipedia.org/wiki/ISO_639) code
+    string[] languages;
+    # The copyright statements of the audiobook
+    CopyrightObject[] copyrights;
+    # A list of the countries in which the audiobook can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "available_markets"}
+    @deprecated
+    string[] availableMarkets;
+    # A description of the audiobook. HTML tags are stripped away from this field, use `html_description` field in case HTML tags are needed
+    string description;
+    # The edition of the audiobook
+    string edition?;
+    # The object type
+    "audiobook" 'type;
+    # A description of the audiobook. This field may contain HTML tags
+    @jsondata:Name {value: "html_description"}
+    string htmlDescription;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the audiobook
+    string uri;
+    # Whether or not the audiobook has explicit content (true = yes it does; false = no it does not OR unknown)
+    boolean explicit;
+    # The media type of the audiobook
+    @jsondata:Name {value: "media_type"}
+    string mediaType;
+    # The name of the audiobook
+    string name;
+    # The number of chapters in this audiobook
+    @jsondata:Name {value: "total_chapters"}
+    int totalChapters;
+    # The publisher of the audiobook
+    # 
+    # # Deprecated
+    @deprecated
+    string publisher;
+    # A link to the Web API endpoint providing full details of the audiobook
+    string href;
+    # The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the audiobook
+    string id;
+    # External URLs for this audiobook
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls;
+    # The author(s) for the audiobook
+    AuthorObject[] authors;
+    # The narrator(s) for the audiobook
+    NarratorObject[] narrators;
 };
 
 public type PagingSimplifiedEpisodeObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    *PagingObject;
+    SimplifiedEpisodeObject[] items?;
 };
 
 # Provides a set of configurations for controlling the behaviours when communicating with a remote HTTP endpoint.
@@ -330,3264 +218,1372 @@ public type ConnectionConfig record {|
     # The HTTP version understood by the client
     http:HttpVersion httpVersion = http:HTTP_2_0;
     # Configurations related to HTTP/1.x protocol
-    ClientHttp1Settings http1Settings?;
+    http:ClientHttp1Settings http1Settings = {};
     # Configurations related to HTTP/2 protocol
-    http:ClientHttp2Settings http2Settings?;
+    http:ClientHttp2Settings http2Settings = {};
     # The maximum time to wait (in seconds) for a response before closing the connection
-    decimal timeout = 60;
+    decimal timeout = 30;
     # The choice of setting `forwarded`/`x-forwarded` header
     string forwarded = "disable";
+    # Configurations associated with Redirection
+    http:FollowRedirects followRedirects?;
     # Configurations associated with request pooling
     http:PoolConfiguration poolConfig?;
     # HTTP caching related configurations
-    http:CacheConfig cache?;
+    http:CacheConfig cache = {};
     # Specifies the way of handling compression (`accept-encoding`) header
     http:Compression compression = http:COMPRESSION_AUTO;
     # Configurations associated with the behaviour of the Circuit Breaker
     http:CircuitBreakerConfig circuitBreaker?;
     # Configurations associated with retrying
     http:RetryConfig retryConfig?;
+    # Configurations associated with cookies
+    http:CookieConfig cookieConfig?;
     # Configurations associated with inbound response size limits
-    http:ResponseLimitConfigs responseLimits?;
+    http:ResponseLimitConfigs responseLimits = {};
     # SSL/TLS-related options
     http:ClientSecureSocket secureSocket?;
     # Proxy server related options
     http:ProxyConfig proxy?;
+    # Provides settings related to client socket configuration
+    http:ClientSocketConfig socketConfig = {};
     # Enables the inbound payload validation functionality which provided by the constraint package. Enabled by default
     boolean validation = true;
+    # Enables relaxed data binding on the client side. When enabled, `nil` values are treated as optional, 
+    # and absent fields are handled as `nilable` types. Enabled by default.
+    boolean laxDataBinding = true;
 |};
 
-public type MeEpisodesBody1 record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+# Represents the Queries record for the operation: setPlaybackVolume
+public type SetPlaybackVolumeQueries record {
+    # The id of the device this command is targeting. If not supplied, the user's currently active device is the target.
+    @http:Query {name: "device_id"}
+    string deviceId?;
+    # The volume to set. Must be a value from 0 to 100 inclusive.
+    @http:Query {name: "volume_percent"}
+    int volumePercent;
+};
+
+# Represents the Queries record for the operation: getPlaybackState
+public type GetPlaybackStateQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
+    string market?;
+    # A comma-separated list of item types that your client supports besides the default `track` type. Valid types are: `track` and `episode`.<br/>
+    # _**Note**: This parameter was introduced to allow existing clients to maintain their current behaviour and might be deprecated in the future._<br/>
+    # In addition to providing this parameter, make sure that your client properly handles cases of new types in the future by checking against the `type` field of each object.
+    @http:Query {name: "additional_types"}
+    string additionalTypes?;
 };
 
 public type PagingPlaylistObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    *PagingObject;
+    SimplifiedPlaylistObject[] items?;
 };
 
-public type PlaylistSnapshotIdObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-public type ManySimplifiedShowsObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-public type PrivateUserObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+public type AddItemsToPlaylistRequest record {
+    # A JSON array of the [Spotify URIs](/documentation/web-api/concepts/spotify-uris-ids) to add. For example: `{"uris": ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh","spotify:track:1301WleyT98MSxVHPZCA6M", "spotify:episode:512ojhOuo1ktJprKbVcKyQ"]}`<br/>A maximum of 100 items can be added in one request. _**Note**: if the `uris` parameter is present in the query string, any URIs listed here in the body will be ignored._
+    string[] uris?;
+    # The position to insert the items, a zero-based index. For example, to insert the items in the first position: `position=0` ; to insert the items in the third position: `position=2`. If omitted, the items will be appended to the playlist. Items are added in the order they appear in the uris array. For example: `{"uris": ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh","spotify:track:1301WleyT98MSxVHPZCA6M"], "position": 3}`
+    int position?;
 };
 
 public type PagingSimplifiedTrackObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    *PagingObject;
+    SimplifiedTrackObject[] items?;
+};
+
+public type PrivateUserObject record {
+    # The country of the user, as set in the user's account profile. An [ISO 3166-1 alpha-2 country code](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). _This field is only available when the current user has granted access to the [user-read-private](/documentation/web-api/concepts/scopes/#list-of-scopes) scope._
+    # 
+    # # Deprecated
+    @deprecated
+    string country?;
+    # The user's profile image
+    ImageObject[] images?;
+    # The user's Spotify subscription level: "premium", "free", etc. (The subscription level "open" can be considered the same as "free".) _This field is only available when the current user has granted access to the [user-read-private](/documentation/web-api/concepts/scopes/#list-of-scopes) scope._
+    # 
+    # # Deprecated
+    @deprecated
+    string product?;
+    # The user's explicit content settings. _This field is only available when the current user has granted access to the [user-read-private](/documentation/web-api/concepts/scopes/#list-of-scopes) scope._
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "explicit_content"}
+    @deprecated
+    ExplicitContentSettingsObject explicitContent?;
+    # The name displayed on the user's profile. `null` if not available
+    @jsondata:Name {value: "display_name"}
+    string displayName?;
+    # The object type: "user"
+    string 'type?;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the user
+    string uri?;
+    # A public, immutable, pseudoanonymous identifier for the user's account. Use this field for account linking rather than the `id` field, as it is stable and will not change over the lifetime of the account
+    @jsondata:Name {value: "account_id"}
+    string accountId?;
+    # Information about the followers of the user
+    # 
+    # # Deprecated
+    @deprecated
+    FollowersObject followers?;
+    # A link to the Web API endpoint for this user
+    string href?;
+    # The [Spotify user ID](/documentation/web-api/concepts/spotify-uris-ids) for the user. Do not use this field for account linking — use `account_id` instead, which is immutable
+    string id?;
+    # Known external URLs for this user
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls?;
+    # The user's email address, as entered by the user when creating their account. _**Important!** This email address is unverified; there is no proof that it actually belongs to the user._ _This field is only available when the current user has granted access to the [user-read-email](/documentation/web-api/concepts/scopes/#list-of-scopes) scope._
+    # 
+    # # Deprecated
+    @deprecated
+    string email?;
 };
 
 public type PagingSimplifiedAudiobookObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    *PagingObject;
+    SimplifiedAudiobookObject[] items?;
 };
 
-public type PlayerPlayBody record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-public type PagingSavedEpisodeObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+# Represents the Queries record for the operation: listAlbumTracks
+public type ListAlbumTracksQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
+    string market?;
+    # The index of the first item to return. Default: 0 (the first item). Use with limit to get the next set of items.
+    int offset = 0;
+    # The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
+    @constraint:Int {minValue: 0, maxValue: 50}
+    int 'limit = 20;
 };
 
 public type TrackObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    # The disc number (usually `1` unless the album consists of more than one disc)
+    @jsondata:Name {value: "disc_number"}
+    int discNumber?;
+    # The album on which the track appears. The album object includes a link in `href` to full information about the album
+    SimplifiedAlbumObject album?;
+    # A list of the countries in which the track can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "available_markets"}
+    @deprecated
+    string[] availableMarkets?;
+    # Included in the response when a content restriction is applied
+    TrackRestrictionObject restrictions?;
+    # The object type: "track"
+    "track" 'type?;
+    # Known external IDs for the track
+    @jsondata:Name {value: "external_ids"}
+    ExternalIdObject externalIds?;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the track
+    string uri?;
+    # The track length in milliseconds
+    @jsondata:Name {value: "duration_ms"}
+    int durationMs?;
+    # Whether or not the track has explicit lyrics ( `true` = yes it does; `false` = no it does not OR unknown)
+    boolean explicit?;
+    # Part of the response when [Track Relinking](/documentation/web-api/concepts/track-relinking) is applied. If `true`, the track is playable in the given market. Otherwise `false`
+    @jsondata:Name {value: "is_playable"}
+    boolean isPlayable?;
+    # The artists who performed the track. Each artist object includes a link in `href` to more detailed information about the artist
+    SimplifiedArtistObject[] artists?;
+    # Part of the response when [Track Relinking](/documentation/web-api/concepts/track-relinking) is applied, and the requested track has been replaced with different track. The track in the `linked_from` object contains information about the originally requested track
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "linked_from"}
+    @deprecated
+    record {} linkedFrom?;
+    # A link to a 30 second preview (MP3 format) of the track. Can be `null`
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "preview_url"}
+    @deprecated
+    string? previewUrl?;
+    # The popularity of the track. The value will be between 0 and 100, with 100 being the most popular.<br/>The popularity of a track is a value between 0 and 100, with 100 being the most popular. The popularity is calculated by algorithm and is based, in the most part, on the total number of plays the track has had and how recent those plays are.<br/>Generally speaking, songs that are being played a lot now will have a higher popularity than songs that were played a lot in the past. Duplicate tracks (e.g. the same track from a single and an album) are rated independently. Artist and album popularity is derived mathematically from track popularity. _**Note**: the popularity value may lag actual popularity by a few days: the value is not updated in real time._
+    # 
+    # # Deprecated
+    @deprecated
+    int popularity?;
+    # The name of the track
+    string name?;
+    # The number of the track. If an album has several discs, the track number is the number on the specified disc
+    @jsondata:Name {value: "track_number"}
+    int trackNumber?;
+    # A link to the Web API endpoint providing full details of the track
+    string href?;
+    # The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the track
+    string id?;
+    # Whether or not the track is from a local file
+    @jsondata:Name {value: "is_local"}
+    boolean isLocal?;
+    # Known external URLs for this track
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls?;
 };
 
-# Represents the Queries record for the operation: get-users-saved-albums
-public type GetUsersSavedAlbumsQueries record {
-    string market?;
-    int offset = 0;
+public type PagingSavedEpisodeObject record {
+    *PagingObject;
+    SavedEpisodeObject[] items?;
+};
+
+# The snapshot ID of the playlist after the change
+public type PlaylistSnapshotResponse record {
+    # The snapshot ID of the playlist
+    @jsondata:Name {value: "snapshot_id"}
+    string snapshotId?;
+};
+
+# Represents the Queries record for the operation: saveLibraryItems
+public type SaveLibraryItemsQueries record {
+    # A comma-separated list of [Spotify URIs](/documentation/web-api/concepts/spotify-uris-ids). Maximum: 40 URIs.
+    # 
+    # Supported URI types:
+    # - `spotify:track:{id}`
+    # - `spotify:album:{id}`
+    # - `spotify:episode:{id}`
+    # - `spotify:show:{id}`
+    # - `spotify:audiobook:{id}`
+    # - `spotify:user:{id}`
+    # - `spotify:playlist:{id}`
+    string uris;
+};
+
+public type CursorPagingSimplifiedArtistObject record {
+    *CursorPagingObject;
+    ArtistObject[] items?;
+};
+
+# Represents the Queries record for the operation: listFollowedArtists
+public type ListFollowedArtistsQueries record {
+    # The maximum number of items to return. Default: 20\. Minimum: 1\. Maximum: 50\.
     @constraint:Int {minValue: 0, maxValue: 50}
     int 'limit = 20;
-};
-
-public type Tempo record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: remove-audiobooks-user
-public type RemoveAudiobooksUserQueries record {
-    string ids;
-};
-
-public type PlaylistsPlaylistIdBody record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: skip-users-playback-to-next-track
-public type SkipUsersPlaybackToNextTrackQueries record {
-    string device_id?;
-};
-
-# Represents the Queries record for the operation: get-users-saved-episodes
-public type GetUsersSavedEpisodesQueries record {
-    string market?;
-    int offset = 0;
-    @constraint:Int {minValue: 0, maxValue: 50}
-    int 'limit = 20;
-};
-
-# Represents the Queries record for the operation: get-a-shows-episodes
-public type GetAShowsEpisodesQueries record {
-    string market?;
-    int offset = 0;
-    @constraint:Int {minValue: 0, maxValue: 50}
-    int 'limit = 20;
-};
-
-public type PlaylistObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-public type ManyDevicesObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-public type Key record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-public type CursorPagedArtistsObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: get-users-saved-tracks
-public type GetUsersSavedTracksQueries record {
-    string market?;
-    int offset = 0;
-    @constraint:Int {minValue: 0, maxValue: 50}
-    int 'limit = 20;
-};
-
-public type PagingSavedAlbumObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: get-an-artists-top-tracks
-public type GetAnArtistsTopTracksQueries record {
-    string market?;
-};
-
-public type MeFollowingBody1 record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-public type EpisodeObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: get-an-album
-public type GetAnAlbumQueries record {
-    string market?;
-};
-
-# Represents the Queries record for the operation: remove-albums-user
-public type RemoveAlbumsUserQueries record {
-    string ids;
-};
-
-# Represents the Queries record for the operation: set-repeat-mode-on-users-playback
-public type SetRepeatModeOnUsersPlaybackQueries record {
-    string device_id?;
-    string state;
-};
-
-public type PlaylistIdTracksBody record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: get-list-users-playlists
-public type GetListUsersPlaylistsQueries record {
-    int offset = 0;
-    @constraint:Int {minValue: 0, maxValue: 50}
-    int 'limit = 20;
-};
-
-public type ManyAudioFeaturesObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: get-followed
-public type GetFollowedQueries record {
-    @constraint:Int {minValue: 0, maxValue: 50}
-    int 'limit = 20;
+    # The last artist ID retrieved from the previous request.
     string after?;
+    # The ID type: currently only `artist` is supported.
     "artist" 'type;
 };
 
-# Represents the Queries record for the operation: search
-public type SearchQueries record {
-    string market?;
-    string q;
-    @constraint:Int {minValue: 0, maxValue: 1000}
+# Represents the Queries record for the operation: listSavedAudiobooks
+public type ListSavedAudiobooksQueries record {
+    # The index of the first item to return. Default: 0 (the first item). Use with limit to get the next set of items.
     int offset = 0;
-    "audio" include_external?;
+    # The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
     @constraint:Int {minValue: 0, maxValue: 50}
     int 'limit = 20;
-    ("album"|"artist"|"playlist"|"track"|"show"|"episode"|"audiobook")[] 'type;
 };
 
-public type RecommendationsObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+public type SavedEpisodeObject record {
+    # The date and time the episode was saved.
+    # Timestamps are returned in ISO 8601 format as Coordinated Universal Time (UTC) with a zero offset: YYYY-MM-DDTHH:MM:SSZ
+    @jsondata:Name {value: "added_at"}
+    string addedAt?;
+    # Information about the episode
+    EpisodeObject episode?;
+};
+
+public type PlaylistObject record {
+    # The user who owns the playlist
+    PlaylistOwnerObject owner?;
+    # Images for the playlist. The array may be empty or contain up to three images. The images are returned by size in descending order. See [Working with Playlists](/documentation/web-api/concepts/playlists). _**Note**: If returned, the source URL for the image (`url`) is temporary and will expire in less than a day._
+    ImageObject[] images?;
+    # The version identifier for the current playlist. Can be supplied in other requests to target a specific playlist version
+    @jsondata:Name {value: "snapshot_id"}
+    string snapshotId?;
+    # `true` if the owner allows other users to modify the playlist
+    boolean collaborative?;
+    # The playlist description. _Only returned for modified, verified playlists, otherwise_ `null`
+    string? description?;
+    # The object type: "playlist"
+    string 'type?;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the playlist
+    string uri?;
+    # **Deprecated:** Use `items` instead. The tracks of the playlist
+    # 
+    # # Deprecated
+    @deprecated
+    PagingPlaylistTrackObject tracks?;
+    # The playlist's public/private status (if it is added to the user's profile): `true` the playlist is public, `false` the playlist is private, `null` the playlist status is not relevant. For more about public/private status, see [Working with Playlists](/documentation/web-api/concepts/playlists)
+    boolean 'public?;
+    # The name of the playlist
+    string name?;
+    # A link to the Web API endpoint providing full details of the playlist
+    string href?;
+    # The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the playlist
+    string id?;
+    # Known external URLs for this playlist
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls?;
+    # The items of the playlist. _**Note**: This field is only available for playlists owned by the current user or playlists the user is a collaborator of._
+    PagingPlaylistTrackObject items?;
+};
+
+public type PlaylistTrackObject record {
+    # The date and time the track or episode was added. _**Note**: some very old playlists may return `null` in this field._
+    @jsondata:Name {value: "added_at"}
+    string addedAt?;
+    # Information about the track or episode
+    TrackObject|EpisodeObject item?;
+    # The Spotify user who added the track or episode. _**Note**: some very old playlists may return `null` in this field._
+    @jsondata:Name {value: "added_by"}
+    PlaylistUserObject addedBy?;
+    # Whether this track or episode is a [local file](/documentation/web-api/concepts/playlists/#local-files) or not
+    @jsondata:Name {value: "is_local"}
+    boolean isLocal?;
+    # **Deprecated:** Use `item` instead. Information about the track or episode
+    # 
+    # # Deprecated
+    @deprecated
+    TrackObject|EpisodeObject track?;
+};
+
+public type SimplifiedArtistObject record {
+    # The name of the artist
+    string name?;
+    # A link to the Web API endpoint providing full details of the artist
+    string href?;
+    # The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the artist
+    string id?;
+    # The object type
+    "artist" 'type?;
+    # Known external URLs for this artist
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls?;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the artist
+    string uri?;
+};
+
+public type PagingSavedAlbumObject record {
+    *PagingObject;
+    SavedAlbumObject[] items?;
+};
+
+public type EpisodeObject record {
+    *EpisodeBase;
+    # The show on which the episode belongs
+    SimplifiedShowObject show;
+};
+
+# Represents the Queries record for the operation: listSavedTracks
+public type ListSavedTracksQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
+    string market?;
+    # The index of the first item to return. Default: 0 (the first item). Use with limit to get the next set of items.
+    int offset = 0;
+    # The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
+    @constraint:Int {minValue: 0, maxValue: 50}
+    int 'limit = 20;
+};
+
+public type ArtistDiscographyAlbumObject record {
+    *SimplifiedAlbumObject;
+    # This field describes the relationship between the artist and the album
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "album_group"}
+    @deprecated
+    "album"|"single"|"compilation"|"appears_on" albumGroup;
+};
+
+public type CursorObject record {
+    # The cursor to use as key to find the previous page of items
+    string before?;
+    # The cursor to use as key to find the next page of items
+    string after?;
+};
+
+public type FollowersObject record {
+    # The total number of followers
+    int total?;
+    # This will always be set to null, as the Web API does not support it at the moment
+    string? href?;
+};
+
+public type PagingSimplifiedShowObject record {
+    *PagingObject;
+    SimplifiedShowObject[] items?;
+};
+
+public type CopyrightObject record {
+    # The copyright text for this content
+    string text?;
+    # The type of copyright: `C` = the copyright, `P` = the sound recording (performance) copyright
+    string 'type?;
+};
+
+# Represents the Queries record for the operation: listSavedShows
+public type ListSavedShowsQueries record {
+    # The index of the first item to return. Default: 0 (the first item). Use with limit to get the next set of items.
+    int offset = 0;
+    # The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
+    @constraint:Int {minValue: 0, maxValue: 50}
+    int 'limit = 20;
+};
+
+public type NarratorObject record {
+    # The name of the Narrator
+    string name?;
+};
+
+public type TransferPlaybackRequest record {
+    # A JSON array containing the ID of the device on which playback should be started/transferred.<br/>For example:`{device_ids:["74ASZWbe4lXaubB36ztrGX"]}`<br/>_**Note**: Although an array is accepted, only a single device_id is currently supported. Supplying more than one will return `400 Bad Request`_
+    string[] device_ids;
+    # **true**: ensure playback happens on new device.<br/>**false** or not provided: keep the current playback state.
+    record {} play?;
+};
+
+# Represents the Queries record for the operation: setRepeatMode
+public type SetRepeatModeQueries record {
+    # The id of the device this command is targeting. If
+    # not supplied, the user's currently active device is the target.
+    @http:Query {name: "device_id"}
+    string deviceId?;
+    # **track**, **context** or **off**.<br/>
+    # **track** will repeat the current track.<br/>
+    # **context** will repeat the current context.<br/>
+    # **off** will turn repeat off.
+    string state;
+};
+
+# Represents the Queries record for the operation: listAudiobookChapters
+public type ListAudiobookChaptersQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
+    string market?;
+    # The index of the first item to return. Default: 0 (the first item). Use with limit to get the next set of items.
+    int offset = 0;
+    # The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
+    @constraint:Int {minValue: 0, maxValue: 50}
+    int 'limit = 20;
+};
+
+public type PlaylistOwnerObject record {
+    *PlaylistUserObject;
+    # The name displayed on the user's profile. `null` if not available
+    @jsondata:Name {value: "display_name"}
+    string? displayName?;
 };
 
 public type PagingPlaylistTrackObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    *PagingObject;
+    PlaylistTrackObject[] items?;
 };
 
-# Represents the Queries record for the operation: get-users-saved-audiobooks
-public type GetUsersSavedAudiobooksQueries record {
-    int offset = 0;
-    @constraint:Int {minValue: 0, maxValue: 50}
-    int 'limit = 20;
+public type EpisodeRestrictionObject record {
+    # The reason for the restriction. Supported values:
+    # - `market` - The content item is not available in the given market.
+    # - `product` - The content item is not available for the user's subscription type.
+    # - `explicit` - The content item is explicit and the user's account is set to not play explicit content.
+    # 
+    # Additional reasons may be added in the future.
+    # **Note**: If you use this field, make sure that your application safely handles unknown values
+    string reason?;
 };
 
-public type PagingArtistOrTrackObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+public type SimplifiedTrackObject record {
+    # The disc number (usually `1` unless the album consists of more than one disc)
+    @jsondata:Name {value: "disc_number"}
+    int discNumber?;
+    # A list of the countries in which the track can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "available_markets"}
+    @deprecated
+    string[] availableMarkets?;
+    # Included in the response when a content restriction is applied
+    TrackRestrictionObject restrictions?;
+    # The object type: "track"
+    string 'type?;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the track
+    string uri?;
+    # The track length in milliseconds
+    @jsondata:Name {value: "duration_ms"}
+    int durationMs?;
+    # Whether or not the track has explicit lyrics ( `true` = yes it does; `false` = no it does not OR unknown)
+    boolean explicit?;
+    # Part of the response when [Track Relinking](/documentation/web-api/concepts/track-relinking/) is applied. If `true`, the track is playable in the given market. Otherwise `false`
+    @jsondata:Name {value: "is_playable"}
+    boolean isPlayable?;
+    # The artists who performed the track. Each artist object includes a link in `href` to more detailed information about the artist
+    SimplifiedArtistObject[] artists?;
+    # Part of the response when [Track Relinking](/documentation/web-api/concepts/track-relinking/) is applied and is only part of the response if the track linking, in fact, exists. The requested track has been replaced with a different track. The track in the `linked_from` object contains information about the originally requested track
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "linked_from"}
+    @deprecated
+    LinkedTrackObject linkedFrom?;
+    # A URL to a 30 second preview (MP3 format) of the track
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "preview_url"}
+    @deprecated
+    string? previewUrl?;
+    # The name of the track
+    string name?;
+    # The number of the track. If an album has several discs, the track number is the number on the specified disc
+    @jsondata:Name {value: "track_number"}
+    int trackNumber?;
+    # A link to the Web API endpoint providing full details of the track
+    string href?;
+    # The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the track
+    string id?;
+    # Whether or not the track is from a local file
+    @jsondata:Name {value: "is_local"}
+    boolean isLocal?;
+    # External URLs for this track
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls?;
 };
 
 public type ImageObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    # The image width in pixels
+    int? width;
+    # The source URL of the image
+    string url;
+    # The image height in pixels
+    int? height;
 };
 
-# Represents the Queries record for the operation: get-an-audiobook
-public type GetAnAudiobookQueries record {
-    string market?;
+public type CreatePlaylistRequest record {
+    # The name for the new playlist, for example `"Your Coolest Playlist"`. This name does not need to be unique; a user may have several playlists with the same name.
+    string name;
+    # Defaults to `true`. The playlist's public/private status (if it should be added to the user's profile or not): `true` the playlist will be public, `false` the playlist will be private. To be able to create private playlists, the user must have granted the `playlist-modify-private` [scope](/documentation/web-api/concepts/scopes/#list-of-scopes). For more about public/private status, see [Working with Playlists](/documentation/web-api/concepts/playlists)
+    boolean 'public?;
+    # Defaults to `false`. If `true` the playlist will be collaborative. _**Note**: to create a collaborative playlist you must also set `public` to `false`. To create collaborative playlists you must have granted `playlist-modify-private` and `playlist-modify-public` [scopes](/documentation/web-api/concepts/scopes/#list-of-scopes)._
+    boolean collaborative?;
+    # value for playlist description as displayed in Spotify Clients and in the Web API.
+    string description?;
 };
 
-# Represents the Queries record for the operation: get-new-releases
-public type GetNewReleasesQueries record {
-    int offset = 0;
-    @constraint:Int {minValue: 0, maxValue: 50}
-    int 'limit = 20;
+public type TrackRestrictionObject record {
+    # The reason for the restriction. Supported values:
+    # - `market` - The content item is not available in the given market.
+    # - `product` - The content item is not available for the user's subscription type.
+    # - `explicit` - The content item is explicit and the user's account is set to not play explicit content.
+    # 
+    # Additional reasons may be added in the future.
+    # **Note**: If you use this field, make sure that your application safely handles unknown values
+    string reason?;
 };
 
-public type PublicUserObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+public type EpisodeBase record {
+    # The cover art for the episode in various sizes, widest first
+    ImageObject[] images;
+    # A list of the languages used in the episode, identified by their [ISO 639-1](https://en.wikipedia.org/wiki/ISO_639) code
+    string[] languages;
+    # A description of the episode. HTML tags are stripped away from this field, use `html_description` field in case HTML tags are needed
+    string description;
+    # Included in the response when a content restriction is applied
+    EpisodeRestrictionObject restrictions?;
+    # The language used in the episode, identified by a [ISO 639](https://en.wikipedia.org/wiki/ISO_639) code. This field is deprecated and might be removed in the future. Please use the `languages` field instead
+    # 
+    # # Deprecated
+    @deprecated
+    string language?;
+    # The precision with which `release_date` value is known
+    @jsondata:Name {value: "release_date_precision"}
+    "year"|"month"|"day" releaseDatePrecision;
+    # The object type
+    "episode" 'type;
+    # A description of the episode. This field may contain HTML tags
+    @jsondata:Name {value: "html_description"}
+    string htmlDescription;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the episode
+    string uri;
+    # True if the episode is hosted outside of Spotify's CDN
+    @jsondata:Name {value: "is_externally_hosted"}
+    boolean isExternallyHosted;
+    # A URL to a 30 second preview (MP3 format) of the episode. `null` if not available
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "audio_preview_url"}
+    @deprecated
+    string? audioPreviewUrl;
+    # The episode length in milliseconds
+    @jsondata:Name {value: "duration_ms"}
+    int durationMs;
+    # Whether or not the episode has explicit content (true = yes it does; false = no it does not OR unknown)
+    boolean explicit;
+    # True if the episode is playable in the given market. Otherwise false
+    @jsondata:Name {value: "is_playable"}
+    boolean isPlayable;
+    # The user's most recent position in the episode. Set if the supplied access token is a user token and has the scope 'user-read-playback-position'
+    @jsondata:Name {value: "resume_point"}
+    ResumePointObject resumePoint?;
+    # The date the episode was first released, for example `"1981-12-15"`. Depending on the precision, it might be shown as `"1981"` or `"1981-12"`
+    @jsondata:Name {value: "release_date"}
+    string releaseDate;
+    # The name of the episode
+    string name;
+    # A link to the Web API endpoint providing full details of the episode
+    string href;
+    # The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the episode
+    string id;
+    # External URLs for this episode
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls;
 };
 
-# Represents the Queries record for the operation: save-albums-user
-public type SaveAlbumsUserQueries record {
-    string ids;
+public type UpdatePlaylistItemsRequest record {
+    string[] uris?;
+    # The position of the first item to be reordered.
+    int range_start?;
+    # The position where the items should be inserted.<br/>To reorder the items to the end of the playlist, simply set _insert_before_ to the position after the last item.<br/>Examples:<br/>To reorder the first item to the last position in a playlist with 10 items, set _range_start_ to 0, and _insert_before_ to 10.<br/>To reorder the last item in a playlist with 10 items to the start of the playlist, set _range_start_ to 9, and _insert_before_ to 0.
+    int insert_before?;
+    # The amount of items to be reordered. Defaults to 1 if not set.<br/>The range of items to be reordered begins from the _range_start_ position, and includes the _range_length_ subsequent items.<br/>Example:<br/>To move the items at index 9-10 to the start of the playlist, _range_start_ is set to 9, and _range_length_ is set to 2.
+    int range_length?;
+    # The playlist's snapshot ID against which you want to make the changes.
+    string snapshot_id?;
 };
 
-# Represents the Queries record for the operation: add-to-queue
+# Represents the Queries record for the operation: addToQueue
 public type AddToQueueQueries record {
+    # The id of the device this command is targeting. If
+    # not supplied, the user's currently active device is the target.
     string device_id?;
+    # The uri of the item to add to the queue. Must be a track or an episode uri.
     string uri;
 };
 
-public type MeAlbumsBody record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+# Represents the Queries record for the operation: searchItems
+public type SearchItemsQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
+    string market?;
+    # Your search query.
+    # 
+    # You can narrow down your search using field filters. The available filters are `album`, `artist`, `track`, `year`, `upc`, `tag:hipster`, `tag:new`, `isrc`, and `genre`. Each field filter only applies to certain result types.
+    # 
+    # The `artist` and `year` filters can be used while searching albums, artists and tracks. You can filter on a single `year` or a range (e.g. 1955-1960).<br />
+    # The `album` filter can be used while searching albums and tracks.<br />
+    # The `genre` filter can be used while searching artists and tracks.<br />
+    # The `isrc` and `track` filters can be used while searching tracks.<br />
+    # The `upc`, `tag:new` and `tag:hipster` filters can only be used while searching albums. The `tag:new` filter will return albums released in the past two weeks and `tag:hipster` can be used to return only albums with the lowest 10% popularity.<br />
+    string q;
+    # The index of the first result to return. Use
+    # with limit to get the next page of search results.
+    @constraint:Int {minValue: 0, maxValue: 1000}
+    int offset = 0;
+    # If `include_external=audio` is specified it signals that the client can play externally hosted audio content, and marks
+    # the content as playable in the response. By default externally hosted audio content is marked as unplayable in the response.
+    @http:Query {name: "include_external"}
+    "audio" includeExternal?;
+    # The maximum number of results to return in each item type.
+    @constraint:Int {minValue: 0, maxValue: 10}
+    int 'limit = 5;
+    # A comma-separated list of item types to search across. Search results include hits
+    # from all the specified item types. For example: `q=abacab&type=album,track` returns
+    # both albums and tracks matching "abacab".
+    ("album"|"artist"|"playlist"|"track"|"show"|"episode"|"audiobook")[] 'type;
 };
 
-# Represents the Queries record for the operation: check-users-saved-shows
-public type CheckUsersSavedShowsQueries record {
-    string ids;
+public type ExplicitContentSettingsObject record {
+    # When `true`, indicates that the explicit content setting is locked and can't be changed by the user
+    @jsondata:Name {value: "filter_locked"}
+    boolean filterLocked?;
+    # When `true`, indicates that explicit content should not be played
+    @jsondata:Name {value: "filter_enabled"}
+    boolean filterEnabled?;
 };
 
-# Provides settings related to HTTP/1.x protocol.
-public type ClientHttp1Settings record {|
-    # Specifies whether to reuse a connection for multiple requests
-    http:KeepAlive keepAlive = http:KEEPALIVE_AUTO;
-    # The chunking behaviour of the request
-    http:Chunking chunking = http:CHUNKING_AUTO;
-    # Proxy server related options
-    ProxyConfig proxy?;
-|};
-
-# Represents the Queries record for the operation: check-current-user-follows
-public type CheckCurrentUserFollowsQueries record {
-    string ids;
-    "artist"|"user" 'type;
+public type SimplifiedEpisodeObject record {
+    *EpisodeBase;
 };
 
-# Represents the Queries record for the operation: get-track
+# Represents the Queries record for the operation: getTrack
 public type GetTrackQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
     string market?;
 };
 
-# Represents the Queries record for the operation: get-multiple-artists
-public type GetMultipleArtistsQueries record {
-    string ids;
-};
-
-# Represents the Queries record for the operation: get-multiple-shows
-public type GetMultipleShowsQueries record {
+# Represents the Queries record for the operation: getCurrentlyPlaying
+public type GetCurrentlyPlayingQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
     string market?;
-    string ids;
+    # A comma-separated list of item types that your client supports besides the default `track` type. Valid types are: `track` and `episode`.<br/>
+    # _**Note**: This parameter was introduced to allow existing clients to maintain their current behaviour and might be deprecated in the future._<br/>
+    # In addition to providing this parameter, make sure that your client properly handles cases of new types in the future by checking against the `type` field of each object.
+    @http:Query {name: "additional_types"}
+    string additionalTypes?;
 };
 
-public type ManyAudiobooksObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+# Represents the Queries record for the operation: checkSavedLibraryItems
+public type CheckSavedLibraryItemsQueries record {
+    # A comma-separated list of [Spotify URIs](/documentation/web-api/concepts/spotify-uris-ids). Maximum: 40 URIs.
+    # 
+    # Supported URI types:
+    # - `spotify:track:{id}`
+    # - `spotify:album:{id}`
+    # - `spotify:episode:{id}`
+    # - `spotify:show:{id}`
+    # - `spotify:audiobook:{id}`
+    # - `spotify:artist:{id}`
+    # - `spotify:user:{id}`
+    # - `spotify:playlist:{id}`
+    string uris;
 };
 
-public type PlaylistIdFollowersBody record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+# Represents the Queries record for the operation: startPlayback
+public type StartPlaybackQueries record {
+    # The id of the device this command is targeting. If not supplied, the user's currently active device is the target.
+    @http:Query {name: "device_id"}
+    string deviceId?;
 };
 
 public type QueueObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    # The currently playing track or episode. Can be `null`
+    @jsondata:Name {value: "currently_playing"}
+    TrackObject|EpisodeObject currentlyPlaying?;
+    # The tracks or episodes in the queue. Can be empty
+    QueueObjectQueue[] queue?;
 };
 
-public type MeTracksBody record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: get-an-albums-tracks
-public type GetAnAlbumsTracksQueries record {
+# Represents the Queries record for the operation: listShowEpisodes
+public type ListShowEpisodesQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
     string market?;
+    # The index of the first item to return. Default: 0 (the first item). Use with limit to get the next set of items.
     int offset = 0;
+    # The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
     @constraint:Int {minValue: 0, maxValue: 50}
     int 'limit = 20;
 };
 
-# Represents the Queries record for the operation: remove-tracks-user
-public type RemoveTracksUserQueries record {
-    string ids;
+public type PlayHistoryObject record {
+    # The context the track was played from
+    ContextObject context?;
+    # The date and time the track was played
+    @jsondata:Name {value: "played_at"}
+    string playedAt?;
+    # The track the user listened to
+    TrackObject track?;
 };
 
-# Represents the Queries record for the operation: get-a-list-of-current-users-playlists
-public type GetAListOfCurrentUsersPlaylistsQueries record {
+public type AlbumBase record {
+    # The cover art for the album in various sizes, widest first
+    ImageObject[] images;
+    # The markets in which the album is available: [ISO 3166-1 alpha-2 country codes](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). _**NOTE**: an album is considered available in a market when at least 1 of its tracks is available in that market._
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "available_markets"}
+    @deprecated
+    string[] availableMarkets;
+    # Included in the response when a content restriction is applied
+    AlbumRestrictionObject restrictions?;
+    # The precision with which `release_date` value is known
+    @jsondata:Name {value: "release_date_precision"}
+    "year"|"month"|"day" releaseDatePrecision;
+    # The object type
+    "album" 'type;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the album
+    string uri;
+    # The number of tracks in the album
+    @jsondata:Name {value: "total_tracks"}
+    int totalTracks;
+    # The date the album was first released
+    @jsondata:Name {value: "release_date"}
+    string releaseDate;
+    # The name of the album. In case of an album takedown, the value may be an empty string
+    string name;
+    # The type of the album
+    @jsondata:Name {value: "album_type"}
+    "album"|"single"|"compilation" albumType;
+    # A link to the Web API endpoint providing full details of the album
+    string href;
+    # The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the album
+    string id;
+    # Known external URLs for this album
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls;
+};
+
+public type AuthorObject record {
+    # The name of the author
+    string name?;
+};
+
+public type ContextObject record {
+    # A link to the Web API endpoint providing full details of the track
+    string href?;
+    # The object type, e.g. "artist", "playlist", "album", "show"
+    string 'type?;
+    # External URLs for this context
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls?;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the context
+    string uri?;
+};
+
+# Represents the Queries record for the operation: getAlbum
+public type GetAlbumQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
+    string market?;
+};
+
+public type PagingObject record {
+    # URL to the next page of items. ( `null` if none)
+    string? next;
+    # The total number of items available to return
+    int total;
+    # The offset of the items returned (as set in the query or by default)
+    int offset;
+    # URL to the previous page of items. ( `null` if none)
+    string? previous;
+    # The maximum number of items in the response (as set in the query or by default)
+    int 'limit;
+    # A link to the Web API endpoint returning the full result of the request
+    string href;
+};
+
+public type DisallowsObject record {
+    # Toggling shuffle flag. Optional field
+    @jsondata:Name {value: "toggling_shuffle"}
+    boolean togglingShuffle?;
+    # Transfering playback between devices. Optional field
+    @jsondata:Name {value: "transferring_playback"}
+    boolean transferringPlayback?;
+    # Skipping to the next context. Optional field
+    @jsondata:Name {value: "skipping_next"}
+    boolean skippingNext?;
+    # Pausing. Optional field
+    boolean pausing?;
+    # Resuming. Optional field
+    boolean resuming?;
+    # Skipping to the previous context. Optional field
+    @jsondata:Name {value: "skipping_prev"}
+    boolean skippingPrev?;
+    # Toggling repeat context flag. Optional field
+    @jsondata:Name {value: "toggling_repeat_context"}
+    boolean togglingRepeatContext?;
+    # Interrupting playback. Optional field
+    @jsondata:Name {value: "interrupting_playback"}
+    boolean interruptingPlayback?;
+    # Seeking playback location. Optional field
+    boolean seeking?;
+    # Toggling repeat track flag. Optional field
+    @jsondata:Name {value: "toggling_repeat_track"}
+    boolean togglingRepeatTrack?;
+};
+
+public type SimplifiedPlaylistObject record {
+    # The user who owns the playlist
+    PlaylistOwnerObject owner?;
+    # Images for the playlist. The array may be empty or contain up to three images. The images are returned by size in descending order. See [Working with Playlists](/documentation/web-api/concepts/playlists). _**Note**: If returned, the source URL for the image (`url`) is temporary and will expire in less than a day._
+    ImageObject[] images?;
+    # The version identifier for the current playlist. Can be supplied in other requests to target a specific playlist version
+    @jsondata:Name {value: "snapshot_id"}
+    string snapshotId?;
+    # `true` if the owner allows other users to modify the playlist
+    boolean collaborative?;
+    # The playlist description. _Only returned for modified, verified playlists, otherwise_ `null`
+    string description?;
+    # The object type: "playlist"
+    string 'type?;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the playlist
+    string uri?;
+    # **Deprecated:** Use `items` instead. A collection containing a link ( `href` ) to the Web API endpoint where full details of the playlist's tracks can be retrieved, along with the `total` number of tracks in the playlist. Note, a track object may be `null`. This can happen if a track is no longer available
+    # 
+    # # Deprecated
+    @deprecated
+    PlaylistTracksRefObject tracks?;
+    # The playlist's public/private status (if it is added to the user's profile): `true` the playlist is public, `false` the playlist is private, `null` the playlist status is not relevant. For more about public/private status, see [Working with Playlists](/documentation/web-api/concepts/playlists)
+    boolean 'public?;
+    # The name of the playlist
+    string name?;
+    # A link to the Web API endpoint providing full details of the playlist
+    string href?;
+    # The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the playlist
+    string id?;
+    # Known external URLs for this playlist
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls?;
+    # A collection containing a link ( `href` ) to the Web API endpoint where full details of the playlist's items can be retrieved, along with the `total` number of items in the playlist. Note, a track object may be `null`. This can happen if a track is no longer available
+    PlaylistTracksRefObject items?;
+};
+
+public type SavedTrackObject record {
+    # The date and time the track was saved.
+    # Timestamps are returned in ISO 8601 format as Coordinated Universal Time (UTC) with a zero offset: YYYY-MM-DDTHH:MM:SSZ.
+    # If the time is imprecise (for example, the date/time of an album release), an additional field indicates the precision; see for example, release_date in an album object
+    @jsondata:Name {value: "added_at"}
+    string addedAt?;
+    # Information about the track
+    TrackObject track?;
+};
+
+# Represents the Queries record for the operation: getChapter
+public type GetChapterQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
+    string market?;
+};
+
+public type PlaylistUserObject record {
+    # A link to the Web API endpoint for this user
+    string href?;
+    # The [Spotify user ID](/documentation/web-api/concepts/spotify-uris-ids) for this user
+    string id?;
+    # The object type
+    "user" 'type?;
+    # Known public external URLs for this user
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls?;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for this user
+    string uri?;
+};
+
+public type SimplifiedAudiobookObject record {
+    *AudiobookBase;
+};
+
+# Represents the Queries record for the operation: listArtistAlbums
+public type ListArtistAlbumsQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
+    string market?;
+    # The index of the first item to return. Default: 0 (the first item). Use with limit to get the next set of items.
     int offset = 0;
+    # A comma-separated list of keywords that will be used to filter the response. If not supplied, all album types will be returned. <br/>
+    # Valid values are:<br/>- `album`<br/>- `single`<br/>- `appears_on`<br/>- `compilation`<br/>For example: `include_groups=album,single`.
+    @http:Query {name: "include_groups"}
+    string includeGroups?;
+    # The maximum number of items to return. Default: 5. Minimum: 1. Maximum: 10.
+    @constraint:Int {minValue: 0, maxValue: 10}
+    int 'limit = 5;
+};
+
+public type ChapterBase record {
+    # The cover art for the chapter in various sizes, widest first
+    ImageObject[] images;
+    # A list of the languages used in the chapter, identified by their [ISO 639-1](https://en.wikipedia.org/wiki/ISO_639) code
+    string[] languages;
+    # The number of the chapter
+    @jsondata:Name {value: "chapter_number"}
+    int chapterNumber;
+    # A list of the countries in which the chapter can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "available_markets"}
+    @deprecated
+    string[] availableMarkets?;
+    # A description of the chapter. HTML tags are stripped away from this field, use `html_description` field in case HTML tags are needed
+    string description;
+    # Included in the response when a content restriction is applied
+    ChapterRestrictionObject restrictions?;
+    # The precision with which `release_date` value is known
+    @jsondata:Name {value: "release_date_precision"}
+    "year"|"month"|"day" releaseDatePrecision;
+    # The object type
+    "episode" 'type;
+    # A description of the chapter. This field may contain HTML tags
+    @jsondata:Name {value: "html_description"}
+    string htmlDescription;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the chapter
+    string uri;
+    # A URL to a 30 second preview (MP3 format) of the chapter. `null` if not available
+    # 
+    # # Deprecated
+    @jsondata:Name {value: "audio_preview_url"}
+    @deprecated
+    string? audioPreviewUrl;
+    # The chapter length in milliseconds
+    @jsondata:Name {value: "duration_ms"}
+    int durationMs;
+    # Whether or not the chapter has explicit content (true = yes it does; false = no it does not OR unknown)
+    boolean explicit;
+    # True if the chapter is playable in the given market. Otherwise false
+    @jsondata:Name {value: "is_playable"}
+    boolean isPlayable;
+    # The user's most recent position in the chapter. Set if the supplied access token is a user token and has the scope 'user-read-playback-position'
+    @jsondata:Name {value: "resume_point"}
+    ResumePointObject resumePoint?;
+    # The date the chapter was first released, for example `"1981-12-15"`. Depending on the precision, it might be shown as `"1981"` or `"1981-12"`
+    @jsondata:Name {value: "release_date"}
+    string releaseDate;
+    # The name of the chapter
+    string name;
+    # A link to the Web API endpoint providing full details of the chapter
+    string href;
+    # The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the chapter
+    string id;
+    # External URLs for this chapter
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls;
+};
+
+# Represents the Queries record for the operation: listSavedAlbums
+public type ListSavedAlbumsQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
+    string market?;
+    # The index of the first item to return. Default: 0 (the first item). Use with limit to get the next set of items.
+    int offset = 0;
+    # The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
     @constraint:Int {minValue: 0, maxValue: 50}
     int 'limit = 20;
-};
-
-public type PagedAlbumsObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: get-an-artists-albums
-public type GetAnArtistsAlbumsQueries record {
-    string market?;
-    int offset = 0;
-    string include_groups?;
-    @constraint:Int {minValue: 0, maxValue: 50}
-    int 'limit = 20;
-};
-
-public type ManyAlbumsObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-public type MarketsResponse record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: check-users-saved-albums
-public type CheckUsersSavedAlbumsQueries record {
-    string ids;
-};
-
-# Represents the Queries record for the operation: save-episodes-user
-public type SaveEpisodesUserQueries record {
-    string ids;
-};
-
-# Represents the Queries record for the operation: get-playlists-tracks
-public type GetPlaylistsTracksQueries record {
-    string market?;
-    string additional_types?;
-    int offset = 0;
-    @constraint:Int {minValue: 0, maxValue: 50}
-    int 'limit = 20;
-    string fields?;
-};
-
-public type PagingFeaturedPlaylistObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: follow-artists-users
-public type FollowArtistsUsersQueries record {
-    string ids;
-    "artist"|"user" 'type;
-};
-
-# Represents the Queries record for the operation: get-audiobook-chapters
-public type GetAudiobookChaptersQueries record {
-    string market?;
-    int offset = 0;
-    @constraint:Int {minValue: 0, maxValue: 50}
-    int 'limit = 20;
-};
-
-# Represents the Queries record for the operation: toggle-shuffle-for-users-playback
-public type ToggleShuffleForUsersPlaybackQueries record {
-    string device_id?;
-    boolean state;
-};
-
-public type ArtistObjects record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: reorder-or-replace-playlists-tracks
-public type ReorderOrReplacePlaylistsTracksQueries record {
-    string uris?;
-};
-
-public type ManyGenresObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-public type ManyChaptersObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-public type MePlayerBody record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: get-recommendations
-public type GetRecommendationsQueries record {
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal max_instrumentalness?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal target_speechiness?;
-    @constraint:Int {minValue: 0, maxValue: 1}
-    int min_mode?;
-    int target_duration_ms?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal min_valence?;
-    @constraint:Int {minValue: 0, maxValue: 100}
-    int min_popularity?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal min_danceability?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal max_energy?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal min_energy?;
-    decimal target_loudness?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal target_liveness?;
-    @constraint:Int {minValue: 0, maxValue: 1}
-    int max_mode?;
-    decimal max_tempo?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal max_valence?;
-    @constraint:Int {minValue: 0, maxValue: 11}
-    int max_key?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal min_acousticness?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal max_acousticness?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal target_energy?;
-    decimal target_tempo?;
-    string seed_tracks;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal max_liveness?;
-    @constraint:Int {minValue: 1, maxValue: 100}
-    int 'limit = 20;
-    int max_duration_ms?;
-    int min_duration_ms?;
-    string seed_artists;
-    @constraint:Int {minValue: 0, maxValue: 11}
-    int min_key?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal target_danceability?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal min_liveness?;
-    int max_time_signature?;
-    int target_time_signature?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal target_acousticness?;
-    decimal min_loudness?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal target_valence?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal target_instrumentalness?;
-    @constraint:Int {minValue: 0, maxValue: 100}
-    int max_popularity?;
-    @constraint:Int {minValue: 0, maxValue: 1}
-    int target_mode?;
-    decimal max_loudness?;
-    @constraint:Int {maxValue: 11}
-    int min_time_signature?;
-    string market?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal min_instrumentalness?;
-    decimal min_tempo?;
-    @constraint:Int {minValue: 0, maxValue: 11}
-    int target_key?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal max_danceability?;
-    @constraint:Int {minValue: 0, maxValue: 100}
-    int target_popularity?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal min_speechiness?;
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal max_speechiness?;
-    string seed_genres;
-};
-
-# Represents the Queries record for the operation: pause-a-users-playback
-public type PauseAUsersPlaybackQueries record {
-    string device_id?;
 };
 
 public type ArtistObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: save-audiobooks-user
-public type SaveAudiobooksUserQueries record {
-    string ids;
-};
-
-public type MeAlbumsBody1 record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: get-a-show
-public type GetAShowQueries record {
-    string market?;
+    # Images of the artist in various sizes, widest first
+    ImageObject[] images?;
+    # Information about the followers of the artist
+    # 
+    # # Deprecated
+    @deprecated
+    FollowersObject followers?;
+    # A list of the genres the artist is associated with. If not yet classified, the array is empty
+    # 
+    # # Deprecated
+    @deprecated
+    string[] genres?;
+    # The popularity of the artist. The value will be between 0 and 100, with 100 being the most popular. The artist's popularity is calculated from the popularity of all the artist's tracks
+    # 
+    # # Deprecated
+    @deprecated
+    int popularity?;
+    # The name of the artist
+    string name?;
+    # A link to the Web API endpoint providing full details of the artist
+    string href?;
+    # The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the artist
+    string id?;
+    # The object type
+    "artist" 'type?;
+    # Known external URLs for this artist
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls?;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the artist
+    string uri?;
 };
 
 public type PagingSimplifiedChapterObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    *PagingObject;
+    SimplifiedChapterObject[] items?;
 };
 
-# Represents the Queries record for the operation: get-an-episode
-public type GetAnEpisodeQueries record {
+public type UpdatePlaylistDetailsRequest record {
+    # The new name for the playlist, for example `"My New Playlist Title"`
+    string name?;
+    # The playlist's public/private status (if it should be added to the user's profile or not): `true` the playlist will be public, `false` the playlist will be private, `null` the playlist status is not relevant. For more about public/private status, see [Working with Playlists](/documentation/web-api/concepts/playlists)
+    boolean 'public?;
+    # If `true`, the playlist will become collaborative and other users will be able to modify the playlist in their Spotify client. <br/>
+    # _**Note**: You can only set `collaborative` to `true` on non-public playlists._
+    boolean collaborative?;
+    # Value for playlist description as displayed in Spotify Clients and in the Web API.
+    string description?;
+};
+
+# Represents the Queries record for the operation: listSavedEpisodes
+public type ListSavedEpisodesQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
+    string market?;
+    # The index of the first item to return. Default: 0 (the first item). Use with limit to get the next set of items.
+    int offset = 0;
+    # The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
+    @constraint:Int {minValue: 0, maxValue: 50}
+    int 'limit = 20;
+};
+
+# Represents the Queries record for the operation: pausePlayback
+public type PausePlaybackQueries record {
+    # The id of the device this command is targeting. If not supplied, the user's currently active device is the target.
+    @http:Query {name: "device_id"}
+    string deviceId?;
+};
+
+# Represents the Queries record for the operation: setShuffle
+public type SetShuffleQueries record {
+    # The id of the device this command is targeting. If
+    # not supplied, the user's currently active device is the target.
+    @http:Query {name: "device_id"}
+    string deviceId?;
+    # **true** : Shuffle user's playback.<br/>
+    # **false** : Do not shuffle user's playback.
+    boolean state;
+};
+
+# Represents the Queries record for the operation: getEpisode
+public type GetEpisodeQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
     string market?;
 };
 
-# Represents the Queries record for the operation: get-several-chapters
-public type GetSeveralChaptersQueries record {
-    string market?;
-    string ids;
+# Represents the Queries record for the operation: listRecentlyPlayed
+public type ListRecentlyPlayedQueries record {
+    # A Unix timestamp in milliseconds. Returns all items
+    # before (but not including) this cursor position. If `before` is specified,
+    # `after` must not be specified.
+    int before?;
+    # The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
+    @constraint:Int {minValue: 0, maxValue: 50}
+    int 'limit = 20;
+    # A Unix timestamp in milliseconds. Returns all items
+    # after (but not including) this cursor position. If `after` is specified, `before`
+    # must not be specified.
+    int after?;
 };
 
-# Represents the Queries record for the operation: get-a-chapter
-public type GetAChapterQueries record {
-    string market?;
+public type SimplifiedShowObject record {
+    *ShowBase;
 };
 
-public type SearchItemsObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+public type PlaylistTracksRefObject record {
+    # Number of tracks in the playlist
+    int total?;
+    # A link to the Web API endpoint where full details of the playlist's tracks can be retrieved
+    string href?;
+};
+
+# Represents the Queries record for the operation: skipToPrevious
+public type SkipToPreviousQueries record {
+    # The id of the device this command is targeting. If
+    # not supplied, the user's currently active device is the target.
+    @http:Query {name: "device_id"}
+    string deviceId?;
+};
+
+public type ExternalIdObject record {
+    # [International Article Number](http://en.wikipedia.org/wiki/International_Article_Number_%28EAN%29)
+    string ean?;
+    # [Universal Product Code](http://en.wikipedia.org/wiki/Universal_Product_Code)
+    string upc?;
+    # [International Standard Recording Code](http://en.wikipedia.org/wiki/International_Standard_Recording_Code)
+    string isrc?;
 };
 
 public type CurrentlyPlayingContextObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    # The currently playing track or episode. Can be `null`
+    TrackObject|EpisodeObject item?;
+    # The object type of the currently playing item. Can be one of `track`, `episode`, `ad` or `unknown`
+    @jsondata:Name {value: "currently_playing_type"}
+    string currentlyPlayingType?;
+    # If shuffle is on or off
+    @jsondata:Name {value: "shuffle_state"}
+    boolean shuffleState?;
+    # A Context Object. Can be `null`
+    ContextObject context?;
+    # If something is currently playing, return `true`
+    @jsondata:Name {value: "is_playing"}
+    boolean isPlaying?;
+    # Progress into the currently playing track or episode. Can be `null`
+    @jsondata:Name {value: "progress_ms"}
+    int progressMs?;
+    # The device that is currently active
+    DeviceObject device?;
+    # Allows to update the user interface based on which playback actions are available within the current context
+    DisallowsObject actions?;
+    # off, track, context
+    @jsondata:Name {value: "repeat_state"}
+    string repeatState?;
+    # Unix Millisecond Timestamp when playback state was last changed (play, pause, skip, scrub, new song, etc.)
+    int timestamp?;
 };
 
 public type PagingArtistDiscographyAlbumObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    *PagingObject;
+    ArtistDiscographyAlbumObject[] items?;
 };
 
-public type Loudness record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+public type StartPlaybackRequest record {
+    # Optional. Spotify URI of the context to play.
+    # Valid contexts are albums, artists & playlists.
+    # `{context_uri:"spotify:album:1Je1IMUlBXcx1Fz0WE7oPT"}`
+    record {} context_uri?;
+    # Optional. A JSON array of the Spotify track URIs to play.
+    # For example: `{"uris": ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh", "spotify:track:1301WleyT98MSxVHPZCA6M"]}`
+    string[] uris?;
+    # Optional. Indicates from where in the context playback should start. Only available when context_uri corresponds to an album or playlist object
+    # "position" is zero based and can’t be negative. Example: `"offset": {"position": 5}`
+    # "uri" is a string representing the uri of the item to start at. Example: `"offset": {"uri": "spotify:track:1301WleyT98MSxVHPZCA6M"}`
+    record {} offset?;
+    # integer
+    record {} position_ms?;
 };
 
-public type MeTracksBody1 record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+# Search results grouped by item type
+public type SearchResultsResponse record {
+    PagingSimplifiedAlbumObject albums?;
+    PagingSimplifiedShowObject shows?;
+    PagingArtistObject artists?;
+    PagingSimplifiedAudiobookObject audiobooks?;
+    PagingPlaylistObject playlists?;
+    PagingTrackObject tracks?;
+    PagingSimplifiedEpisodeObject episodes?;
 };
 
-# Represents the Queries record for the operation: unfollow-artists-users
-public type UnfollowArtistsUsersQueries record {
-    string ids;
-    "artist"|"user" 'type;
+# Represents the Queries record for the operation: listTopItems
+public type ListTopItemsQueries record {
+    # The index of the first item to return. Default: 0 (the first item). Use with limit to get the next set of items.
+    int offset = 0;
+    # Over what time frame the affinities are computed. Valid values: `long_term` (calculated from ~1 year of data and including all new data as it becomes available), `medium_term` (approximately last 6 months), `short_term` (approximately last 4 weeks). Default: `medium_term`
+    @http:Query {name: "time_range"}
+    string timeRange = "medium_term";
+    # The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
+    @constraint:Int {minValue: 0, maxValue: 50}
+    int 'limit = 20;
 };
 
-public type ManyTrackObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+# Represents the Queries record for the operation: addItemsToPlaylist
+public type AddItemsToPlaylistQueries record {
+    # A comma-separated list of [Spotify URIs](/documentation/web-api/concepts/spotify-uris-ids) to add, can be track or episode URIs. For example:<br/>`uris=spotify:track:4iV5W9uYEdYUVa79Axb7Rh, spotify:track:1301WleyT98MSxVHPZCA6M, spotify:episode:512ojhOuo1ktJprKbVcKyQ`<br/>A maximum of 100 items can be added in one request. <br/>
+    # _**Note**: it is likely that passing a large number of item URIs as a query parameter will exceed the maximum length of the request URI. When adding a large number of items, it is recommended to pass them in the request body, see below._
+    string uris?;
+    # The position to insert the items, a zero-based index. For example, to insert the items in the first position: `position=0`; to insert the items in the third position: `position=2`. If omitted, the items will be appended to the playlist. Items are added in the order they are listed in the query string or request body.
+    int position?;
+};
+
+public type LinkedTrackObject record {
+    # A link to the Web API endpoint providing full details of the track
+    string href?;
+    # The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the track
+    string id?;
+    # The object type: "track"
+    string 'type?;
+    # Known external URLs for this track
+    @jsondata:Name {value: "external_urls"}
+    ExternalUrlObject externalUrls?;
+    # The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the track
+    string uri?;
 };
 
 public type ChapterObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    *ChapterBase;
+    # The audiobook for which the chapter belongs
+    SimplifiedAudiobookObject audiobook;
 };
 
 public type PagingSavedTrackObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    *PagingObject;
+    SavedTrackObject[] items?;
 };
 
-public type UserIdPlaylistsBody record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+public type SavedShowObject record {
+    # The date and time the show was saved.
+    # Timestamps are returned in ISO 8601 format as Coordinated Universal Time (UTC) with a zero offset: YYYY-MM-DDTHH:MM:SSZ.
+    # If the time is imprecise (for example, the date/time of an album release), an additional field indicates the precision; see for example, release_date in an album object
+    @jsondata:Name {value: "added_at"}
+    string addedAt?;
+    # Information about the show
+    SimplifiedShowObject show?;
 };
 
-# Represents the Queries record for the operation: get-several-audio-features
-public type GetSeveralAudioFeaturesQueries record {
-    string ids;
+# Represents the Queries record for the operation: seekToPosition
+public type SeekToPositionQueries record {
+    # The position in milliseconds to seek to. Must be a
+    # positive number. Passing in a position that is greater than the length of
+    # the track will cause the player to start playing the next song.
+    @http:Query {name: "position_ms"}
+    int positionMs;
+    # The id of the device this command is targeting. If
+    # not supplied, the user's currently active device is the target.
+    @http:Query {name: "device_id"}
+    string deviceId?;
 };
 
-public type PlaylistIdTracksBody1 record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+# Represents the Queries record for the operation: getShow
+public type GetShowQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
+    string market?;
 };
 
-# Represents the Queries record for the operation: get-a-categories-playlists
-public type GetACategoriesPlaylistsQueries record {
+# Represents the Queries record for the operation: listPlaylistItems
+public type ListPlaylistItemsQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
+    string market?;
+    # A comma-separated list of item types that your client supports besides the default `track` type. Valid types are: `track` and `episode`.<br/>
+    # _**Note**: This parameter was introduced to allow existing clients to maintain their current behaviour and might be deprecated in the future._<br/>
+    # In addition to providing this parameter, make sure that your client properly handles cases of new types in the future by checking against the `type` field of each object.
+    @http:Query {name: "additional_types"}
+    string additionalTypes?;
+    # The index of the first item to return. Default: 0 (the first item). Use with limit to get the next set of items.
     int offset = 0;
+    # The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
     @constraint:Int {minValue: 0, maxValue: 50}
     int 'limit = 20;
-};
-
-public type PlaylistIdTracksBody2 record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: get-users-top-artists-and-tracks
-public type GetUsersTopArtistsAndTracksQueries record {
-    int offset = 0;
-    string time_range = "medium_term";
-    @constraint:Int {minValue: 0, maxValue: 50}
-    int 'limit = 20;
+    # Filters for the query: a comma-separated list of the
+    # fields to return. If omitted, all fields are returned. For example, to get
+    # just the total number of items and the request limit:<br/>`fields=total,limit`<br/>A
+    # dot separator can be used to specify non-reoccurring fields, while parentheses
+    # can be used to specify reoccurring fields within objects. For example, to
+    # get just the added date and user ID of the adder:<br/>`fields=items(added_at,added_by.id)`<br/>Use
+    # multiple parentheses to drill down into nested objects, for example:<br/>`fields=items(track(name,href,album(name,href)))`<br/>Fields
+    # can be excluded by prefixing them with an exclamation mark, for example:<br/>`fields=items.track.album(!external_urls,images)`
+    string fields?;
 };
 
 # OAuth2 Refresh Token Grant Configs
@@ -3597,671 +1593,185 @@ public type OAuth2RefreshTokenGrantConfig record {|
     string refreshUrl = "https://accounts.spotify.com/api/token";
 |};
 
+# A set of devices
+public type DevicesResponse record {
+    # The available playback devices
+    DeviceObject[] devices;
+};
+
 public type CursorPagingPlayHistoryObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    *CursorPagingObject;
+    PlayHistoryObject[] items?;
 };
 
-public type AudioAnalysisObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+public type ChapterRestrictionObject record {
+    # The reason for the restriction. Supported values:
+    # - `market` - The content item is not available in the given market.
+    # - `product` - The content item is not available for the user's subscription type.
+    # - `explicit` - The content item is explicit and the user's account is set to not play explicit content.
+    # - `payment_required` - Payment is required to play the content item.
+    # 
+    # Additional reasons may be added in the future.
+    # **Note**: If you use this field, make sure that your application safely handles unknown values
+    string reason?;
 };
 
-# Represents the Queries record for the operation: get-users-saved-shows
-public type GetUsersSavedShowsQueries record {
-    int offset = 0;
-    @constraint:Int {minValue: 0, maxValue: 50}
-    int 'limit = 20;
-};
-
-public type CategoryObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+public type PagingTrackObject record {
+    *PagingObject;
+    TrackObject[] items?;
 };
 
 public type PagingSavedShowObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    *PagingObject;
+    SavedShowObject[] items?;
 };
 
-public type MeEpisodesBody record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+public type PagingArtistObject record {
+    *PagingObject;
+    ArtistObject[] items?;
 };
 
-# Represents the Queries record for the operation: get-multiple-albums
-public type GetMultipleAlbumsQueries record {
-    string market?;
-    string ids;
+public type PlaylistTrackReference record {
+    # Spotify URI
+    string uri?;
 };
 
-# Represents the Queries record for the operation: remove-episodes-user
-public type RemoveEpisodesUserQueries record {
-    string ids;
-};
-
-# Represents the Queries record for the operation: get-several-tracks
-public type GetSeveralTracksQueries record {
-    string market?;
-    string ids;
-};
-
-public type Mode record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: get-categories
-public type GetCategoriesQueries record {
-    int offset = 0;
-    @constraint:Int {minValue: 0, maxValue: 50}
-    int 'limit = 20;
-    string locale?;
-};
-
-# Represents the Queries record for the operation: get-playlist
+# Represents the Queries record for the operation: getPlaylist
 public type GetPlaylistQueries record {
+    # An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #   If a country code is specified, only content that is available in that market will be returned.<br/>
+    #   If a valid user access token is specified in the request header, the country associated with
+    #   the user account will take priority over this parameter.<br/>
+    #   _**Note**: If neither market or user country are provided, the content is considered unavailable for the client._<br/>
+    #   Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
     string market?;
-    string additional_types?;
+    # A comma-separated list of item types that your client supports besides the default `track` type. Valid types are: `track` and `episode`.<br/>
+    # _**Note**: This parameter was introduced to allow existing clients to maintain their current behaviour and might be deprecated in the future._<br/>
+    # In addition to providing this parameter, make sure that your client properly handles cases of new types in the future by checking against the `type` field of each object.
+    @http:Query {name: "additional_types"}
+    string additionalTypes?;
+    # Filters for the query: a comma-separated list of the
+    # fields to return. If omitted, all fields are returned. For example, to get
+    # just the playlist''s description and URI: `fields=description,uri`. A dot
+    # separator can be used to specify non-reoccurring fields, while parentheses
+    # can be used to specify reoccurring fields within objects. For example, to
+    # get just the added date and user ID of the adder: `fields=tracks.items(added_at,added_by.id)`.
+    # Use multiple parentheses to drill down into nested objects, for example: `fields=tracks.items(track(name,href,album(name,href)))`.
+    # Fields can be excluded by prefixing them with an exclamation mark, for example:
+    # `fields=tracks.items(track(name,href,album(!name,href)))`
     string fields?;
 };
 
 public type AudiobookObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    *AudiobookBase;
+    # The chapters of the audiobook
+    PagingSimplifiedChapterObject chapters;
 };
 
-# Represents the Queries record for the operation: check-users-saved-tracks
-public type CheckUsersSavedTracksQueries record {
-    string ids;
+public type CursorPagingObject record {
+    # URL to the next page of items. ( `null` if none)
+    string next?;
+    # The cursors used to find the next set of items
+    CursorObject cursors?;
+    # The total number of items available to return
+    int total?;
+    # The maximum number of items in the response (as set in the query or by default)
+    int 'limit?;
+    # A link to the Web API endpoint returning the full result of the request
+    string href?;
 };
 
-# Proxy server configurations to be used with the HTTP client endpoint.
-public type ProxyConfig record {|
-    # Host name of the proxy server
-    string host = "";
-    # Proxy server port
-    int port = 0;
-    # Proxy server username
-    string userName = "";
-    # Proxy server password
-    @display {label: "", kind: "password"}
-    string password = "";
-|};
-
-public type MeFollowingBody record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+public type DeviceObject record {
+    # If this device is the currently active device
+    @jsondata:Name {value: "is_active"}
+    boolean isActive?;
+    # If this device is currently in a private session
+    @jsondata:Name {value: "is_private_session"}
+    boolean isPrivateSession?;
+    # Whether controlling this device is restricted. At present if this is "true" then no Web API commands will be accepted by this device
+    @jsondata:Name {value: "is_restricted"}
+    boolean isRestricted?;
+    # A human-readable name for the device. Some devices have a name that the user can configure (e.g. \"Loudest speaker\") and some devices have a generic name associated with the manufacturer or device model
+    string name?;
+    # The device ID. This ID is unique and persistent to some extent. However, this is not guaranteed and any cached `device_id` should periodically be cleared out and refetched as necessary
+    string? id?;
+    # Device type, such as "computer", "smartphone" or "speaker"
+    string 'type?;
+    # If this device can be used to set the volume
+    @jsondata:Name {value: "supports_volume"}
+    boolean supportsVolume?;
+    # The current volume in percent
+    @jsondata:Name {value: "volume_percent"}
+    int? volumePercent?;
 };
 
-# Represents the Queries record for the operation: get-recently-played
-public type GetRecentlyPlayedQueries record {
-    int before?;
-    @constraint:Int {minValue: 0, maxValue: 50}
-    int 'limit = 20;
-    int after?;
+public type SavedAlbumObject record {
+    # The date and time the album was saved
+    # Timestamps are returned in ISO 8601 format as Coordinated Universal Time (UTC) with a zero offset: YYYY-MM-DDTHH:MM:SSZ.
+    # If the time is imprecise (for example, the date/time of an album release), an additional field indicates the precision; see for example, release_date in an album object
+    @jsondata:Name {value: "added_at"}
+    string addedAt?;
+    # Information about the album
+    AlbumObject album?;
 };
 
-# Represents the Queries record for the operation: save-shows-user
-public type SaveShowsUserQueries record {
-    string ids;
+# Pages of artists or tracks
+public type PagingArtistOrTrackResponse record {
+    *PagingObject;
+    # The artists or tracks on this page
+    (ArtistObject|TrackObject)[] items?;
 };
 
-public type TimeSignature record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
-};
-
-# Represents the Queries record for the operation: start-a-users-playback
-public type StartAUsersPlaybackQueries record {
-    string device_id?;
-};
-
-# Represents the Queries record for the operation: get-information-about-the-users-current-playback
-public type GetInformationAboutTheUsersCurrentPlaybackQueries record {
-    string market?;
-    string additional_types?;
-};
-
-# Represents the Queries record for the operation: get-featured-playlists
-public type GetFeaturedPlaylistsQueries record {
+# Represents the Queries record for the operation: listCurrentUserPlaylists
+public type ListCurrentUserPlaylistsQueries record {
+    # 'The index of the first playlist to return. Default:
+    # 0 (the first object). Maximum offset: 100.000\. Use with `limit` to get the
+    # next set of playlists.'
     int offset = 0;
+    # The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
     @constraint:Int {minValue: 0, maxValue: 50}
     int 'limit = 20;
-    string locale?;
 };
 
-# Represents the Queries record for the operation: save-tracks-user
-public type SaveTracksUserQueries record {
-    string ids;
-};
-
-# Represents the Queries record for the operation: add-tracks-to-playlist
-public type AddTracksToPlaylistQueries record {
-    string uris?;
-    int position?;
-};
-
-# Represents the Queries record for the operation: set-volume-for-users-playback
-public type SetVolumeForUsersPlaybackQueries record {
-    string device_id?;
-    int volume_percent;
-};
-
-# Represents the Queries record for the operation: seek-to-position-in-currently-playing-track
-public type SeekToPositionInCurrentlyPlayingTrackQueries record {
-    int position_ms;
-    string device_id?;
-};
-
-# Represents the Queries record for the operation: get-a-category
-public type GetACategoryQueries record {
-    string locale?;
-};
-
-# Represents the Queries record for the operation: get-the-users-currently-playing-track
-public type GetTheUsersCurrentlyPlayingTrackQueries record {
-    string market?;
-    string additional_types?;
+public type AlbumRestrictionObject record {
+    # The reason for the restriction. Albums may be restricted if the content is not available in a given market, to the user's subscription type, or when the user's account is set to not play explicit content.
+    # Additional reasons may be added in the future
+    "market"|"product"|"explicit" reason?;
 };
 
 public type AlbumObject record {
-    # The exact number of audio samples analyzed from this track. See also `analysis_sample_rate`.
-    int num_samples?;
-    # Length of the track in seconds.
-    decimal duration?;
-    # This field will always contain the empty string.
-    string sample_md5?;
-    # An offset to the start of the region of the track that was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int offset_seconds?;
-    # The length of the region of the track was analyzed, if a subset of the track was analyzed. (As the entire track is analyzed, this should always be 0.)
-    int window_seconds?;
-    # The sample rate used to decode and analyze this track. May differ from the actual sample rate of this track available on Spotify.
-    int analysis_sample_rate?;
-    # The number of channels used for analysis. If 1, all channels are summed together to mono before analysis.
-    int analysis_channels?;
-    # The time, in seconds, at which the track's fade-in period ends. If the track has no fade-in, this will be 0.0.
-    decimal end_of_fade_in?;
-    # The time, in seconds, at which the track's fade-out period starts. If the track has no fade-out, this should match the track's length.
-    decimal start_of_fade_out?;
-    Loudness loudness?;
-    Tempo tempo?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `tempo`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal tempo_confidence?;
-    TimeSignature time_signature?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `time_signature`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal time_signature_confidence?;
-    Key 'key?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `key`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal key_confidence?;
-    Mode mode?;
-    # The confidence, from 0.0 to 1.0, of the reliability of the `mode`.
-    @constraint:Number {minValue: 0, maxValue: 1}
-    decimal mode_confidence?;
-    # An [Echo Nest Musical Fingerprint (ENMFP)](https://academiccommons.columbia.edu/doi/10.7916/D8Q248M4) codestring for this track.
-    string codestring?;
-    # A version number for the Echo Nest Musical Fingerprint format used in the codestring field.
-    decimal code_version?;
-    # An [EchoPrint](https://github.com/spotify/echoprint-codegen) codestring for this track.
-    string echoprintstring?;
-    # A version number for the EchoPrint format used in the echoprintstring field.
-    decimal echoprint_version?;
-    # A [Synchstring](https://github.com/echonest/synchdata) for this track.
-    string synchstring?;
-    # A version number for the Synchstring used in the synchstring field.
-    decimal synch_version?;
-    # A Rhythmstring for this track. The format of this string is similar to the Synchstring.
-    string rhythmstring?;
-    # A version number for the Rhythmstring used in the rhythmstring field.
-    decimal rhythm_version?;
+    *AlbumBase;
+    # The artists of the album. Each artist object includes a link in `href` to more detailed information about the artist
+    SimplifiedArtistObject[] artists;
+    # The copyright statements of the album
+    CopyrightObject[] copyrights;
+    # **Deprecated** The array is always empty
+    # 
+    # # Deprecated
+    @deprecated
+    string[] genres;
+    # The popularity of the album. The value will be between 0 and 100, with 100 being the most popular
+    # 
+    # # Deprecated
+    @deprecated
+    int popularity;
+    # The label associated with the album
+    # 
+    # # Deprecated
+    @deprecated
+    string label;
+    # Known external IDs for the album
+    @jsondata:Name {value: "external_ids"}
+    ExternalIdObject externalIds;
+    # The tracks of the album
+    PagingSimplifiedTrackObject tracks;
 };
 
-# Represents the Queries record for the operation: get-multiple-episodes
-public type GetMultipleEpisodesQueries record {
-    string market?;
-    string ids;
+public type ResumePointObject record {
+    # Whether or not the episode has been fully played by the user
+    @jsondata:Name {value: "fully_played"}
+    boolean fullyPlayed?;
+    # The user's most recent position in the episode in milliseconds
+    @jsondata:Name {value: "resume_position_ms"}
+    int resumePositionMs?;
 };

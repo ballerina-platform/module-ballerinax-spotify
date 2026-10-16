@@ -1,3 +1,4 @@
+
 // Copyright (c) 2024, WSO2 LLC. (http://www.wso2.com).
 //
 // WSO2 LLC. licenses this file to you under the Apache License,
@@ -14,86 +15,193 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/http;
+import ballerina/os;
 import ballerina/test;
 
-configurable string token = ?;
+final boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
+final string serviceUrl = isLiveServer ? "https://api.spotify.com/v1" : "http://localhost:9090";
+final string token = isLiveServer ? os:getEnv("SPOTIFY_ACCESS_TOKEN") : "test_token";
 
-final string artistId = "0TnOYISbd1XYRBk9myaseg";
-final string albumId = "4aawyAB9vmqN3uQ7FjRGTy";
-final string audiobooksId = "7iHfbu1YPACw6oZPAFJtqe";
-final string categoryId = "dinner";
-final string episodeId = "512ojhOuo1ktJprKbVcKyQ";
-final string chaptersId = "0D5wENdkdwbqlrHoaJ9g29";
-final string playlistsId = "3cEYpjA9oz9GiPac4AsH4n";
-final string showsId = "38bS44xjbVVZ3No3ByF1dJ";
-final string tracksId = "11dFghVXANMlKmJXsNCbNl";
-final string userId = "smedjan";
+final Client spotify = check new ({
+    auth: {token},
+    httpVersion: isLiveServer ? http:HTTP_2_0 : http:HTTP_1_1
+}, serviceUrl);
 
-// Initialize the client with auth configuration
-ConnectionConfig config = {
-    auth: {
-        token: token
+const string ALBUM_ID = "4m2880jivSbbyEGAKfITCa";
+const string ARTIST_ID = "4tZwfgrHOc3mvqYlEYSvVi";
+const string TRACK_ID = "2Foc5Q5nqNiosCNqttzHof";
+const string SHOW_ID = "38bS44xjbVVZ3No3ByF1dJ";
+const string EPISODE_ID = "512ojhOuo1ktJprKbVcKyQ";
+const string PLAYLIST_ID = "37i9dQZF1DXcBWIGoYBM5M";
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetAlbum() returns error? {
+    AlbumObject response = check spotify->getAlbum(ALBUM_ID);
+    test:assertEquals(response.id, ALBUM_ID);
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListAlbumTracks() returns error? {
+    PagingSimplifiedTrackObject response = check spotify->listAlbumTracks(ALBUM_ID);
+    test:assertTrue((response.items ?: []).length() > 0);
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetArtist() returns error? {
+    ArtistObject response = check spotify->getArtist(ARTIST_ID);
+    test:assertEquals(response.id, ARTIST_ID);
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListArtistAlbums() returns error? {
+    PagingArtistDiscographyAlbumObject response = check spotify->listArtistAlbums(ARTIST_ID);
+    test:assertTrue((response.items ?: []).length() > 0);
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetTrack() returns error? {
+    TrackObject response = check spotify->getTrack(TRACK_ID);
+    test:assertEquals(response.id, TRACK_ID);
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testSearchItems() returns error? {
+    SearchResultsResponse response = check spotify->searchItems(q = "daft punk", 'type = ["track", "artist", "album"]);
+    test:assertTrue(response.tracks !is ());
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetCurrentUserProfile() returns error? {
+    PrivateUserObject response = check spotify->getCurrentUserProfile();
+    test:assertTrue(response.id is string);
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetPlaylist() returns error? {
+    PlaylistObject response = check spotify->getPlaylist(PLAYLIST_ID);
+    test:assertEquals(response.id, PLAYLIST_ID);
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListPlaylistItems() returns error? {
+    PagingPlaylistTrackObject response = check spotify->listPlaylistItems(PLAYLIST_ID);
+    test:assertTrue((response.items ?: []).length() > 0);
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testAddItemsToPlaylist() returns error? {
+    if isLiveServer {
+        return;
     }
-};
-
-final Client spotify = check new(config);
-
-@test:Config {}
-isolated function getAlbumTest() returns error? {
-    AlbumObject|error response =spotify->/albums/[albumId];
-    test:assertTrue(response is AlbumObject);
+    PlaylistSnapshotResponse response = check spotify->addItemsToPlaylist(PLAYLIST_ID, {uris: ["spotify:track:" + TRACK_ID]});
+    test:assertTrue(response.snapshotId is string);
 }
 
-@test:Config {}
-isolated function browseCategoriesTest() returns error? {
-    PagedCategoriesObject|error response = check spotify->/browse/categories;
-    test:assertTrue(response is PagedCategoriesObject);
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testCreatePlaylist() returns error? {
+    if isLiveServer {
+        return;
+    }
+    PlaylistObject response = check spotify->createPlaylist({name: "Road Trip", description: "Songs for the drive", 'public: false});
+    test:assertEquals(response.name, "Road Trip");
 }
 
-@test:Config {}
-isolated function getMarketsTest() returns error? {
-    MarketsResponse|error response = spotify->/markets;
-    test:assertTrue(response is MarketsResponse);
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testUpdatePlaylistDetails() returns error? {
+    if isLiveServer {
+        return;
+    }
+    error? response = spotify->updatePlaylistDetails(PLAYLIST_ID, {name: "Focus Beats", 'public: true});
+    test:assertTrue(response is ());
 }
 
-@test:Config {}
-isolated function getplaylistTest() returns error? {
-    CurrentlyPlayingContextObject|error response = spotify->/playlists/[playlistsId];
-    test:assertTrue(response is CurrentlyPlayingContextObject);
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testRemovePlaylistItems() returns error? {
+    if isLiveServer {
+        return;
+    }
+    PlaylistSnapshotResponse response = check spotify->removePlaylistItems(PLAYLIST_ID, {items: [{uri: "spotify:track:" + TRACK_ID}]});
+    test:assertTrue(response.snapshotId is string);
 }
 
-@test:Config {}
-isolated function getTrackTest() returns error? {
-    TrackObject|error response =spotify->/tracks/[tracksId];
-    test:assertTrue(response is TrackObject);
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListCurrentUserPlaylists() returns error? {
+    PagingPlaylistObject response = check spotify->listCurrentUserPlaylists();
+    test:assertTrue((response.items ?: []).length() > 0);
 }
 
-@test:Config {}
-isolated function getUserTest() returns error? {
-    PrivateUserObject|error response = spotify->/tracks/[tracksId];
-    test:assertTrue(response is PrivateUserObject);
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListSavedTracks() returns error? {
+    PagingSavedTrackObject response = check spotify->listSavedTracks();
+    test:assertTrue((response.items ?: []).length() > 0);
 }
 
-@test:Config {}
-isolated function getAlbumTracksTest() returns error? {
-    PagingSimplifiedTrackObject|error response = spotify->/albums/[albumId ]/tracks;
-    test:assertTrue(response is PagingSimplifiedTrackObject);
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListTopItems() returns error? {
+    PagingArtistOrTrackResponse response = check spotify->listTopItems("tracks");
+    test:assertTrue((response.items ?: []).length() > 0);
 }
 
-@test:Config {}
-isolated function getArtistIdTest() returns error? {
-    ArtistObject|error response =spotify->/artists/[artistId];
-    test:assertTrue(response is ArtistObject);
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetShow() returns error? {
+    ShowObject response = check spotify->getShow(SHOW_ID);
+    test:assertEquals(response.id, SHOW_ID);
 }
 
-@test:Config {}
-isolated function getArtistsAlbumTest() returns error? {
-    PagingArtistDiscographyAlbumObject|error response = spotify->/artists/[artistId]/albums;
-    test:assertTrue(response is PagingArtistDiscographyAlbumObject);
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetEpisode() returns error? {
+    EpisodeObject response = check spotify->getEpisode(EPISODE_ID);
+    test:assertEquals(response.id, EPISODE_ID);
 }
 
-@test:Config {}
-isolated function browseCategoryTest() returns error? {
-    CategoryObject|error response = spotify->/browse/categories/[categoryId];
-    test:assertTrue(response is CategoryObject);
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testGetPlaybackState() returns error? {
+    CurrentlyPlayingContextObject? response = check spotify->getPlaybackState();
+    if isLiveServer {
+        return;
+    }
+    test:assertTrue(response?.isPlaying == true);
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListDevices() returns error? {
+    DevicesResponse response = check spotify->listDevices();
+    test:assertTrue(response.devices.length() > 0);
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testSaveLibraryItems() returns error? {
+    if isLiveServer {
+        return;
+    }
+    error? response = spotify->saveLibraryItems(uris = "spotify:track:" + TRACK_ID);
+    test:assertTrue(response is ());
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testRemoveLibraryItems() returns error? {
+    if isLiveServer {
+        return;
+    }
+    error? response = spotify->removeLibraryItems(uris = "spotify:track:" + TRACK_ID);
+    test:assertTrue(response is ());
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListSavedAlbums() returns error? {
+    PagingSavedAlbumObject response = check spotify->listSavedAlbums();
+    test:assertTrue((response.items ?: []).length() > 0);
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListFollowedArtists() returns error? {
+    FollowedArtistsResponse response = check spotify->listFollowedArtists('type = "artist");
+    test:assertTrue((response.artists.items ?: []).length() > 0);
+}
+
+@test:Config {groups: ["live_tests", "mock_tests"]}
+isolated function testListRecentlyPlayed() returns error? {
+    CursorPagingPlayHistoryObject response = check spotify->listRecentlyPlayed();
+    test:assertTrue((response.items ?: []).length() > 0);
 }
