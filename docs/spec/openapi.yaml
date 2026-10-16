@@ -203,6 +203,7 @@ paths:
         - name: id
           required: true
           in: path
+          description: The Spotify ID of the episode
           schema:
             title: Get an Episode
             description:
@@ -338,6 +339,7 @@ paths:
         - name: id
           required: true
           in: path
+          description: The Spotify ID of the track
           schema:
             title: Spotify Track ID
             description: |
@@ -1152,6 +1154,7 @@ paths:
         - name: type
           required: true
           in: path
+          description: The type of entity to return, either `artists` or `tracks`
           schema:
             title: Type
             description: |
@@ -2252,25 +2255,41 @@ components:
         - artists
       properties:
         artists:
-          $ref: '#/components/schemas/CursorPagingSimplifiedArtistObject'
+          allOf:
+            - $ref: '#/components/schemas/CursorPagingSimplifiedArtistObject'
+          description: A cursor-paged set of the artists the current user follows
     SearchResultsResponse:
       type: object
       description: Search results grouped by item type
       properties:
         tracks:
-          $ref: '#/components/schemas/PagingTrackObject'
+          allOf:
+            - $ref: '#/components/schemas/PagingTrackObject'
+          description: A page of tracks matching the search query
         artists:
-          $ref: '#/components/schemas/PagingArtistObject'
+          allOf:
+            - $ref: '#/components/schemas/PagingArtistObject'
+          description: A page of artists matching the search query
         albums:
-          $ref: '#/components/schemas/PagingSimplifiedAlbumObject'
+          allOf:
+            - $ref: '#/components/schemas/PagingSimplifiedAlbumObject'
+          description: A page of albums matching the search query
         playlists:
-          $ref: '#/components/schemas/PagingPlaylistObject'
+          allOf:
+            - $ref: '#/components/schemas/PagingPlaylistObject'
+          description: A page of playlists matching the search query
         shows:
-          $ref: '#/components/schemas/PagingSimplifiedShowObject'
+          allOf:
+            - $ref: '#/components/schemas/PagingSimplifiedShowObject'
+          description: A page of shows matching the search query
         episodes:
-          $ref: '#/components/schemas/PagingSimplifiedEpisodeObject'
+          allOf:
+            - $ref: '#/components/schemas/PagingSimplifiedEpisodeObject'
+          description: A page of episodes matching the search query
         audiobooks:
-          $ref: '#/components/schemas/PagingSimplifiedAudiobookObject'
+          allOf:
+            - $ref: '#/components/schemas/PagingSimplifiedAudiobookObject'
+          description: A page of audiobooks matching the search query
     PlaylistSnapshotResponse:
       type: object
       description: The snapshot ID of the playlist after the change
@@ -4341,6 +4360,7 @@ components:
   parameters:
     PathAlbumId:
       in: path
+      description: The Spotify ID of the album
       name: id
       required: true
       schema:
@@ -4353,6 +4373,7 @@ components:
       name: playlist_id
       required: true
       in: path
+      description: The Spotify ID of the playlist
       schema:
         title: Playlist ID
         description: |
@@ -4413,6 +4434,7 @@ components:
       name: id
       required: true
       in: path
+      description: The Spotify ID of the artist
       schema:
         title: Spotify Artist ID
         description: |
@@ -4423,6 +4445,7 @@ components:
       name: id
       required: true
       in: path
+      description: The Spotify ID of the show
       schema:
         title: Spotify Show ID
         description: |
@@ -4434,6 +4457,7 @@ components:
       name: id
       required: true
       in: path
+      description: The Spotify ID of the audiobook
       schema:
         title: Spotify Audiobook ID
         description: |
@@ -4445,6 +4469,7 @@ components:
       name: id
       required: true
       in: path
+      description: The Spotify ID of the chapter
       schema:
         title: Spotify Chapter ID
         description: |

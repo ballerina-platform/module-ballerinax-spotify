@@ -227,6 +227,7 @@ paths:
       parameters:
       - name: id
         in: path
+        description: The Spotify ID of the episode
         required: true
         style: simple
         explode: false
@@ -376,6 +377,7 @@ paths:
       parameters:
       - name: id
         in: path
+        description: The Spotify ID of the track
         required: true
         style: simple
         explode: false
@@ -1275,6 +1277,7 @@ paths:
       parameters:
       - name: type
         in: path
+        description: The type of entity to return, either `artists` or `tracks`
         required: true
         style: simple
         explode: false
@@ -2389,7 +2392,9 @@ components:
       type: object
       properties:
         artists:
-          $ref: '#/components/schemas/CursorPagingSimplifiedArtistObject'
+          description: A cursor-paged set of the artists the current user follows
+          allOf:
+          - $ref: '#/components/schemas/CursorPagingSimplifiedArtistObject'
       description: A cursor-paged set of artists
     ExternalUrlObject:
       type: object
@@ -3885,19 +3890,33 @@ components:
       type: object
       properties:
         albums:
-          $ref: '#/components/schemas/PagingSimplifiedAlbumObject'
+          description: A page of albums matching the search query
+          allOf:
+          - $ref: '#/components/schemas/PagingSimplifiedAlbumObject'
         shows:
-          $ref: '#/components/schemas/PagingSimplifiedShowObject'
+          description: A page of shows matching the search query
+          allOf:
+          - $ref: '#/components/schemas/PagingSimplifiedShowObject'
         artists:
-          $ref: '#/components/schemas/PagingArtistObject'
+          description: A page of artists matching the search query
+          allOf:
+          - $ref: '#/components/schemas/PagingArtistObject'
         audiobooks:
-          $ref: '#/components/schemas/PagingSimplifiedAudiobookObject'
+          description: A page of audiobooks matching the search query
+          allOf:
+          - $ref: '#/components/schemas/PagingSimplifiedAudiobookObject'
         playlists:
-          $ref: '#/components/schemas/PagingPlaylistObject'
+          description: A page of playlists matching the search query
+          allOf:
+          - $ref: '#/components/schemas/PagingPlaylistObject'
         tracks:
-          $ref: '#/components/schemas/PagingTrackObject'
+          description: A page of tracks matching the search query
+          allOf:
+          - $ref: '#/components/schemas/PagingTrackObject'
         episodes:
-          $ref: '#/components/schemas/PagingSimplifiedEpisodeObject'
+          description: A page of episodes matching the search query
+          allOf:
+          - $ref: '#/components/schemas/PagingSimplifiedEpisodeObject'
       description: Search results grouped by item type
     LinkedTrackObject:
       type: object
@@ -5168,6 +5187,7 @@ components:
     PathAlbumId:
       name: id
       in: path
+      description: The Spotify ID of the album
       required: true
       style: simple
       explode: false
@@ -5181,6 +5201,7 @@ components:
     PathPlaylistId:
       name: playlistId
       in: path
+      description: The Spotify ID of the playlist
       required: true
       style: simple
       explode: false
@@ -5261,6 +5282,7 @@ components:
     PathArtistId:
       name: id
       in: path
+      description: The Spotify ID of the artist
       required: true
       style: simple
       explode: false
@@ -5274,6 +5296,7 @@ components:
     PathShowId:
       name: id
       in: path
+      description: The Spotify ID of the show
       required: true
       style: simple
       explode: false
@@ -5289,6 +5312,7 @@ components:
     PathAudiobookId:
       name: id
       in: path
+      description: The Spotify ID of the audiobook
       required: true
       style: simple
       explode: false
@@ -5304,6 +5328,7 @@ components:
     PathChapterId:
       name: id
       in: path
+      description: The Spotify ID of the chapter
       required: true
       style: simple
       explode: false

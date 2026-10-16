@@ -74,6 +74,7 @@ public type GetAudiobookQueries record {
 
 # A cursor-paged set of artists
 public type FollowedArtistsResponse record {
+    # A cursor-paged set of the artists the current user follows
     CursorPagingSimplifiedArtistObject artists;
 };
 
@@ -1467,12 +1468,19 @@ public type StartPlaybackRequest record {
 
 # Search results grouped by item type
 public type SearchResultsResponse record {
+    # A page of albums matching the search query
     PagingSimplifiedAlbumObject albums?;
+    # A page of shows matching the search query
     PagingSimplifiedShowObject shows?;
+    # A page of artists matching the search query
     PagingArtistObject artists?;
+    # A page of audiobooks matching the search query
     PagingSimplifiedAudiobookObject audiobooks?;
+    # A page of playlists matching the search query
     PagingPlaylistObject playlists?;
+    # A page of tracks matching the search query
     PagingTrackObject tracks?;
+    # A page of episodes matching the search query
     PagingSimplifiedEpisodeObject episodes?;
 };
 

@@ -35,6 +35,7 @@ public isolated client class Client {
 
     # Get Album
     #
+    # + id - The Spotify ID of the album
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - An album 
@@ -46,6 +47,7 @@ public isolated client class Client {
 
     # Get Album Tracks
     #
+    # + id - The Spotify ID of the album
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Pages of tracks 
@@ -57,6 +59,7 @@ public isolated client class Client {
 
     # Get Artist
     #
+    # + id - The Spotify ID of the artist
     # + headers - Headers to be sent with the request 
     # + return - An artist 
     remote isolated function getArtist(string id, map<string|string[]> headers = {}) returns ArtistObject|error {
@@ -66,6 +69,7 @@ public isolated client class Client {
 
     # Get Artist's Albums
     #
+    # + id - The Spotify ID of the artist
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Pages of albums 
@@ -77,6 +81,7 @@ public isolated client class Client {
 
     # Get Show
     #
+    # + id - The Spotify ID of the show
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - A show 
@@ -88,6 +93,7 @@ public isolated client class Client {
 
     # Get Show Episodes
     #
+    # + id - The Spotify ID of the show
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Pages of episodes 
@@ -99,6 +105,7 @@ public isolated client class Client {
 
     # Get Episode
     #
+    # + id - The Spotify ID of the episode
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - An episode 
@@ -110,6 +117,7 @@ public isolated client class Client {
 
     # Get an Audiobook
     #
+    # + id - The Spotify ID of the audiobook
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - An Audiobook 
@@ -121,6 +129,7 @@ public isolated client class Client {
 
     # Get Audiobook Chapters
     #
+    # + id - The Spotify ID of the audiobook
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Pages of chapters 
@@ -143,6 +152,7 @@ public isolated client class Client {
 
     # Get a Chapter
     #
+    # + id - The Spotify ID of the chapter
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - A Chapter 
@@ -154,6 +164,7 @@ public isolated client class Client {
 
     # Get Track
     #
+    # + id - The Spotify ID of the track
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - A track 
@@ -186,6 +197,7 @@ public isolated client class Client {
 
     # Get Playlist
     #
+    # + playlistId - The Spotify ID of the playlist
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - A playlist 
@@ -197,6 +209,7 @@ public isolated client class Client {
 
     # Change Playlist Details
     #
+    # + playlistId - The Spotify ID of the playlist
     # + headers - Headers to be sent with the request 
     # + payload - Playlist name, description, and visibility details to change 
     # + return - Playlist updated 
@@ -210,6 +223,7 @@ public isolated client class Client {
 
     # Get Playlist Items
     #
+    # + playlistId - The Spotify ID of the playlist
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Pages of tracks 
@@ -221,6 +235,7 @@ public isolated client class Client {
 
     # Update Playlist Items
     #
+    # + playlistId - The Spotify ID of the playlist
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - URIs to replace the playlist items, or range to reorder 
@@ -236,6 +251,7 @@ public isolated client class Client {
 
     # Add Items to Playlist
     #
+    # + playlistId - The Spotify ID of the playlist
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - Item URIs and optional position to add to the playlist 
@@ -251,6 +267,7 @@ public isolated client class Client {
 
     # Remove Playlist Items
     #
+    # + playlistId - The Spotify ID of the playlist
     # + headers - Headers to be sent with the request 
     # + payload - Item URIs to remove from the playlist 
     # + return - A snapshot ID for the playlist 
@@ -366,6 +383,7 @@ public isolated client class Client {
 
     # Get User's Top Items
     #
+    # + 'type - The type of entity to return, either `artists` or `tracks`
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Pages of artists or tracks 
@@ -377,6 +395,7 @@ public isolated client class Client {
 
     # Get Playlist Cover Image
     #
+    # + playlistId - The Spotify ID of the playlist
     # + headers - Headers to be sent with the request 
     # + return - A set of images 
     remote isolated function getPlaylistCoverImage(string playlistId, map<string|string[]> headers = {}) returns ImageObject[]|error {
@@ -386,6 +405,7 @@ public isolated client class Client {
 
     # Add Custom Playlist Cover Image
     #
+    # + playlistId - The Spotify ID of the playlist
     # + headers - Headers to be sent with the request 
     # + request - Base64 encoded JPEG image to use as the playlist cover 
     # + return - Image uploaded 

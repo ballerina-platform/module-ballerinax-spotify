@@ -28,6 +28,8 @@ These changes are done in order to improve the overall usability, and as workaro
 
    The script is idempotent: on the committed spec it finds nothing to remove. Removing operations changes flatten's numbering of generated request-body schemas (`PlaylistIdItemsBody`, `PlaylistIdItemsBody1`, …). After a prune, check that the `*Body` names in `ai-mappings.json` still map to the intended schemas, or redo those schema names, so that regeneration keeps the same public type names.
 
+6. **Added descriptions to undocumented path parameters and `$ref` properties** (made in the original spec, `docs/spec/openapi.yaml`). The path parameters `PathAlbumId`, `PathArtistId`, `PathShowId`, `PathAudiobookId`, `PathChapterId` and `PathPlaylistId`, and the inline `id` path parameters of `GET /episodes/{id}` and `GET /tracks/{id}` and `type` of `GET /me/top/{type}`, had their description only on the `schema`, which the generated client does not document. Each now has a parameter-level `description`. The bare `$ref` properties of `FollowedArtistsResponse` (`artists`) and `SearchResultsResponse` (`tracks`, `artists`, `albums`, `playlists`, `shows`, `episodes`, `audiobooks`) are wrapped as `allOf: [$ref]` with a `description`, because a description beside a `$ref` is dropped.
+
 ## OpenAPI cli command
 
 The following command was used to generate the Ballerina client from the OpenAPI specification. The command should be executed from the repository root directory.
