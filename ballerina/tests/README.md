@@ -1,13 +1,23 @@
 # Running Tests
 
 ## Prerequisites
-- A Bearer Token and an Access Token from your Spotify Developer account are required.
-- You will also need your User ID for certain tests. Use the [Spotify ID Finder] (https://developer.spotify.com/documentation/web-api/) to locate it.
 
-# Running Tests
+To run the tests against the live Spotify Web API you need:
 
-Run the following command to start running tests.
+- An OAuth 2.0 access token from your [Spotify Developer account](https://developer.spotify.com/dashboard), exposed as `SPOTIFY_ACCESS_TOKEN`.
+
+## Running the tests
+
+By default the tests run against a mock server that starts automatically with `bal test`:
 
 ```bash
 bal test
 ```
+
+To run them against the live API, set `IS_LIVE_SERVER` and the credentials above:
+
+```bash
+IS_LIVE_SERVER=true SPOTIFY_ACCESS_TOKEN=<token> bal test
+```
+
+Tests that modify data (creating playlists, saving or removing tracks, and similar) are skipped against the live API.
