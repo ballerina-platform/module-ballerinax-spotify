@@ -2,16 +2,23 @@
 
 The `ballerinax/spotify` connector provides practical examples illustrating usage in various scenarios.
 
- 1.[Get artist and album details from Spotify](https://github.com/ballerina-platform/module-ballerinax-spotify/tree/main/examples/details) - Get information about an artist including their details, genres, followers, and discography from Spotify.
- 
+1. **[Listening taste profile](https://github.com/ballerina-platform/module-ballerinax-spotify/tree/main/examples/listening_taste_profile)** - Summarise the signed-in user's top artists, top tracks and favourite genres.
+
+2. **[Top tracks playlist builder](https://github.com/ballerina-platform/module-ballerinax-spotify/tree/main/examples/top_tracks_playlist_builder)** - Turn the user's top tracks into a new playlist.
+
 ## Prerequisites
 
-1. Generate Spotify access token to authenticate the connector as described in the [Setup guide](https://central.ballerina.io/ballerinax/spotify/latest#setup-guide).
-2. For each example, create a `Config.toml` file to add the configuration parameters. Here's an example of how your `Config.toml` file should look like:
+1. Generate Spotify credentials to authenticate the connector as described in the [Setup guide](https://central.ballerina.io/ballerinax/spotify/latest#setup-guide).
+
+2. For each example, create a `Config.toml` file with the related configuration. Here's an example of how your `Config.toml` file should look:
 
 ```toml
-token = "<Access Token>"
+clientId = "<client-id>"
+clientSecret = "<client-secret>"
+refreshToken = "<refresh-token>"
 ```
+
+Each example lists the additional values it needs in its own README.
 
 ## Running an example
 
@@ -27,22 +34,4 @@ Execute the following commands to build an example from the source:
 
     ```bash
     bal run
-    ```
-
-## Building the examples with the local module
-
-**Warning**: Due to the absence of support for reading local repositories for single Ballerina files, the Bala of the module is manually written to the central repository as a workaround. Consequently, the bash script may modify your local Ballerina repositories.
-
-Execute the following commands to build all the examples against the changes you have made to the module locally:
-
-* To build all the examples:
-
-    ```bash
-    ./build.sh build
-    ```
-
-* To run all the examples:
-
-    ```bash
-    ./build.sh run
     ```

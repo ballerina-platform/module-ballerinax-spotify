@@ -1,16 +1,14 @@
 [package]
-distribution = "2201.10.0"
+distribution = "2201.12.0"
 org = "ballerinax"
 name = "spotify"
-version = "0.1.0"
+version = "2.0.0"
 license = ["Apache-2.0"]
 authors = ["Ballerina"]
-keywords = []
-icon = "icon.png" 
+keywords = ["Type/Connector", "Vendor/Spotify", "Area/Productivity & Collaboration"]
+icon = "icon.png"
 repository = "https://github.com/ballerina-platform/module-ballerinax-spotify"
 
 [build-options]
 observabilityIncluded = true
 
-[platform.java17]
-graalvmCompatible = true
