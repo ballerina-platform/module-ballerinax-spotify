@@ -1,16 +1,10 @@
-# Ballerina Spotify connector
-
-[![Build](https://github.com/ballerina-platform/module-ballerinax-spotify/actions/workflows/ci.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-spotify/actions/workflows/ci.yml)
-[![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-spotify.svg)](https://github.com/ballerina-platform/module-ballerinax-spotify/commits/main)
-[![GitHub Issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-library/module/spotify.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-library/labels/module%2Fspotify)
-
 ## Overview
 
 [Spotify](https://www.spotify.com/) is a music and podcast streaming service that gives listeners access to millions of tracks, albums, podcasts, and audiobooks, along with personalised playlists and recommendations.
 
 The Spotify connector provides a Ballerina client for the [Spotify Web API](https://developer.spotify.com/documentation/web-api). It lets you search the Spotify catalogue, read and manage a user's library and playlists, follow artists and users, and inspect and control playback on a user's devices from your integrations.
 
-## Key Features
+### Key Features
 
 - Browse the Spotify catalogue: albums, artists, tracks, shows, episodes, audiobooks, and chapters
 - Search for any catalogue item and fetch new releases, categories, and recommendations
